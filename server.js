@@ -3,18 +3,19 @@ const cors = require('cors');
 const axios = require('axios')
 
 
-
 const app = express();
 const port = 80;
 
-const dev = true // disble for production
+// for development
+const dev = true 
+const useLocalFiles = false 
 
 if(dev){
     app.use(cors());
     app.options('*', cors());
 }
 
-app.use(express.json());  
+//app.use(express.json());  
 
 // ** Endpoint definition **
 
@@ -25,33 +26,35 @@ app.get('/', function(req, res){
 
 app.get('/vocabs', function(req, res){    // IoT Vocabs https://docs.proceed-labs.org/concepts/bpmn/bpmn-general-serialization/
     
-    if(dev)
-        res.send(
+    if(useLocalFiles)
+        res.json(
             [
-                "ontology.json",
-                "schemaorg-all-https.jsonld"
-
+                "schemaorg-all-https.jsonld",
+                "ontology.json"
             ]
         )
     else
-        res.send(
+        res.json(
             [
-                "https://schema.org/version/latest/schemaorg-current-https.jsonld",
-                "http://iot-ontologies.github.io/dogont/documentation/ontology.json"
+                "https://schema.org/version/latest/schemaorg-current-https.jsonld",          //application/ld+json
+                "http://iot-ontologies.github.io/dogont/documentation/ontology.json",        //application/json;
+                "https://dbpedia.org/ontology/",                                              //text/html; charset=UTF-8
+                "http://qudt.org/vocab/quantitykind/",                                       //turtle
 
             ]
         )
-
-
 });
 
 // exprect json with key "url", return webpage
-app.put('/proxy', function(req, res){
-   let url = req.body['url']
+app.get('/proxy', function(req, res){
+   let url = req.headers.url
     console.log(url)
     axios.get(url)
     .then(
-        proxyResponse =>  res.send(proxyResponse.data)
+        proxyResponse =>  {
+            res.set('content-type', proxyResponse.headers['content-type']);
+            res.send(proxyResponse.data)
+        }
     ).catch(err => res.send(err))
 });
 

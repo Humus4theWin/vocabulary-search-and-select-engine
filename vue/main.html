@@ -1,16 +1,14 @@
 <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
 
 <div id="app">
+    <h1>Frontend Search</h1>
     <div>
-        <h1>Frontend Search</h1>
-        <div v-for="vocab in vocabStore">
-            <div>
-                {{ vocab }}
-            </div>
+        <div v-for="vocab in vocabs">
+            {{ vocab.url }}
         </div>
-        <button v-on:click="searchData"> 
-        </button>
     </div>
+    <button v-on:click="searchData"> 
+    </button>
 </div>
 
 
@@ -18,42 +16,71 @@
  var app = new Vue({
         el: '#app',
         data: {
-            vocabList: [],
-            vocabStore: []
+            vocabs:[
+                {
+                    url: "",
+                    data: "",
+                    type: "",
+                }
+            ]
         },
         // load all vocabs
         async created (){
-            await this.getVocabList()
-            await this.getAllVocabs()
+            let vocabList =  await fetch('/vocabs').then(data => data.json())
+            this.vocabs = vocabList.map(url => {
+                return {
+                    url: url,
+                    data: "",
+                    type: "",
+                }
+            })
+            // load all vocabs
+            await this.getAllVocabs(this.vocabs, this.getVocabDirect)
+            // load missing ones
+            await this.getAllVocabs(this.vocabs.filter(v => !v.loaded), this.getVocabProxy)
         },
         watch:{
-            vocabList:function(val){
+            vocabs:function(val){
                 console.log(val)
              },
-             vocabStore:function(val){
-                console.log(val)
-             }
+             
         },
         methods: {
-            getVocabList(){
-                return fetch('/vocabs')
-                .then(data => data.json())
-                .then(json => this.vocabList = json);
-            },
-            getVocab(vocabPath){
-                return fetch(vocabPath)
-                .then(data => data.json())
-                .then(json => this.vocabStore = json)
-                .catch(err => console.log(err))
-            },
-            getAllVocabs(){
-                let promises =  this.vocabList.map(element => {
-                    this.getVocab(element)       
+            getAllVocabs(vocabList, loadFunction){
+                let promises = vocabList.map(vocab => {
+                    loadFunction(vocab)       
                 });
                 return Promise.all(promises)
             },
+            getVocabDirect(vocab){
+                return fetch(vocab.url)
+                .then(data => {
+                    vocab.type = data.headers.get("content-type")
+                    return data.text()
+                })
+                .then(text => {
+                    vocab.data = text
+                })
+                .catch(err =>  console.log("error CORS?"))   //make second request sync
+            },
+            getVocabProxy(vocab){
+                return fetch('/proxy',{
+                  //  method:"PUT",
+                    headers: {'url': vocab.url},
+                   // body: vocabPath
+                })
+                .then(data => {
+                    vocab.type = data.headers.get("content-type")
+                    return data.text()
+                })
+                .then(text => {
+                    vocab.data = text
+                })
+                .catch(err => console.log(err))
+            },
+            
             searchData(){
-                    console.log("search")
+                console.log("search")
             }
         }
     })
