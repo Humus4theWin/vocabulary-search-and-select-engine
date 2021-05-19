@@ -6,3 +6,4 @@ This is a project for finding approriate term for describing capabilities of IoT
 | ------ | ------ | ------ |
 | schema.org | Y | Y
 | dublincore.org | X | X
+| iot-ontologies | Y | X
