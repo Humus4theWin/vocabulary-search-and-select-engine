@@ -2,7 +2,6 @@ const express = require('express');
 const cors = require('cors');
 const axios = require('axios')
 
-
 const app = express();
 const port = 80;
 
@@ -38,17 +37,15 @@ app.get('/vocabs', function(req, res){    // IoT Vocabs https://docs.proceed-lab
             [
                 "https://schema.org/version/latest/schemaorg-current-https.jsonld",          //application/ld+json
                 "http://iot-ontologies.github.io/dogont/documentation/ontology.json",        //application/json;
-                "https://dbpedia.org/ontology/",                                              //text/html; charset=UTF-8
+                "https://dbpedia.org/ontology/",                                             //text/html; charset=UTF-8
                 "http://qudt.org/vocab/quantitykind/",                                       //turtle
-
             ]
         )
 });
 
-// exprect json with key "url", return webpage
+// exprect body with key "url", return webpage
 app.get('/proxy', function(req, res){
    let url = req.headers.url
-    console.log(url)
     axios.get(url)
     .then(
         proxyResponse =>  {

@@ -4,10 +4,11 @@
     <h1>Frontend Search</h1>
     <div>
         <div v-for="vocab in vocabs">
-            {{ vocab.url }}
+            <div v-bind:class="vocab.data!=='' ? 'loaded':''">
+                {{ vocab.url }}
+            </div>
         </div>
     </div>
-    <button v-on:click="searchData"> 
     </button>
 </div>
 
@@ -78,10 +79,16 @@
                 })
                 .catch(err => console.log(err))
             },
-            
-            searchData(){
-                console.log("search")
-            }
         }
     })
 </script>
+
+<style>
+.loaded{
+    background-color: lightgreen;
+}
+
+
+
+
+</style>
