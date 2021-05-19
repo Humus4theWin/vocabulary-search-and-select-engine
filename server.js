@@ -23,13 +23,26 @@ app.get('/', function(req, res){
     res.sendFile('vue/main.html',{root: __dirname })
 });
 
-app.get('/vocabs', function(req, res){    
-    res.send(
-        [
-            "https://schema.org/version/latest/schemaorg-current-https.jsonld",
+app.get('/vocabs', function(req, res){    // IoT Vocabs https://docs.proceed-labs.org/concepts/bpmn/bpmn-general-serialization/
+    
+    if(dev)
+        res.send(
+            [
+                "ontology.json",
+                "schemaorg-all-https.jsonld"
 
-        ]
-    )
+            ]
+        )
+    else
+        res.send(
+            [
+                "https://schema.org/version/latest/schemaorg-current-https.jsonld",
+                "http://iot-ontologies.github.io/dogont/documentation/ontology.json"
+
+            ]
+        )
+
+
 });
 
 // exprect json with key "url", return webpage
@@ -42,6 +55,8 @@ app.put('/proxy', function(req, res){
     ).catch(err => res.send(err))
 });
 
+// verse vocabs locally for testing
+app.use('/', express.static(__dirname + '/public'));
 
 // start Server
 app.listen(port, () => {

@@ -1,6 +1,6 @@
 <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
 
-<div id="app"></div>
+<div id="app">
     <div>
         <h1>Frontend Search</h1>
         <div v-for="vocab in vocabStore">
@@ -8,6 +8,8 @@
                 {{ vocab }}
             </div>
         </div>
+        <button v-on:click="searchData"> 
+        </button>
     </div>
 </div>
 
@@ -17,15 +19,12 @@
         el: '#app',
         data: {
             vocabList: [],
-            vocabStore: ["w"]
+            vocabStore: []
         },
         // load all vocabs
         async created (){
             await this.getVocabList()
-            let promises =  this.vocabList.map(element => {
-              this.getVocab(element)       
-           });
-            await Promise.all(promises)
+            await this.getAllVocabs()
         },
         watch:{
             vocabList:function(val){
@@ -46,8 +45,16 @@
                 .then(data => data.json())
                 .then(json => this.vocabStore = json)
                 .catch(err => console.log(err))
+            },
+            getAllVocabs(){
+                let promises =  this.vocabList.map(element => {
+                    this.getVocab(element)       
+                });
+                return Promise.all(promises)
+            },
+            searchData(){
+                    console.log("search")
             }
-         
         }
     })
 </script>
