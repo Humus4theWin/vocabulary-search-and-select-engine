@@ -23,7 +23,7 @@
         async created (){
             let vocabList =  await fetch('/vocabs').then(data => data.json())
             let promises = vocabList.map(
-                url => this.this.importVocab(url).then(
+                url => this.loadVocab(url).then(
                 // then process
                 vocab => this.storeVocab(vocab,url)))
  
