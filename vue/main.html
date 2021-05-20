@@ -22,7 +22,10 @@
         // load all vocabs
         async created (){
             let vocabList =  await fetch('/vocabs').then(data => data.json())
-            let promises = vocabList.map(url => this.importVocab(url).then(vocab => this.vocabs = {...this.vocabs, [url]:vocab}))
+            let promises = vocabList.map(
+                url => this.this.importVocab(url).then(
+                // then process
+                vocab => this.storeVocab(vocab,url)))
  
             await Promise.all(promises)
 
@@ -34,9 +37,8 @@
              },
         },
         methods: {
-            async importVocab(url){
+            async loadVocab(url){
                 let vocab = {};
-              //  this.vocabs.push(vocab)
 
                 let response;
                 try{
@@ -55,6 +57,9 @@
                     console.log("error: "+url)
                 }
                 return vocab;
+            },
+            storeVocab(vocab,url){
+                this.vocabs = {...this.vocabs, [url]:vocab}
             }
         }
     })
