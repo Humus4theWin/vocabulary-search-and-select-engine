@@ -3,9 +3,9 @@
 <div id="app">
     <h1>Frontend Search</h1>
     <div>
-        <div v-for="vocab in vocabs">
-            <div v-bind:class="vocab.data!=='' ? 'loaded':''">
-                {{ vocab.url }}
+        <div v-for="vocab in Object.keys(vocabs)">
+            <div v-bind:class="vocabs[vocab].data ? 'loaded':''">
+                {{ vocab}} 
             </div>
         </div>
     </div>
@@ -17,73 +17,51 @@
  var app = new Vue({
         el: '#app',
         data: {
-            vocabs:[
-                {
-                    url: "",
-                    data: "",
-                    type: "",
-                }
-            ]
+            vocabs:{}
         },
         // load all vocabs
         async created (){
             let vocabList =  await fetch('/vocabs').then(data => data.json())
-            this.vocabs = vocabList.map(url => {
-                return {
-                    url: url,
-                    data: "",
-                    type: "",
-                }
-            })
-            // load all vocabs
-            await this.getAllVocabs(this.vocabs, this.getVocabDirect)
-            // load missing ones
-            await this.getAllVocabs(this.vocabs.filter(v => !v.loaded), this.getVocabProxy)
+            let promises = vocabList.map(url => this.importVocab(url).then(vocab => this.vocabs = {...this.vocabs, [url]:vocab}))
+ 
+            await Promise.all(promises)
+
+            //trigger processing
         },
         watch:{
             vocabs:function(val){
                 console.log(val)
              },
-             
         },
         methods: {
-            getAllVocabs(vocabList, loadFunction){
-                let promises = vocabList.map(vocab => {
-                    loadFunction(vocab)       
-                });
-                return Promise.all(promises)
-            },
-            getVocabDirect(vocab){
-                return fetch(vocab.url)
-                .then(data => {
-                    vocab.type = data.headers.get("content-type")
-                    return data.text()
-                })
-                .then(text => {
-                    vocab.data = text
-                })
-                .catch(err =>  console.log("error CORS?"))   //make second request sync
-            },
-            getVocabProxy(vocab){
-                return fetch('/proxy',{
-                  //  method:"PUT",
-                    headers: {'url': vocab.url},
-                   // body: vocabPath
-                })
-                .then(data => {
-                    vocab.type = data.headers.get("content-type")
-                    return data.text()
-                })
-                .then(text => {
-                    vocab.data = text
-                })
-                .catch(err => console.log(err))
-            },
+            async importVocab(url){
+                let vocab = {};
+              //  this.vocabs.push(vocab)
+
+                let response;
+                try{
+                    // load from remote server
+                    response = await fetch(url)
+                }catch(ex){
+                    // if fails, load via proxy
+                    response = await fetch('/proxy',{
+                        headers: {url: url},
+                    })
+                }
+                if(response.ok){
+                    vocab.type =  response.headers.get("content-type")
+                    vocab.data = await response.text();
+                }else{
+                    console.log("error: "+url)
+                }
+                return vocab;
+            }
         }
     })
 </script>
 
 <style>
+
 .loaded{
     background-color: lightgreen;
 }
