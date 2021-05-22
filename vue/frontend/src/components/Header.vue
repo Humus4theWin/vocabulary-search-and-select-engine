@@ -1,7 +1,7 @@
 <template>
   <nav class="topbar-container">
     <div class="topbar">
-      <div class="topbar-logo"></div>
+      <div class="topbar-logo">sd</div>
     </div>
   </nav>
 </template>
