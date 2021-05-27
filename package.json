@@ -1,0 +1,24 @@
+{
+  "name": "vocabulary-search-and-select-engine",
+  "version": "1.0.0",
+  "description": "This is a project for finding approriate term for describing capabilities of IoT devices.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/dBPMS-PROCEED/vocabulary-search-and-select-engine.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/dBPMS-PROCEED/vocabulary-search-and-select-engine/issues"
+  },
+  "homepage": "https://gitlab.com/dBPMS-PROCEED/vocabulary-search-and-select-engine#readme",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "cors": "^2.8.5",
+    "express": "^4.17.1"
+  }
+}
