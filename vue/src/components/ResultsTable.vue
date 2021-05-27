@@ -21,7 +21,7 @@
 
 <script>
 export default {
-  name: "resultsTable",
+  name: "ResultsTable",
   props: ["results"],
   data: () => ({}),
 };
