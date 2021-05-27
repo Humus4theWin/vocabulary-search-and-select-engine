@@ -38,7 +38,7 @@ app.get('/vocabs', function(req, res){    // IoT Vocabs https://docs.proceed-lab
                 "https://schema.org/version/latest/schemaorg-current-https.jsonld",          //application/ld+json
                 "http://iot-ontologies.github.io/dogont/documentation/ontology.json",        //application/json;
                 "https://dbpedia.org/ontology/",                                             //text/html; charset=UTF-8
-                "http://qudt.org/vocab/quantitykind/",                                       //turtle
+            //    "http://qudt.org/vocab/quantitykind/",                                       //turtle
             ]
         )
 });
