@@ -1,7 +1,6 @@
 <template>
-  <div class="home">
-    <Header />
-
+  <div class="search">
+    <h1>Search for your URI</h1>
     <SearchField />
     <Navigation />
   </div>
@@ -11,14 +10,12 @@
 // @ is an alias to /src
 import Navigation from "@/components/Navigation.vue";
 import SearchField from "@/components/SearchField.vue";
-import Header from "@/components/Header.vue";
 
 export default {
-  name: "Home",
+  name: "Search",
   components: {
     Navigation,
     SearchField,
-    Header,
   },
 };
 </script>

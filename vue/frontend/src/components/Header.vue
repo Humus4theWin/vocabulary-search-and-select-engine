@@ -1,13 +1,8 @@
 <template>
-  <nav class="topbar-container">
-    <div class="topbar">
-      <div class="topbar-logo">sd</div>
-    </div>
-  </nav>
+  <v-bottom-navigation class="primary" height="60"> </v-bottom-navigation>
 </template>
+     
 
 <script>
-export default {
-  name: "Header",
-};
+export default {};
 </script>
