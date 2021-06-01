@@ -6,10 +6,11 @@
       depressed
       min-height="80"
       max-height="85"
+      width="80"
     >
       <span>Home</span>
 
-      <v-icon>mdi-history</v-icon>
+      <v-icon>mdi-home</v-icon>
     </v-btn>
 
     <v-btn
@@ -18,10 +19,11 @@
       depressed
       min-height="80"
       max-height="85"
+      width="80"
     >
       <span>Search</span>
 
-      <v-icon>mdi-heart</v-icon>
+      <v-icon>mdi-library</v-icon>
     </v-btn>
   </v-bottom-navigation>
 </template>

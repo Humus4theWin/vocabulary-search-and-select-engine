@@ -8,11 +8,11 @@
     <v-row>
       <v-col cols="12">
         <v-row justify="center" align="center">
-          <v-col cols="8">
+          <v-col cols="9">
             <v-card>
               <v-row justify="center">
                 <v-col cols="12">
-                  <v-card-title> search for your URI </v-card-title>
+                  <v-card-title> Search for your URI </v-card-title>
 
                   <v-card-text>
                     <v-autocomplete
