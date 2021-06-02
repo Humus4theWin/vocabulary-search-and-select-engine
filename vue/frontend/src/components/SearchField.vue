@@ -20,7 +20,7 @@
                       :items="items"
                       :loading="isLoading"
                       :search-input.sync="search"
-                      color="white"
+                      color="black"
                       hide-no-data
                       hide-selected
                       item-text="Description"
