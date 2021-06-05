@@ -1,24 +1,21 @@
 <template>
-  <div class="home">
-    <Header />
-
-    <SearchField />
-    <Navigation />
-  </div>
+  <v-container fill-height>
+    <v-layout column wrap justify-center>
+      <v-row justify-center align-content="center">
+        <SearchField />
+      </v-row>
+    </v-layout>
+  </v-container>
 </template>
 
 <script>
 // @ is an alias to /src
-import Navigation from "@/components/Navigation.vue";
 import SearchField from "@/components/SearchField.vue";
-import Header from "@/components/Header.vue";
 
 export default {
   name: "Home",
   components: {
-    Navigation,
     SearchField,
-    Header,
   },
 };
 </script>
