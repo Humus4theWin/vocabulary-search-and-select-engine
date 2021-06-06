@@ -7,9 +7,6 @@
         label="paste Vocab URL here"
       ></v-text-field>
       <v-row align="center" justify="space-between">
-        <v-col>
-          <v-btn v-on:click="emitAdd">add Vocab</v-btn>
-        </v-col>
         <v-select
           v-model="select"
           :hint="`${select.state}, ${select.abbr}`"
@@ -21,6 +18,9 @@
           return-object
           single-line
         ></v-select>
+        <v-col>
+          <v-btn v-on:click="emitAdd">add Vocab</v-btn>
+        </v-col>
       </v-row>
     </v-container>
   </v-form>
