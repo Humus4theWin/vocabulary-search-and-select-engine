@@ -1,7 +1,7 @@
 <template>
   <v-bottom-navigation class="primary" height="60">
     <v-row>
-      <v-col cols="1">
+      <v-col cols="1" xs="12">
         <v-btn
           class="primary"
           :to="{ name: 'Home' }"

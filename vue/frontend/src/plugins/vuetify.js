@@ -11,6 +11,7 @@ export default new Vuetify({
         },
         themes: {
             light: {
+                //green of proceed
                 primary: "#74b559",
                 secondary: "#424242",
                 accent: "#82B1FF",
