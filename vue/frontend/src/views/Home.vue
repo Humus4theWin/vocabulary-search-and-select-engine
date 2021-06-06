@@ -1,24 +1,15 @@
 <template>
-  <div class="home">
-    <Header />
-    <v-container>
-      <v-row align="center" justify="start">
-        <v-spacer></v-spacer>
-        <v-col cols="6"><SearchField /></v-col>
-        <v-spacer></v-spacer>
-        <v-col cols="4"><AddVocab /></v-col>
+  <v-container fill-height>
+    <v-layout column wrap justify-center>
+      <v-row justify-center align-content="center">
+        <SearchField />
       </v-row>
-      <v-row justify="end">
-        <v-col cols="4"> <vocabTable /></v-col>
-      </v-row>
-    </v-container>
-    <Navigation />
-  </div>
+    </v-layout>
+  </v-container>
 </template>
 
 <script>
 // @ is an alias to /src
-import Navigation from "@/components/Navigation.vue";
 import SearchField from "@/components/SearchField.vue";
 import Header from "@/components/Header.vue";
 import AddVocab from "@/components/AddVocab.vue";

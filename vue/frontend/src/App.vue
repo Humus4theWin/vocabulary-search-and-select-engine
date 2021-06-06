@@ -1,6 +1,8 @@
 <template>
   <v-app>
+    <Header />
     <router-view />
+    <Navigation />
   </v-app>
 </template>
 
@@ -27,3 +29,10 @@
   }
 }
 </style>
+<script>
+import Header from "@/components/Header";
+import Navigation from "@/components/Navigation";
+export default {
+  components: { Navigation, Header },
+};
+</script>
