@@ -1,19 +1,22 @@
 <template>
   <v-container fluid>
-    <v-row>
-      <v-col cols="12">
-        <v-spacer></v-spacer>
+    <v-row justify="center" align="center">
+      <v-col sm="9" cols="7" xl="5">
+        <h1 align="left">
+          CREATE A
+          <br />
+          CAPABILITY DESCRIPTION
+        </h1>
       </v-col>
     </v-row>
     <v-row>
       <v-col cols="12">
         <v-row justify="center" align="center">
-          <v-col cols="9">
+          <v-col sm="9" cols="7" xl="5">
             <v-card>
               <v-row justify="center">
                 <v-col cols="12">
-                  <v-card-title> Search for your URI </v-card-title>
-
+                  <!--<v-card-title> Search for your URI </v-card-title>-->
                   <v-card-text>
                     <v-autocomplete
                       v-model="model"
@@ -33,7 +36,7 @@
                   </v-card-text>
                   <v-divider></v-divider>
                   <v-expand-transition>
-                    <v-list v-if="model" class="red lighten-3">
+                    <v-list v-if="model" class="info">
                       <v-list-item v-for="(field, i) in fields" :key="i">
                         <v-list-item-content>
                           <v-list-item-title
@@ -91,7 +94,7 @@ export default {
 
   watch: {
     search(val) {
-      if (val == "") return;
+      if (val === "") return;
       // Items have already been loaded
       if (this.items.length > 0) return;
 
