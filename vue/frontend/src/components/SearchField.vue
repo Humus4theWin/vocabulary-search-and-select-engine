@@ -109,6 +109,7 @@ export default {
   },
 
   watch: {
+    // old -> can be deleted ?
     search(val) {
       if (val === "") return;
       // Items have already been loaded
@@ -131,19 +132,6 @@ export default {
           console.log(err);
         })
         .finally(() => (this.isLoading = false));
-    },
-  },
-  methods: {
-    termSearch() {
-      return this.$store.getters.quads
-        .filter((quad) => quad.predicate.value.includes("label"))
-        .map((quad) => {
-          let key = quad.subject.value;
-          let val = quad.object.value;
-          let obj = Object.assign({}, key, { val });
-          console.log(obj);
-          return obj;
-        });
     },
   },
 };
