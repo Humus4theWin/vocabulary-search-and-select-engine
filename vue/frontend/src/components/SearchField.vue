@@ -2,11 +2,7 @@
   <v-container fluid>
     <v-row justify="center" align="center">
       <v-col sm="9" cols="7" xl="5">
-        <h1 align="left">
-          CREATE A
-          <br />
-          CAPABILITY DESCRIPTION
-        </h1>
+        <h1 align="left">CREATE A CAPABILITY DESCRIPTION</h1>
       </v-col>
     </v-row>
 
@@ -27,9 +23,9 @@
                       color="black"
                       hide-no-data
                       hide-selected
-                      item-text="Description"
-                      item-value="API"
-                      label="URIs"
+                      item-text="url"
+                      item-value="label"
+                      label="search terms"
                       placeholder="Start typing to Search"
                       prepend-icon="mdi-database-search"
                       return-object
@@ -82,14 +78,16 @@ export default {
       });
     },
     items() {
-      return this.entries.map((entry) => {
-        const Description =
-          entry.Description.length > this.descriptionLimit
-            ? entry.Description.slice(0, this.descriptionLimit) + "..."
-            : entry.Description;
-
-        return Object.assign({}, entry, { Description });
-      });
+      return this.$store.getters.quads
+        .filter((quad) => quad.predicate.value.includes("label"))
+        .map((quad) => {
+          let obj = {
+            label: quad.subject.value,
+            url: quad.object.value,
+          };
+          console.log(obj);
+          return obj;
+        });
     },
   },
 
@@ -116,6 +114,19 @@ export default {
           console.log(err);
         })
         .finally(() => (this.isLoading = false));
+    },
+  },
+  methods: {
+    termSearch() {
+      return this.$store.getters.quads
+        .filter((quad) => quad.predicate.value.includes("label"))
+        .map((quad) => {
+          let key = quad.subject.value;
+          let val = quad.object.value;
+          let obj = Object.assign({}, key, { val });
+          console.log(obj);
+          return obj;
+        });
     },
   },
 };

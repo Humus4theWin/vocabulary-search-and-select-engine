@@ -26,7 +26,7 @@ const store = new Vuex.Store({
       state.quads.push(quad);
     },
     addQuads(state, quads) {
-      console.log(quads);
+      console.log(quads[0]);
       state.quads = [...state.quads, ...quads];
     },
     addVocab(state, vocab) {
@@ -37,6 +37,9 @@ const store = new Vuex.Store({
   getters: {
     vocabularies: (state) => {
       return state.vocabs;
+    },
+    quads: (state) => {
+      return state.quads;
     },
   },
 });
