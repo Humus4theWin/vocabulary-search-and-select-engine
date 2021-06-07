@@ -23,8 +23,8 @@
                       color="black"
                       hide-no-data
                       hide-selected
-                      item-text="url"
-                      item-value="label"
+                      item-text="label"
+                      item-value="url"
                       label="search terms"
                       placeholder="Start typing to Search"
                       prepend-icon="mdi-database-search"
@@ -82,8 +82,8 @@ export default {
         .filter((quad) => quad.predicate.value.includes("label"))
         .map((quad) => {
           let obj = {
-            label: quad.subject.value,
-            url: quad.object.value,
+            url: quad.subject.value,
+            label: quad.object.value,
           };
           console.log(obj);
           return obj;
