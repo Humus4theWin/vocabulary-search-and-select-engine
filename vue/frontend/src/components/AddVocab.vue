@@ -19,7 +19,7 @@
           single-line
         ></v-select>
         <v-col>
-          <v-btn v-on:click="emitAdd">add Vocab</v-btn>
+          <v-btn v-on:click="addVocab">add Vocab</v-btn>
         </v-col>
       </v-row>
     </v-container>
@@ -48,8 +48,10 @@ export default {
   }),
 
   methods: {
-    emitAdd() {
+    addVocab() {
       this.$emit("add", this.addURL, this.select.state);
+
+      //clean up
       this.select.state = undefined;
       this.select.abbr = "auto";
       this.addURL = "";

@@ -9,9 +9,37 @@
       max-height="85"
       width="80"
     >
-      <span>Search</span>
-      <v-icon>mdi-book-search-outline</v-icon>
+      <span>Capability</span>
+      <v-icon>mdi-hammer-wrench</v-icon>
     </v-btn>
+
+        <v-btn
+      class="primary"
+      to="/Vocabs"
+      depressed
+      min-height="80"
+      max-height="85"
+      width="80"
+    >
+      <span>Vocabs</span>
+      <v-icon>mdi-book-open-blank-variant</v-icon>
+    </v-btn>
+
+        <v-btn
+      class="primary"
+      to='/create'
+      depressed
+      min-height="80"
+      max-height="85"
+      width="80"
+    >
+      <span>Create Term</span>
+      <v-icon>mdi-pencil</v-icon>
+    </v-btn>
+    
+
+    <v-divider></v-divider>
+
 
     <v-btn
         class="primary mr-10"
