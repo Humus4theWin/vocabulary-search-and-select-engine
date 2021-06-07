@@ -12,6 +12,7 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
     quads: [],
+    vocabs: [],
 
     search: "",
     //contains the results of the search
@@ -25,7 +26,17 @@ const store = new Vuex.Store({
       state.quads.push(quad);
     },
     addQuads(state, quads) {
+      console.log(quads);
       state.quads = [...state.quads, ...quads];
+    },
+    addVocab(state, vocab) {
+      console.log(vocab);
+      state.vocabs.push(vocab);
+    },
+  },
+  getters: {
+    vocabularies: (state) => {
+      return state.vocabs;
     },
   },
 });

@@ -27,6 +27,8 @@
 </template>
 
 <script>
+import rdfParser from "rdf-parse";
+//import { mapGetters,  mapActions} from 'vuex'
 export default {
   name: "AddVocab",
   data: () => ({
@@ -49,12 +51,60 @@ export default {
 
   methods: {
     addVocab() {
-      this.$emit("add", this.addURL, this.select.state);
-
+      //this.$emit("add", this.addURL, this.select.state);
+      this.importVocab(this.addURL, this.select.state);
       //clean up
       this.select.state = undefined;
       this.select.abbr = "auto";
       this.addURL = "";
+    },
+
+    async importVocab(url, format) {
+      let vocab = {};
+      vocab.amount = 0;
+
+      vocab.baseURL = "http://" + url.split("/")[2];
+
+      let response;
+      try {
+        // load from remote server
+        response = await fetch(url);
+      } catch (ex) {
+        // if fails, load via proxy
+        response = await fetch("http://localhost:80/proxy", {
+          headers: { url: url },
+        });
+      }
+      if (response.ok) {
+        vocab.type = response.headers.get("content-type").split(";")[0];
+        vocab.data = await response.text();
+      } else {
+        console.log("error: " + url);
+        return;
+      }
+      if (format) vocab.type = format;
+
+      // parse vocab datta
+      let textStream = require("streamify-string")(vocab.data);
+      let quads = [];
+
+      await rdfParser
+        .parse(textStream, {
+          contentType: vocab.type,
+          baseIRI: vocab.baseURL,
+        })
+        .on("data", (quad) => {
+          quads.push(quad);
+          vocab.amount += 1;
+        })
+        .on("error", (error) => console.error(error))
+        .on("end", () => {
+          this.$store.commit("addQuads", quads);
+          this.$store.commit("addVocab", vocab);
+          console.log("All done!");
+        });
+
+      // push vocab
     },
   },
 };
