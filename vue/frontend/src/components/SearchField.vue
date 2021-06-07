@@ -9,6 +9,7 @@
         </h1>
       </v-col>
     </v-row>
+
     <v-row>
       <v-col cols="12">
         <v-row justify="center" align="center">
