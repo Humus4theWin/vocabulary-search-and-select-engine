@@ -17,6 +17,7 @@ const store = new Vuex.Store({
     search: "",
     //contains the results of the search
     answers: {},
+    drawerState: false,
   },
   mutations: {
     saveSearchedWord(state, word) {
@@ -33,6 +34,10 @@ const store = new Vuex.Store({
       console.log(vocab);
       state.vocabs.push(vocab);
     },
+    toggleDrawerState(state) {
+      console.log("toggled");
+      state.drawerState = !state.drawerState;
+    },
   },
   getters: {
     vocabularies: (state) => {
@@ -40,6 +45,9 @@ const store = new Vuex.Store({
     },
     quads: (state) => {
       return state.quads;
+    },
+    drawerState(state) {
+      return state.drawerState;
     },
   },
 });

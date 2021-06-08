@@ -3,6 +3,7 @@
     <Header />
     <router-view />
     <Navigation />
+    <left-drawer />
   </v-app>
 </template>
 
@@ -32,8 +33,10 @@
 <script>
 import Header from "@/components/Header";
 import Navigation from "@/components/Navigation";
+import LeftDrawer from "./components/LeftDrawer.vue";
 
 export default {
-  components: { Navigation, Header },
+  components: { Navigation, Header, LeftDrawer },
+  methods: {},
 };
 </script>
