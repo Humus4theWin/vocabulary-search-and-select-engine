@@ -35,7 +35,6 @@ const store = new Vuex.Store({
       state.vocabs.push(vocab);
     },
     toggleDrawerState(state) {
-      console.log("toggled");
       state.drawerState = !state.drawerState;
     },
   },

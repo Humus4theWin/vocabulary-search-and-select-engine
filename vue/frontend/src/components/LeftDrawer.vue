@@ -23,13 +23,29 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapMutations } from "vuex";
 
 export default {
-  name: "Header",
-  methods: {
+  name: "LeftDrawer",
+  computed: {
     ...mapGetters({
-      drawerState: "drawerState", // map `this.drawerState()` to `this.$store.dispatch('drawerState')`
+      drawer: "drawerState", // map `this.drawerState()` to `this.$store.dispatch('drawerState')`
+    }),
+    drawerState: {
+      get() {
+        return this.drawer;
+      },
+      set(drawerState) {
+        if (!drawerState) {
+          this.toggleDrawerState();
+        }
+        return drawerState;
+      },
+    },
+  },
+  methods: {
+    ...mapMutations({
+      toggleDrawerState: "toggleDrawerState", // map `this.toggleDrawerState()` to `this.$store.dispatch('toggleDrawerState')`
     }),
   },
 };
