@@ -1,6 +1,8 @@
 <template>
   <v-bottom-navigation class="primary" height="80">
     <!-- absolute min-height="80" max-height="85"-->
+
+    <!--
     <v-btn
       class="primary"
       :to="{ name: 'Home' }"
@@ -36,9 +38,10 @@
       <span>Create Term</span>
       <v-icon>mdi-pencil</v-icon>
     </v-btn>
+
     
 
-    <v-divider></v-divider>
+    <v-divider></v-divider>    -->
 
 
     <v-btn

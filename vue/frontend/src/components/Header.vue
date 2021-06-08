@@ -27,7 +27,7 @@
         <v-toolbar extension-height="100">
           <v-app-bar-nav-icon @click="toggleDrawerState()"></v-app-bar-nav-icon>
 
-          <v-toolbar-title>Capabilities</v-toolbar-title>
+          <v-toolbar-title>To Do: Add Page Title Here</v-toolbar-title>
 
           <v-spacer></v-spacer>
 

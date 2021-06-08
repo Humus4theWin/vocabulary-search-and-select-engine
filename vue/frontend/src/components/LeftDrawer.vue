@@ -2,19 +2,49 @@
   <v-navigation-drawer v-model="drawerState" absolute temporary>
     <v-list-item>
       <v-list-item-content>
-        <v-list-item-title>Capabilities</v-list-item-title>
+        <v-btn
+          class="primary"
+          :to="{ name: 'Home' }"
+          depressed
+          min-height="80"
+          max-height="85"
+          width="80"
+        >
+          <span>Capability</span>
+          <v-icon class="pa-2">mdi-hammer-wrench</v-icon>
+        </v-btn>
       </v-list-item-content>
     </v-list-item>
 
     <v-list-item>
       <v-list-item-content>
-        <v-list-item-title>Vocabularies</v-list-item-title>
+        <v-btn
+          class="primary"
+          to="/Vocabs"
+          depressed
+          min-height="80"
+          max-height="85"
+          width="80"
+        >
+          <span>Vocabs</span>
+          <v-icon class="pa-2">mdi-book-open-blank-variant</v-icon>
+        </v-btn>
       </v-list-item-content>
     </v-list-item>
 
     <v-list-item>
       <v-list-item-content>
-        <v-list-item-title>More..</v-list-item-title>
+        <v-btn
+          class="primary"
+          to="/create"
+          depressed
+          min-height="80"
+          max-height="85"
+          width="80"
+        >
+          <span>Create Term</span>
+          <v-icon class="pa-2">mdi-pencil</v-icon>
+        </v-btn>
       </v-list-item-content>
     </v-list-item>
 
