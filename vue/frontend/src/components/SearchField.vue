@@ -1,11 +1,5 @@
 <template>
   <v-container fluid>
-    <v-row justify="center" align="center">
-      <v-col sm="9" cols="7" xl="5">
-        <h1 align="left">CREATE A CAPABILITY DESCRIPTION</h1>
-      </v-col>
-    </v-row>
-
     <v-row>
       <v-col cols="12">
         <v-row justify="center" align="center">
