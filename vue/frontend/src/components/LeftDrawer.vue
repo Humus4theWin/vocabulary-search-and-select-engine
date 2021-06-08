@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer v-model="drawerState" absolute temporary>
+  <v-navigation-drawer v-model="drawerState" fixed temporary>
     <v-list-item>
       <v-list-item-content>
         <v-btn

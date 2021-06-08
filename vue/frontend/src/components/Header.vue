@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar color="primary" height="120" app>
+  <v-app-bar color="primary" height="120">
     <v-col>
       <v-row justify="left" align="center">
         <router-link :to="{ name: 'Home' }">
