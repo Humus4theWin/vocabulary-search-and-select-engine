@@ -1,52 +1,34 @@
 <template>
-  <v-container fluid>
-    <v-row>
-      <v-col cols="12">
-        <v-row justify="center" align="center">
-          <v-col sm="9" xl="4">
-            <v-card>
-              <v-row justify="center">
-                <v-col cols="12">
-                  <!--<v-card-title> Search for your URI </v-card-title>-->
-                  <v-card-text>
-                    <v-autocomplete
-                      v-model="model"
-                      :items="items"
-                      :loading="isLoading"
-                      :search-input.sync="search"
-                      color="black"
-                      hide-no-data
-                      hide-selected
-                      item-text="label"
-                      item-value="url"
-                      label="search terms"
-                      placeholder="Start typing to Search"
-                      prepend-icon="mdi-database-search"
-                      return-object
-                    ></v-autocomplete>
-                  </v-card-text>
-                  <v-expand-transition>
-                    <v-list v-if="model" class="info">
-                      <v-list-item v-for="(field, i) in fields" :key="i">
-                        <v-list-item-content>
-                          <v-list-item-title
-                            v-text="field.value"
-                          ></v-list-item-title>
-                          <v-list-item-subtitle
-                            v-text="field.key"
-                          ></v-list-item-subtitle>
-                        </v-list-item-content>
-                      </v-list-item>
-                    </v-list>
-                  </v-expand-transition>
-                </v-col>
-              </v-row>
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-col>
-    </v-row>
-  </v-container>
+  <v-card>
+    <!--<v-card-title> Search for your URI </v-card-title>-->
+    <v-card-text>
+      <v-autocomplete
+        v-model="model"
+        :items="items"
+        :loading="isLoading"
+        :search-input.sync="search"
+        color="black"
+        hide-no-data
+        hide-selected
+        item-text="label"
+        item-value="url"
+        label="search terms"
+        placeholder="Start typing to Search"
+        prepend-icon="mdi-database-search"
+        return-object
+      ></v-autocomplete>
+    </v-card-text>
+    <v-expand-transition>
+      <v-list v-if="model" class="info">
+        <v-list-item v-for="(field, i) in fields" :key="i">
+          <v-list-item-content>
+            <v-list-item-title v-text="field.value"></v-list-item-title>
+            <v-list-item-subtitle v-text="field.key"></v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-expand-transition>
+  </v-card>
 </template>
 
 <script>
