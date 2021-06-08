@@ -1,10 +1,14 @@
 <template>
   <v-container fill-height>
     <v-layout column justify-center>
+      <v-spacer></v-spacer>
       <v-row justify-center align-content="center">
-        <v-col cols="12" lg="4"><AddVocab /></v-col>
-        <v-col cols="12" lg="8"><vocabTable /></v-col>
+        <v-col cols="12"><AddVocab /></v-col>
       </v-row>
+      <v-row>
+        <v-col cols="12"><vocabTable /></v-col>
+      </v-row>
+      <v-spacer></v-spacer>
     </v-layout>
   </v-container>
 </template>

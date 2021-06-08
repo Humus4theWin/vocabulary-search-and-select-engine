@@ -26,3 +26,8 @@ export default {
   data: () => ({}),
 };
 </script>
+<style>
+th, td {
+  text-align: left;
+}
+</style>

@@ -1,24 +1,31 @@
 <template>
   <v-form>
     <v-container fluid>
-      <v-text-field
-        outlined
-        v-model="addURL"
-        label="paste Vocab URL here"
-      ></v-text-field>
       <v-row align="center" justify="space-between">
-        <v-select
-          v-model="select"
-          :hint="`${select.state}, ${select.abbr}`"
-          :items="items"
-          item-text="abbr"
-          item-value="state"
-          label="Select"
-          persistent-hint
-          return-object
-          single-line
-        ></v-select>
-        <v-col>
+        <v-col cols="12">
+          <h1 align="left">ADD ANOTHER <br />VOCABULARY</h1>
+        </v-col>
+        <v-col cols="6">
+          <v-text-field
+            outlined
+            v-model="addURL"
+            label="paste Vocab URL here"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="2" class="pb-10">
+          <v-select
+            v-model="select"
+            :hint="`${select.abbr}`"
+            :items="items"
+            item-text="abbr"
+            item-value="state"
+            label="Select format"
+            persistent-hint
+            return-object
+            single-line
+          ></v-select>
+        </v-col>
+        <v-col class="pb-10">
           <v-btn v-on:click="addVocab">add Vocab</v-btn>
         </v-col>
       </v-row>
