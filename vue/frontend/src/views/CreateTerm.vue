@@ -53,7 +53,7 @@
             <v-col v-else cols="9">
               <v-textarea
                 v-model="discription"
-                label="enter your literal description"
+                label="Enter your literal description"
                 name="input-7-1"
                 value=""
                 background-color="grey lighten-3"
@@ -98,20 +98,20 @@ export default {
       { state: "rdfs:domain" },
       { state: "rdfs:range" },
     ],
-    hint: "your created IRI is: https://docs.proceed-labs.org/",
+    hint: "your created IRI is: https://rdf.proceed-labs.org/",
     radios: null,
     select: { state: undefined },
     discription: "",
   }),
   computed: {
     changeHint() {
-      return "your created IRI is: https://docs.proceed-labs.org/" + this.title;
+      return "Your created IRI is: https://rdf.proceed-labs.org/" + this.title;
     },
   },
   methods: {
     addTerm() {
       let quad = {
-        Subject: "https://docs.proceed-labs.org/" + this.title,
+        Subject: "https://rdf.proceed-labs.org/" + this.title,
         Predicate: this.select.state,
         Object: "",
       };
