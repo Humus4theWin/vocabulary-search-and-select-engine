@@ -1,6 +1,6 @@
 <template>
-  <v-container fill-height class="pt-13">
-    <v-layout column wrap justify-center>
+  <v-container fill-height class="pt-16">
+    <v-layout column wrap justify-center class="pt-16">
       <v-col cols="6">
         <v-container>
           <v-row>
@@ -42,7 +42,7 @@
           </v-row>
           <v-row>
             <v-radio-group v-model="radios" mandatory>
-              <v-radio label="IRI of Object" value="IRI"></v-radio>
+              <v-radio label="IRI as Object" value="IRI"></v-radio>
               <v-radio label="Literal as Object" value="Literal"></v-radio>
             </v-radio-group>
           </v-row>
@@ -115,15 +115,19 @@ export default {
         Predicate: this.select.state,
         Object: "",
       };
-      console.log(this.title + this.select.state);
-      if (this.radios === "IRI") {
-        console.log("IRI" + this.$store.getters.search);
-        quad.Object = this.$store.getters.search;
+      if (this.title && this.select.state) {
+        console.log(this.title + this.select.state);
+        if (this.radios === "IRI") {
+          console.log("IRI" + this.$store.getters.search);
+          quad.Object = this.$store.getters.search;
+        } else {
+          console.log(this.discription);
+          quad.Object = this.discription;
+        }
+        this.$store.commit("addTerm", quad);
       } else {
-        console.log(this.discription);
-        quad.Object = this.discription;
+        console.log("fehlerhafte Eingabe");
       }
-      this.$store.commit("addTerm", quad);
     },
   },
 };
