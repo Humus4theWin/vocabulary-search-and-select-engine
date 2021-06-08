@@ -65,6 +65,10 @@ export default {
       if (!this.model) return [];
 
       return Object.keys(this.model).map((key) => {
+        if (key === "url") {
+          this.$store.commit("saveSearchedWord", this.model[key]);
+          console.log(this.model[key]);
+        }
         return {
           key,
           value: this.model[key] || "n/a",

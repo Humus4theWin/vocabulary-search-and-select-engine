@@ -1,52 +1,75 @@
 <template>
-  <v-container fill-height>
+  <v-container fill-height class="pt-13">
     <v-layout column wrap justify-center>
-      <v-container class="pt-16">
-        <v-row class="pt-16">
-          <v-col sm="9" cols="7" xl="5" class="pt-16">
-            <h1 align="left">CREATE A NEW TERM</h1>
-          </v-col>
-        </v-row>
+      <v-col cols="6">
+        <v-container>
+          <v-row>
+            <v-col sm="9" cols="7" xl="5">
+              <h1 align="left">CREATE A NEW TERM</h1>
+            </v-col>
+          </v-row>
+          <v-row>
+            <h3>Subject:</h3>
+          </v-row>
+          <v-row>
+            <v-col cols="6">
+              <v-text-field
+                dense
+                v-model="title"
+                :hint="changeHint"
+                label="Term Name"
+              ></v-text-field>
+            </v-col>
+          </v-row>
+          <v-row>
+            <h3>Predicate:</h3>
+          </v-row>
+          <v-row>
+            <!--TODO key value like addVocab -->
+            <v-col cols="6">
+              <v-select
+                :items="items"
+                label="RDFS Predicate"
+                item-text="state"
+                v-model="select"
+                return-object
+                dense
+              ></v-select>
+            </v-col>
+          </v-row>
+          <v-row>
+            <h3>Object:</h3>
+          </v-row>
+          <v-row>
+            <v-radio-group v-model="radios" mandatory>
+              <v-radio label="IRI of Object" value="IRI"></v-radio>
+              <v-radio label="Literal as Object" value="Literal"></v-radio>
+            </v-radio-group>
+          </v-row>
+          <v-row>
+            <v-col v-if="radios === 'IRI'" cols="12">
+              <SearchField />
+            </v-col>
+            <v-col v-else cols="9">
+              <v-textarea
+                v-model="discription"
+                label="enter your literal description"
+                name="input-7-1"
+                value=""
+                background-color="grey lighten-3"
+              ></v-textarea>
+            </v-col>
+          </v-row>
+          <v-row class="pt-3">
+            <v-btn v-on:click="addTerm">add Term</v-btn>
+          </v-row>
+        </v-container>
+      </v-col>
+      <v-col cols="6">
         <v-row>
-          <h3>Subject:</h3>
+          <v-container> <termsTable /></v-container>
         </v-row>
-        <v-row>
-          <v-col cols="4">
-            <v-text-field
-              v-model="title"
-              :hint="changeHint"
-              label="Term Name"
-            ></v-text-field>
-          </v-col>
-        </v-row>
-        <v-row>
-          <h3>Predicate:</h3>
-        </v-row>
-        <v-row justify-center align-content="center">
-          <!--TODO key value like addVocab -->
-          <v-select :items="items" label="RDFS Predicate" dense></v-select>
-        </v-row>
-        <v-row>
-          <h3>Object:</h3>
-        </v-row>
-        <v-row>
-          <v-radio-group v-model="radios" mandatory>
-            <v-radio label="IRI of Object" value="IRI"></v-radio>
-            <v-radio label="Literal as Object" value="Literal"></v-radio>
-          </v-radio-group>
-        </v-row>
-        <v-row>
-          <v-col v-if="radios === 'IRI'" cols="8"><SearchField /></v-col>
-          <v-col v-else>
-            <v-textarea
-              label="enter your literal description"
-              name="input-7-1"
-              value=""
-              background-color="grey lighten-3"
-            ></v-textarea>
-          </v-col>
-        </v-row>
-      </v-container>
+      </v-col>
     </v-layout>
   </v-container>
 </template>
@@ -54,29 +77,53 @@
 <script>
 // @ is an alias to /src
 import SearchField from "@/components/SearchField.vue";
+import TermsTable from "@/components/TermsTable.vue";
 
 export default {
   name: "Home",
+  props: ["search"],
   components: {
     SearchField,
+    TermsTable,
   },
   data: () => ({
+    //contains subject
     title: "",
     items: [
-      "rdfs: Class",
-      "rdf:Property",
-      "rdf:type",
-      "rdfs:subClassOf",
-      "rdfs:subPropertyOf",
-      "rdfs:domain",
-      "rdfs:range",
+      { state: "rdfs:Class" },
+      { state: "rdf:Property" },
+      { state: "rdf:type" },
+      { state: "rdfs:subClassOf" },
+      { state: "rdfs:subPropertyOf" },
+      { state: "rdfs:domain" },
+      { state: "rdfs:range" },
     ],
     hint: "your created IRI is: https://docs.proceed-labs.org/",
     radios: null,
+    select: { state: undefined },
+    discription: "",
   }),
   computed: {
     changeHint() {
       return "your created IRI is: https://docs.proceed-labs.org/" + this.title;
+    },
+  },
+  methods: {
+    addTerm() {
+      let quad = {
+        Subject: "https://docs.proceed-labs.org/" + this.title,
+        Predicate: this.select.state,
+        Object: "",
+      };
+      console.log(this.title + this.select.state);
+      if (this.radios === "IRI") {
+        console.log("IRI" + this.$store.getters.search);
+        quad.Object = this.$store.getters.search;
+      } else {
+        console.log(this.discription);
+        quad.Object = this.discription;
+      }
+      this.$store.commit("addTerm", quad);
     },
   },
 };

@@ -13,6 +13,7 @@ const store = new Vuex.Store({
   state: {
     quads: [],
     vocabs: [],
+    terms: [],
 
     search: "",
     //contains the results of the search
@@ -34,6 +35,9 @@ const store = new Vuex.Store({
       console.log(vocab);
       state.vocabs.push(vocab);
     },
+    addTerm(state, term) {
+      state.terms.push(term);
+    },
     toggleDrawerState(state) {
       state.drawerState = !state.drawerState;
     },
@@ -48,6 +52,13 @@ const store = new Vuex.Store({
     drawerState(state) {
       return state.drawerState;
     },
+    terms: (state) => {
+      return state.terms;
+    },
+    search: (state) => {
+      return state.search;
+    }
+
   },
 });
 new Vue({
