@@ -1,7 +1,7 @@
 <template>
   <v-container fill-height class="pt-16">
     <v-layout justify-center>
-      <v-col cols="6">
+      <v-col cols="6" xs="12">
         <v-container>
           <v-row>
             <v-col sm="9" cols="7" xl="5" class="pl-0">
@@ -46,7 +46,7 @@
               <v-radio label="Literal as Object" value="Literal"></v-radio>
             </v-radio-group>
           </v-row>
-          <v-row>
+          <v-row class="pl-0">
             <v-col v-if="radios === 'IRI'" cols="12">
               <SearchField />
             </v-col>
@@ -65,7 +65,7 @@
           </v-row>
         </v-container>
       </v-col>
-      <v-col cols="6">
+      <v-col cols="6" xs="12">
         <v-row>
           <v-container> <termsTable /></v-container>
         </v-row>
