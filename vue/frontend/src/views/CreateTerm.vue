@@ -1,10 +1,10 @@
 <template>
   <v-container fill-height class="pt-16">
-    <v-layout column wrap justify-center class="pt-16">
+    <v-layout justify-center>
       <v-col cols="6">
         <v-container>
           <v-row>
-            <v-col sm="9" cols="7" xl="5">
+            <v-col sm="9" cols="7" xl="5" class="pl-0">
               <h1 align="left">CREATE A NEW TERM</h1>
             </v-col>
           </v-row>
@@ -134,6 +134,6 @@ export default {
 </script>
 <style scoped>
 .adjustheight {
-  padding-top: 20%;
+  padding-left: -10;
 }
 </style>
