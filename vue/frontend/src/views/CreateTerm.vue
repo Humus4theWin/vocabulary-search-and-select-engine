@@ -90,6 +90,7 @@ export default {
     //contains subject
     title: "",
     items: [
+      { state: "undefined" },
       { state: "rdfs:Class" },
       { state: "rdf:Property" },
       { state: "rdf:type" },
@@ -115,7 +116,11 @@ export default {
         Predicate: this.select.state,
         Object: "",
       };
-      if (this.title && this.select.state) {
+      if (
+        this.title &&
+        this.select.state &&
+        this.select.state !== "undefined"
+      ) {
         console.log(this.title + this.select.state);
         if (this.radios === "IRI") {
           console.log("IRI" + this.$store.getters.search);
@@ -125,6 +130,8 @@ export default {
           quad.Object = this.discription;
         }
         this.$store.commit("addTerm", quad);
+        this.select.state = "undefined";
+        this.discription = "";
       } else {
         console.log("fehlerhafte Eingabe");
       }
