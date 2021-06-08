@@ -27,7 +27,9 @@
         <v-toolbar extension-height="100">
           <v-app-bar-nav-icon @click="toggleDrawerState()"></v-app-bar-nav-icon>
 
-          <v-toolbar-title>To Do: Add Page Title Here</v-toolbar-title>
+          <v-toolbar-title class="optionalTitle"
+            >To Do: Add Optional Page Title Here?!</v-toolbar-title
+          >
 
           <v-spacer></v-spacer>
 
@@ -43,6 +45,9 @@
 <style>
 .actionBar {
   margin-top: 25px;
+}
+.optionalTitle {
+  display: none;
 }
 </style>
 

@@ -48,9 +48,11 @@
       </v-list-item-content>
     </v-list-item>
 
-    <v-divider></v-divider>
+    <!--<v-divider></v-divider>-->
   </v-navigation-drawer>
 </template>
+
+<style></style>
 
 <script>
 import { mapGetters, mapMutations } from "vuex";
