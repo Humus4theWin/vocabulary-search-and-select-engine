@@ -113,8 +113,8 @@ export default {
         });
     },
 
-    async indexVocab(url, quads) {
-      //find terms
+    indexVocab(url, quads) {
+      //find terms in other Thread
 
       let terms = quads
         .filter((quad) => quad.predicate.value.includes("label"))
@@ -125,7 +125,7 @@ export default {
           };
           return obj;
         });
-
+      console.log(quads);
       // add all attributes
       terms = terms.map((term) => {
         let attributes = quads.filter((quad) => {
@@ -142,7 +142,6 @@ export default {
 
         return term;
       });
-      console.log(terms);
       this.$store.commit("addVocabTerms", { url: url, terms: terms });
     },
   },
