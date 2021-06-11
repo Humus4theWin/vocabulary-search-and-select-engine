@@ -56,33 +56,7 @@ export default {
       });
     },
     items() {
-      let terms = this.$store.getters.quads
-        .filter((quad) => quad.predicate.value.includes("label"))
-        .map((quad) => {
-          let obj = {
-            url: quad.subject.value,
-            label: quad.object.value,
-          };
-          return obj;
-        });
-      // add all attributes
-      terms = terms.map((term) => {
-        let attributes = this.$store.getters.quads.filter((quad) => {
-          return quad.subject.value === term.url;
-        });
-
-        attributes.forEach((attr) => {
-          let val = attr.object.value;
-          if (val.length > this.descriptionLimit) {
-            val = val.slice(0, this.descriptionLimit) + "...";
-          }
-          term[attr.predicate.value] = val;
-        });
-
-        return term;
-      });
-
-      return terms;
+      return this.$store.getters.getVocabTerms;
     },
   },
 };

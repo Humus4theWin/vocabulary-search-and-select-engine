@@ -29,6 +29,10 @@ const store = new Vuex.Store({
       console.log(vocab);
       state.vocabs.push(vocab);
     },
+    addVocabTerms(state, data) {
+      let selected = state.vocabs.filter((vocab) => vocab.url === data.url);
+      selected[0].terms = data.terms;
+    },
     addTerm(state, term) {
       state.terms.push(term);
     },
@@ -48,6 +52,9 @@ const store = new Vuex.Store({
     },
     terms: (state) => {
       return state.terms;
+    },
+    getVocabTerms(state) {
+      return state.vocabs.flatMap((vocab) => vocab.terms);
     },
     search: (state) => {
       return state.search;

@@ -70,6 +70,7 @@ export default {
       let vocab = {};
       vocab.amount = 0;
       vocab.url = url;
+      vocab.terms = [];
       vocab.baseURL = "http://" + url.split("/")[2];
 
       let response;
@@ -108,9 +109,42 @@ export default {
         .on("end", () => {
           this.$store.commit("addVocab", vocab);
           console.log("All done!");
+          this.indexVocab(url, vocab.quads);
         });
     },
-    async indexVocab() {},
+
+    async indexVocab(url, quads) {
+      //find terms
+
+      let terms = quads
+        .filter((quad) => quad.predicate.value.includes("label"))
+        .map((quad) => {
+          let obj = {
+            url: quad.subject.value,
+            label: quad.object.value,
+          };
+          return obj;
+        });
+
+      // add all attributes
+      terms = terms.map((term) => {
+        let attributes = quads.filter((quad) => {
+          return quad.subject.value === term.url;
+        });
+
+        attributes.forEach((attr) => {
+          let val = attr.object.value;
+          if (val.length > this.descriptionLimit) {
+            val = val.slice(0, this.descriptionLimit) + "...";
+          }
+          term[attr.predicate.value] = val;
+        });
+
+        return term;
+      });
+      console.log(terms);
+      this.$store.commit("addVocabTerms", { url: url, terms: terms });
+    },
   },
 };
 </script>
