@@ -4,14 +4,15 @@ import App from "./App.vue";
 import vuetify from "./plugins/vuetify";
 import router from "./router";
 import Vuex from "vuex";
+import VueWorker from "vue-worker";
 
 Vue.config.productionTip = false;
 Vue.use(Vuetify);
 Vue.use(Vuex);
+Vue.use(VueWorker);
 
 const store = new Vuex.Store({
   state: {
-    quads: [],
     vocabs: [],
     terms: [],
 
@@ -23,13 +24,6 @@ const store = new Vuex.Store({
   mutations: {
     saveSearchedWord(state, word) {
       state.search = word;
-    },
-    addQuad(state, quad) {
-      state.quads.push(quad);
-    },
-    addQuads(state, quads) {
-      console.log(quads[0]);
-      state.quads = [...state.quads, ...quads];
     },
     addVocab(state, vocab) {
       console.log(vocab);
@@ -47,7 +41,7 @@ const store = new Vuex.Store({
       return state.vocabs;
     },
     quads: (state) => {
-      return state.quads;
+      return state.vocabs.flatMap((vocab) => vocab.quads);
     },
     drawerState(state) {
       return state.drawerState;
@@ -57,10 +51,10 @@ const store = new Vuex.Store({
     },
     search: (state) => {
       return state.search;
-    }
-
+    },
   },
 });
+
 new Vue({
   vuetify,
   router,

@@ -69,7 +69,7 @@ export default {
     async importVocab(url, format) {
       let vocab = {};
       vocab.amount = 0;
-
+      vocab.url = url;
       vocab.baseURL = "http://" + url.split("/")[2];
 
       let response;
@@ -93,7 +93,7 @@ export default {
 
       // parse vocab datta
       let textStream = require("streamify-string")(vocab.data);
-      let quads = [];
+      vocab.quads = [];
 
       await rdfParser
         .parse(textStream, {
@@ -101,18 +101,16 @@ export default {
           baseIRI: vocab.baseURL,
         })
         .on("data", (quad) => {
-          quads.push(quad);
+          vocab.quads.push(quad);
           vocab.amount += 1;
         })
         .on("error", (error) => console.error(error))
         .on("end", () => {
-          this.$store.commit("addQuads", quads);
           this.$store.commit("addVocab", vocab);
           console.log("All done!");
         });
-
-      // push vocab
     },
+    async indexVocab() {},
   },
 };
 </script>
