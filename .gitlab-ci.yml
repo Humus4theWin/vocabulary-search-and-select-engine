@@ -7,9 +7,10 @@
 # Stages run in sequential order, but jobs within stages run in parallel.
 #
 # For more information, see: https://docs.gitlab.com/ee/ci/yaml/README.html#stages
-image: node:9.11.1
+
 
 pages:
+  image: node:9.11.1
   stage: deploy # List of stages for jobs, and their order of execution
   script:
     - echo "Compiling the code..."
@@ -20,6 +21,7 @@ pages:
     - echo "No lint issues found."
     - echo "Deploying application..."
     - cd vue/frontend
+    - echo "changed directory"
     - npm install
     - echo "node modules installed"
     - npm run build
