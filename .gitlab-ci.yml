@@ -19,7 +19,7 @@ pages: # List of stages for jobs, and their order of execution
     - echo "No lint issues found."
     - echo "Deploying application..."
     - cd vue/frontend
-    - npm install --progress=false
+    - npm install
     - npm run build
     - echo "Application successfully deployed."
   artifacts:
