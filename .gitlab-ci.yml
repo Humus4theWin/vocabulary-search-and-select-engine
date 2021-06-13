@@ -18,7 +18,7 @@ pages: # List of stages for jobs, and their order of execution
     - echo "Linting code... This will take about 10 seconds."
     - echo "No lint issues found."
     - echo "Deploying application..."
-    - npm run build
+    - vue-cli-service build
     - echo "Application successfully deployed."
   artifacts:
     paths:
