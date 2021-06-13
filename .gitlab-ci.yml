@@ -18,6 +18,7 @@ pages: # List of stages for jobs, and their order of execution
     - echo "Linting code... This will take about 10 seconds."
     - echo "No lint issues found."
     - echo "Deploying application..."
+    - cd vue/frontend
     - npm install --progress=false
     - npm run build
     - echo "Application successfully deployed."
