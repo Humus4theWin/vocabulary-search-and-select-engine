@@ -22,6 +22,6 @@ pages:
   artifacts:
     expire_in: 1 day
     paths:
-      - public
+      - vue/frontend/public
   only:
     - master
