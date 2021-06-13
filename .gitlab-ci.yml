@@ -16,8 +16,9 @@ pages:
     - cd vue/frontend #mandatory
     - npm install --progress=false
     - npm run build
-    - mv public public-vue # GitLab Pages hooks on the public folder
-    - mv dist public # rename the dist folder (result of npm run build)
+    - rm -rf public
+    - mkdir public
+    - cp -r dist/* public
   artifacts:
     paths:
       - public
