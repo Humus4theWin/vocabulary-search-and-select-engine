@@ -17,7 +17,7 @@ pages:
     - echo "Deploying application..."
     - cd vue/frontend
     - echo "changed directory"
-    - npm install
+    - npm install --progress=false
     - echo "node modules installed"
     - npm run build
     - echo "Application successfully deployed."
