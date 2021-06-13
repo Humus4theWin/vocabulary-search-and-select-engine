@@ -20,7 +20,7 @@
       <v-list-item-content>
         <v-btn
           class="primary"
-          to="/Vocabs"
+          :to="{ name: 'Vocabularies' }"
           depressed
           min-height="80"
           max-height="85"
@@ -36,7 +36,7 @@
       <v-list-item-content>
         <v-btn
           class="primary"
-          to="/create"
+          :to="{ name: 'CreateTerm' }"
           depressed
           min-height="80"
           max-height="85"
@@ -47,13 +47,8 @@
         </v-btn>
       </v-list-item-content>
     </v-list-item>
-
-    <!--<v-divider></v-divider>-->
   </v-navigation-drawer>
 </template>
-
-<style></style>
-
 <script>
 import { mapGetters, mapMutations } from "vuex";
 

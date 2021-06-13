@@ -1,6 +1,5 @@
 <template>
   <v-card>
-    <!--<v-card-title> Search for your URI </v-card-title>-->
     <v-card-text>
       <v-autocomplete
         v-model="model"

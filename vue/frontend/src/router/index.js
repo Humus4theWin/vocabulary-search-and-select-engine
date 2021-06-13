@@ -1,8 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
-import CreateTerm from "../views/CreateTerm.vue";
-import Vocabularies from "../views/Vocabularies.vue";
 
 Vue.use(VueRouter);
 
@@ -15,17 +13,30 @@ const routes = [
   {
     path: "/vocabs",
     name: "Vocabularies",
-    component: Vocabularies,
+    component: () =>
+      import(/* webpackChunkName: "vocabularies" */ "../views/Vocabularies"),
   },
   {
     path: "/create",
-    name: "Create term",
-    component: CreateTerm,
+    name: "CreateTerm",
+    component: () =>
+      import(/* webpackChunkName: "createTerm" */ "../views/CreateTerm"),
+  },
+  {
+    path: "/404",
+    alias: "*",
+    name: "NotFound",
+    component: () =>
+      import(/* webpackChunkName: "notfound" */ "../views/NotFound"),
   },
 ];
 
+//for URL without hashes
+const mode = "history";
+
 const router = new VueRouter({
   routes,
+  mode,
 });
 
 export default router;

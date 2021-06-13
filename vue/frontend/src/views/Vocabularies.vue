@@ -17,7 +17,6 @@
 import AddVocab from "@/components/AddVocab.vue";
 import vocabTable from "@/components/vocabTable.vue";
 
-// todo: Elemente sinnvoll anordnen (nicht in der mitte!)
 export default {
   name: "Home",
   components: {

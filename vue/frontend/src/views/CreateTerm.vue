@@ -5,7 +5,7 @@
         <v-container>
           <v-row>
             <v-col sm="9" cols="7" xl="5" class="pl-0">
-              <h1 align="left">CREATE A NEW TERM</h1>
+              <h1>CREATE A NEW TERM</h1>
             </v-col>
           </v-row>
           <v-row>
@@ -41,7 +41,7 @@
             <h3>Object:</h3>
           </v-row>
           <v-row>
-            <v-radio-group v-model="radios" mandatory>
+            <v-radio-group v-model="radios" mandatory row>
               <v-radio label="IRI as Object" value="IRI"></v-radio>
               <v-radio label="Literal as Object" value="Literal"></v-radio>
             </v-radio-group>
@@ -139,8 +139,3 @@ export default {
   },
 };
 </script>
-<style scoped>
-.adjustheight {
-  padding-left: -10;
-}
-</style>

@@ -3,7 +3,7 @@
     <v-container fluid>
       <v-row align="center" justify="space-between">
         <v-col cols="12">
-          <h1 align="left">ADD ANOTHER <br />VOCABULARY</h1>
+          <h1>ADD ANOTHER <br />VOCABULARY</h1>
         </v-col>
         <v-col cols="6">
           <v-text-field

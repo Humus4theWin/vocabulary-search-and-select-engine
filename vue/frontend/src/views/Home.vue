@@ -6,7 +6,7 @@
           <v-row>
             <v-spacer></v-spacer>
             <v-col cols="6">
-              <h1 align="left">CREATE A <br />CAPABILITY DESCRIPTION</h1>
+              <h1>CREATE A <br />CAPABILITY DESCRIPTION</h1>
             </v-col>
             <v-spacer></v-spacer>
           </v-row>
@@ -37,4 +37,12 @@ export default {
   },
 };
 </script>
-<style></style>
+<style>
+h1 {
+  text-align: left;
+}
+th,
+td {
+  text-align: left;
+}
+</style>
