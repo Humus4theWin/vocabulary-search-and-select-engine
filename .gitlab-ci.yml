@@ -21,6 +21,9 @@ pages:
     - echo "node modules installed"
     - npm run build
     - echo "Application successfully deployed."
+    - rm -rf public
+    - mkdir public
+    - cp -r dist/* public
   artifacts:
     paths:
       - public
