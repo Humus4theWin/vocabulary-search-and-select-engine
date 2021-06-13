@@ -13,14 +13,10 @@ pages:
   image: node:latest
   stage: deploy # List of stages for jobs, and their order of execution
   script:
-    
-    - echo "Deploying application..."
-    - cd vue/frontend
-    - echo "changed directory"
+    #- cd vue/frontend
+    #- echo "changed directory"
     - npm install --progress=false
-    - echo "node modules installed"
     - npm run build
-    - echo "Application successfully deployed."
     - rm -rf public
     - mkdir public
     - cp -r dist/* public
