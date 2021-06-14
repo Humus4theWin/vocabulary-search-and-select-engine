@@ -13,7 +13,6 @@ pages:
   image: node:latest
   stage: deploy # List of stages for jobs, and their order of execution
   script:
-    - cd vue/frontend #mandatory
     - npm install --progress=false
     - npm run build
     - rm -rf public
@@ -22,6 +21,6 @@ pages:
   artifacts:
     expire_in: 1 day
     paths:
-      - vue/frontend/public
+      - public
   only:
     - master

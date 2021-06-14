@@ -6,7 +6,8 @@ Vue.use(VueRouter);
 
 const routes = [
   {
-    path: "/",
+    path: "/vocabulary-search-and-select-engine/",
+    alias: ["/", "/vocabulary-search-and-select-engine/"],
     name: "Home",
     component: Home,
   },
