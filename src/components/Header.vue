@@ -45,12 +45,6 @@
   </v-app-bar>
 </template>
 
-<style>
-.actionBar {
-  margin-top: 25px;
-}
-</style>
-
 <script>
 import { mapGetters, mapMutations } from "vuex";
 

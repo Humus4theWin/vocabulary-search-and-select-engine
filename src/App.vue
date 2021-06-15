@@ -38,6 +38,12 @@
 .leftView {
   max-height: calc(100% - 200px);
 }
+.actionBar {
+  margin-top: 25px;
+}
+.yearLicense {
+  font-size: 80%;
+}
 </style>
 <script>
 import Header from "@/components/Header";

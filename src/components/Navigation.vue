@@ -17,8 +17,4 @@
 <script>
 export default {};
 </script>
-<style>
-.yearLicense{
-  font-size: 80%;
-}
-</style>
+
