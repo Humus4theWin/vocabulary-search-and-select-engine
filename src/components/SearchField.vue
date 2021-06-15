@@ -10,8 +10,8 @@
         hide-selected
         item-text="label"
         item-value="url"
-        label="search terms"
-        placeholder="Start typing to Search"
+        label="Terms"
+        placeholder="Start typing to search"
         prepend-icon="mdi-database-search"
         return-object
       ></v-autocomplete>

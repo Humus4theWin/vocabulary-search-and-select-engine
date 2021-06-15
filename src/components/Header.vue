@@ -1,7 +1,7 @@
 <template>
   <v-app-bar color="primary" height="120">
     <v-col>
-      <v-row justify="left" align="center">
+      <v-row align="center">
         <router-link :to="{ name: 'Home' }">
           <v-img
             class="mx-2"
@@ -25,16 +25,19 @@
 
       <v-card class="actionBar" color="grey lighten-4" flat height="0px" tile>
         <v-toolbar extension-height="100">
-          <v-app-bar-nav-icon @click="toggleDrawerState()"></v-app-bar-nav-icon>
+          <v-app-bar-nav-icon
+            @click="toggleLeftDrawerState()"
+          ></v-app-bar-nav-icon>
 
-          <v-toolbar-title class="optionalTitle"
-            >To Do: Add Optional Page Title Here?!</v-toolbar-title
-          >
+          <v-toolbar-title>Capabilities</v-toolbar-title>
 
           <v-spacer></v-spacer>
 
-          <v-btn icon>
-            <v-icon>mdi-plus</v-icon>
+          <v-btn icon v-if="!rightDrawer" @click="toggleRightDrawerState()"
+            ><v-icon>mdi-arrow-left</v-icon>
+          </v-btn>
+          <v-btn icon v-else @click="toggleRightDrawerState()"
+            ><v-icon>mdi-arrow-right</v-icon>
           </v-btn>
         </v-toolbar>
       </v-card>
@@ -46,19 +49,33 @@
 .actionBar {
   margin-top: 25px;
 }
-.optionalTitle {
-  display: none;
-}
 </style>
 
 <script>
-import { mapMutations } from "vuex";
+import { mapGetters, mapMutations } from "vuex";
 
 export default {
   name: "Header",
+  computed: {
+    ...mapGetters({
+      rightDrawer: "rightDrawerState", // map `this.rightDrawerState()` to `this.$store.dispatch('rightDrawerState')`
+    }),
+    rightDrawerState: {
+      get() {
+        return this.rightDrawer;
+      },
+      set(rightDrawerState) {
+        if (!rightDrawerState) {
+          this.toggleRightDrawerState();
+        }
+        return rightDrawerState;
+      },
+    },
+  },
   methods: {
     ...mapMutations({
-      toggleDrawerState: "toggleDrawerState", // map `this.toggleDrawerState()` to `this.$store.dispatch('toggleDrawerState')`
+      toggleLeftDrawerState: "toggleLeftDrawerState", // map `this.toggleLeftDrawerState()` to `this.$store.dispatch('toggleLeftDrawerState')`
+      toggleRightDrawerState: "toggleRightDrawerState", // map `this.toggleRightDrawerState()` to `this.$store.dispatch('toggleRightDrawerState')`
     }),
   },
 };

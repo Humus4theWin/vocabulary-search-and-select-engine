@@ -56,7 +56,7 @@ export default {
   name: "LeftDrawer",
   computed: {
     ...mapGetters({
-      drawer: "drawerState", // map `this.drawerState()` to `this.$store.dispatch('drawerState')`
+      drawer: "leftDrawerState", // map `this.leftDrawerState()` to `this.$store.dispatch('leftDrawerState')`
     }),
     drawerState: {
       get() {
@@ -64,7 +64,7 @@ export default {
       },
       set(drawerState) {
         if (!drawerState) {
-          this.toggleDrawerState();
+          this.toggleLeftDrawerState();
         }
         return drawerState;
       },
@@ -72,7 +72,7 @@ export default {
   },
   methods: {
     ...mapMutations({
-      toggleDrawerState: "toggleDrawerState", // map `this.toggleDrawerState()` to `this.$store.dispatch('toggleDrawerState')`
+      toggleLeftDrawerState: "toggleLeftDrawerState", // map `this.toggleLeftDrawerState()` to `this.$store.dispatch('toggleLeftDrawerState')`
     }),
   },
 };

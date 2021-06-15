@@ -19,7 +19,8 @@ const store = new Vuex.Store({
     search: "",
     //contains the results of the search
     answers: {},
-    drawerState: false,
+    leftDrawerState: false,
+    rightDrawerState: false,
   },
   mutations: {
     saveSearchedWord(state, word) {
@@ -36,8 +37,11 @@ const store = new Vuex.Store({
     addTerm(state, term) {
       state.terms.push(term);
     },
-    toggleDrawerState(state) {
-      state.drawerState = !state.drawerState;
+    toggleLeftDrawerState(state) {
+      state.leftDrawerState = !state.leftDrawerState;
+    },
+    toggleRightDrawerState(state) {
+      state.rightDrawerState = !state.rightDrawerState;
     },
   },
   getters: {
@@ -47,8 +51,11 @@ const store = new Vuex.Store({
     quads: (state) => {
       return state.vocabs.flatMap((vocab) => vocab.quads);
     },
-    drawerState(state) {
-      return state.drawerState;
+    leftDrawerState(state) {
+      return state.leftDrawerState;
+    },
+    rightDrawerState(state) {
+      return state.rightDrawerState;
     },
     terms: (state) => {
       return state.terms;

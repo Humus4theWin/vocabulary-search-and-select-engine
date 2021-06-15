@@ -1,9 +1,14 @@
 <template>
   <v-app>
-    <Header />
-    <router-view />
-    <Navigation />
-    <left-drawer />
+    <v-row no-gutters>
+      <v-col class="leftView">
+        <Header />
+        <router-view />
+        <Navigation />
+        <left-drawer />
+      </v-col>
+      <right-drawer />
+    </v-row>
   </v-app>
 </template>
 
@@ -29,14 +34,18 @@
     }
   }
 }
+
+.leftView {
+  max-height: calc(100% - 200px);
+}
 </style>
 <script>
 import Header from "@/components/Header";
 import Navigation from "@/components/Navigation";
 import LeftDrawer from "./components/LeftDrawer.vue";
+import RightDrawer from "./components/RightDrawer.vue";
 
 export default {
-  components: { Navigation, Header, LeftDrawer },
-  methods: {},
+  components: { Navigation, Header, LeftDrawer, RightDrawer },
 };
 </script>
