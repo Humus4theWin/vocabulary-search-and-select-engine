@@ -66,6 +66,7 @@ export default {
       },
     },
   },
+
   methods: {
     ...mapMutations({
       toggleLeftDrawerState: "toggleLeftDrawerState", // map `this.toggleLeftDrawerState()` to `this.$store.dispatch('toggleLeftDrawerState')`
