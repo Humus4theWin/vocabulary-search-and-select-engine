@@ -9,7 +9,7 @@
           <v-text-field
             outlined
             v-model="addURL"
-            label="paste Vocab URL here"
+            label="Paste Vocab URL here"
           ></v-text-field>
         </v-col>
         <v-col cols="2" class="pb-10">

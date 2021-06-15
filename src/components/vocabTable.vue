@@ -5,7 +5,7 @@
         <tr>
           <th class="text-left">Source</th>
           <th class="text-left">RDF Type</th>
-          <th class="text-left">Anzahl Quads</th>
+          <th class="text-left">Number of Quads</th>
         </tr>
       </thead>
       <tbody>
