@@ -35,7 +35,6 @@
 
 <script>
 import rdfParser from "rdf-parse";
-//import { mapGetters,  mapActions} from 'vuex'
 export default {
   name: "AddVocab",
   data: () => ({
@@ -58,7 +57,6 @@ export default {
 
   methods: {
     addVocab() {
-      //this.$emit("add", this.addURL, this.select.state);
       this.importVocab(this.addURL, this.select.state);
       //clean up
       this.select.state = undefined;
@@ -92,7 +90,7 @@ export default {
       }
       if (format) vocab.type = format;
 
-      // parse vocab datta
+      // parse vocab data
       let textStream = require("streamify-string")(vocab.data);
       vocab.quads = [];
 
@@ -119,11 +117,10 @@ export default {
       let terms = quads
         .filter((quad) => quad.predicate.value.includes("label"))
         .map((quad) => {
-          let obj = {
+          return {
             url: quad.subject.value,
             label: quad.object.value,
           };
-          return obj;
         });
       console.log(quads);
       // add all attributes

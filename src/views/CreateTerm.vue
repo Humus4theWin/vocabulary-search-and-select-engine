@@ -52,7 +52,7 @@
             </v-col>
             <v-col v-else cols="9">
               <v-textarea
-                v-model="discription"
+                v-model="description"
                 label="Enter your literal description"
                 name="input-7-1"
                 value=""
@@ -100,17 +100,24 @@ export default {
       { state: "rdfs:domain" },
       { state: "rdfs:range" },
     ],
-    hint: "your created IRI is: https://rdf.proceed-labs.org/",
+    hint: "Your created IRI is: https://rdf.proceed-labs.org/",
     radios: null,
     select: { state: undefined },
-    discription: "",
+    description: "",
   }),
   computed: {
+    /**
+     * computes the IRI as hint under the name input field of the term
+     * @return {string}
+     */
     changeHint() {
       return "Your created IRI is: https://rdf.proceed-labs.org/" + this.title;
     },
   },
   methods: {
+    /**
+     * adds the new term as quad ( with object or literal) to the existing terms in the store
+     */
     addTerm() {
       let quad = {
         Subject: "https://rdf.proceed-labs.org/" + this.title,
@@ -127,12 +134,12 @@ export default {
           console.log("IRI" + this.$store.getters.search);
           quad.Object = this.$store.getters.search;
         } else {
-          console.log(this.discription);
-          quad.Object = this.discription;
+          console.log(this.description);
+          quad.Object = this.description;
         }
         this.$store.commit("addTerm", quad);
         this.select.state = "undefined";
-        this.discription = "";
+        this.description = "";
       } else {
         console.log("fehlerhafte Eingabe");
       }
