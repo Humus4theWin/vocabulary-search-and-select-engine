@@ -22,7 +22,6 @@
 <script>
 export default {
   name: "TermsTable",
-  props: ["terms"],
   data: () => ({}),
 };
 </script>

@@ -10,6 +10,7 @@
             outlined
             v-model="addURL"
             label="Paste Vocab URL here"
+            @keyup.enter="addVocab"
           ></v-text-field>
         </v-col>
         <v-col cols="2" class="pb-10">
@@ -56,6 +57,9 @@ export default {
   }),
 
   methods: {
+    /**
+     * calls importVocab and clears select.state, select.abbr (format of Vocab) and URL
+     */
     addVocab() {
       this.importVocab(this.addURL, this.select.state);
       //clean up
@@ -63,7 +67,13 @@ export default {
       this.select.abbr = "auto";
       this.addURL = "";
     },
-
+    /**
+     * imports vocabulary and parses quads; adds it to Vuex
+     * @async
+     * @param url
+     * @param format
+     * @return {Promise<void>}
+     */
     async importVocab(url, format) {
       let vocab = {};
       vocab.amount = 0;
@@ -111,6 +121,11 @@ export default {
         });
     },
 
+    /**
+     * parses the terms and their attributes and adds those to the existing vocab in Vuex
+     * @param url
+     * @param quads
+     */
     indexVocab(url, quads) {
       //find terms in other Thread
 

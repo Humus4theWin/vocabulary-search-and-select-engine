@@ -116,7 +116,7 @@ export default {
   },
   methods: {
     /**
-     * adds the new term as quad ( with object or literal) to the existing terms in the store
+     * adds the new term as quad ( with object or literal) to the existing user terms in the store
      */
     addTerm() {
       let quad = {

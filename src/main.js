@@ -13,13 +13,12 @@ Vue.use(VueWorker);
 /** @type {*} */
 const store = new Vuex.Store({
   state: {
-    //contains the added vocabs
+    //contains the added vocabs {amount, baseURL, data, quads:[{}],terms:[{}], type, url}
     vocabs: [],
+    //contains terms {subject, predicate, object} added by the user
     terms: [],
     //contains the results of the search
     search: "",
-
-    answers: {},
     leftDrawerState: false,
     rightDrawerState: false,
   },
@@ -33,7 +32,7 @@ const store = new Vuex.Store({
       state.search = word;
     },
     /**
-     * adds a vocab to the list of available vocabs
+     * adds a vocab (quads) to the list of available vocabs
      * @param state current state
      * @param {Object} vocab a rdf vocab
      */
@@ -42,15 +41,16 @@ const store = new Vuex.Store({
       state.vocabs.push(vocab);
     },
     /**
+     * adds terms to the vocab, that matches the VocabUrl
      * @param state
-     * @param {Object} data - {url, terms}
+     * @param {Object} data - {VocabUrl, terms}
      */
     addVocabTerms: function (state, data) {
       let selected = state.vocabs.filter((vocab) => vocab.url === data.url);
       selected[0].terms = data.terms;
     },
     /**
-     * adds a new term (subject, predicate, object), created by the user to the searchable terms
+     * adds a new term (subject, predicate, object), created by the user to terms
      * @param state current state
      * @param term subject, predicate, object
      */
@@ -74,7 +74,7 @@ const store = new Vuex.Store({
   },
   getters: {
     /**
-     * returns all vocabs, which were added (baseURL, RDF type, amount)
+     * returns all vocabs, which were added
      * @return state.vocabs
      */
     vocabularies: (state) => {
@@ -111,6 +111,12 @@ const store = new Vuex.Store({
     terms: (state) => {
       return state.terms;
     },
+    /**
+     * returns the vocab terms
+     * @todo refactor JSDoc of function? Format not clear
+     * @param state
+     * @return {unknown[]}
+     */
     getVocabTerms(state) {
       return state.vocabs.flatMap((vocab) => vocab.terms);
     },

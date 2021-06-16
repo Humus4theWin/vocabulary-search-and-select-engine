@@ -40,6 +40,10 @@ export default {
   }),
 
   computed: {
+    /**
+     * returns fields which matches search
+     * @return {{value, key: string}[]|*[]}
+     */
     fields() {
       if (!this.model) return [];
 
@@ -54,6 +58,10 @@ export default {
         };
       });
     },
+    /**
+     * returns the vocab terms (attributes)
+     * @return {any}
+     */
     items() {
       return this.$store.getters.getVocabTerms;
     },
