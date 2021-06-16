@@ -81,10 +81,10 @@ const store = new Vuex.Store({
       return state.vocabs;
     },
     /**
-     * returns vocabs as an array of quads objects {subject, predicate, object}
+     * returns all quads of all vocabs as an array of quads objects {subject, predicate, object}
      * @todo refactor JSDoc of function? Format not clear
      * @param state
-     * @return {unknown[]}
+     * @return {quads[]}
      */
     quads: (state) => {
       return state.vocabs.flatMap((vocab) => vocab.quads);
@@ -112,10 +112,16 @@ const store = new Vuex.Store({
       return state.terms;
     },
     /**
-     * returns the vocab terms
+     * returns all terms from all vocab
      * @todo refactor JSDoc of function? Format not clear
      * @param state
-     * @return {unknown[]}
+     * @return {term[]}
+
+     * @typedef {Object} term
+     * @property {string} label the name of the term (aka. the subject)
+     * @property {string} url the IRI of the Term (aka. the subject)
+     * term can have additional arrtibues (key/val pairs), containning other predicate/object data for the given subject (lable/url)
+     * access them through: Object.keys(<term>)
      */
     getVocabTerms(state) {
       return state.vocabs.flatMap((vocab) => vocab.terms);
