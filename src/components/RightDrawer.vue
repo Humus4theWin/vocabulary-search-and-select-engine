@@ -22,13 +22,10 @@
           </v-toolbar-title>
           <v-spacer></v-spacer>
           <v-btn color="white" icon>
-            <v-icon>mdi-pencil</v-icon>
-          </v-btn>
-          <v-btn color="white" icon>
             <v-icon>mdi-delete</v-icon>
           </v-btn>
         </v-app-bar>
-        <v-card-title>Structured-light 3D scanner</v-card-title>
+        <v-card-title>SL 3D Scanner</v-card-title>
         <v-card-text class="text-left">
           <v-expansion-panels :value="drawerState ? 0 : 1">
             <v-expansion-panel>
@@ -49,9 +46,22 @@
           </v-toolbar-title>
           <v-spacer></v-spacer>
           <v-btn color="white" icon>
-            <v-icon>mdi-pencil</v-icon>
+            <v-icon>mdi-delete</v-icon>
           </v-btn>
         </v-app-bar>
+        <v-card-title>Scans</v-card-title>
+        <v-card-text class="text-left">
+          <v-expansion-panels :value="drawerState ? 0 : 1">
+            <v-expansion-panel>
+              <v-expansion-panel-header> Description </v-expansion-panel-header>
+              <v-expansion-panel-content>
+                To examine systematically (as by passing a beam of radiation
+                over or through) in order to obtain data especially for display
+                or storage.
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+          </v-expansion-panels>
+        </v-card-text>
       </v-card>
 
       <v-card class="mx-auto mb-5">
@@ -60,9 +70,6 @@
             Object
           </v-toolbar-title>
           <v-spacer></v-spacer>
-          <v-btn color="white" icon>
-            <v-icon>mdi-pencil</v-icon>
-          </v-btn>
         </v-app-bar>
       </v-card>
     </v-col>
