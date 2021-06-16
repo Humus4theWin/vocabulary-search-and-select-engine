@@ -1,24 +1,20 @@
 <template>
   <v-container fill-height>
-    <v-layout column wrap justify-center class="pt-10 pl-16">
-      <v-row justify-center align-content="center">
-        <v-col cols="10">
-          <v-row>
-            <v-spacer></v-spacer>
+    <v-layout column justify-center>
+      <v-row justify-center align-content="center" class="mt-15 mb-15">
+        <v-col cols="12">
+          <v-row class="d-flex justify-center">
             <v-col cols="6">
               <h1>Search for Terms</h1>
             </v-col>
-            <v-spacer></v-spacer>
           </v-row>
         </v-col>
 
-        <v-col cols="10">
-          <v-row>
-            <v-spacer></v-spacer>
+        <v-col cols="12">
+          <v-row class="d-flex justify-center">
             <v-col cols="6">
               <SearchField />
             </v-col>
-            <v-spacer></v-spacer>
           </v-row>
         </v-col>
       </v-row>
