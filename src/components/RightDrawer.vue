@@ -5,7 +5,9 @@
     :style="{ flex: drawerState ? '0 0 33.3333%' : '0 0 0%' }"
   >
     <v-col class="pa-8">
-        <h1 class="white--text" style="line-height: 1.3 !important">New Capability</h1>
+      <h1 class="white--text" style="line-height: 1.3 !important">
+        New Capability
+      </h1>
       <v-text-field
         class="pt-5"
         label="Capability Name"
@@ -64,7 +66,7 @@
         </v-app-bar>
       </v-card>
     </v-col>
-    
+
     <v-col fill-height align="end" class="pa-8">
       <v-btn x-large color="white">Generate JSON-LD</v-btn>
     </v-col>

@@ -20,14 +20,20 @@
       <v-list v-if="model" class="info">
         <v-list-item v-for="(field, i) in fields" :key="i">
           <v-list-item-content>
-            <v-list-item-title v-text="field.value"></v-list-item-title>
-            <v-list-item-subtitle v-text="field.key"></v-list-item-subtitle>
+            <v-list-item-title class="whiteText" v-text="field.value"></v-list-item-title>
+            <v-list-item-subtitle class="whiteText" v-text="field.key"></v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
       </v-list>
     </v-expand-transition>
   </v-card>
 </template>
+
+<style>
+.whiteText {
+  color: white !important;
+}
+</style>
 
 <script>
 export default {
