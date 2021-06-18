@@ -5,6 +5,7 @@
         v-model="model"
         :items="items"
         :loading="isLoading"
+        :search-input.sync="search"
         color="black"
         hide-no-data
         hide-selected
