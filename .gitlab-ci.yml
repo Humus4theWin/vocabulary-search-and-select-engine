@@ -33,8 +33,10 @@ defaultVoc:
   image: node:latest
   stage: build
   script:
-   - echo "It works."
-   - echo "Writing to file" >public/dtest.json
+    - echo "It works."
+    - rm -rf public
+    - mkdir public
+    - echo "Writing to file" >public/dtest.json
   artifacts:
     paths:
       - public/dtest.json
