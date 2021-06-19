@@ -22,19 +22,23 @@ pages:
     - rm -rf public
     - mkdir public
     - cp -r dist/* public
+    #
+    - echo "Running "
+    - echo "Content of the file" >public/dtest.json
   artifacts:
     expire_in: 1 day
     paths:
       - public
   only:
     - master
+    - 12-vocab-pipeline-initial-setup
 
-defaultVoc:
-  image: node:latest
-  stage: build
-  script:
-    - echo "It works."
-    - echo "Writing to file" >dtest.json
-  artifacts:
-    paths:
-      - dtest.json
+#defaultVoc:
+#  image: node:latest
+#  stage: build
+#  script:
+#    - echo "It works."
+#    - echo "Writing to file" >dtest.json
+#  artifacts:
+#    paths:
+#      - dtest.json
