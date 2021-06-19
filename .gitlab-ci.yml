@@ -26,8 +26,10 @@ pages:
     - cp -r dist/* public
     #
     - echo "Running Default Vocabulary Pipeline..."
-    - node src/defaultVocPipeline/downloadParseCommit.js
-    - echo "Content of the file" >public/dtest.json
+    - cd src/defaultVocPipeline
+    - npm install
+    - vocabs=$(node ./downloadParseCommit.js)
+    - echo $vocabs >public/defaultVocabularies.json
   artifacts:
     expire_in: 1 day
     paths:

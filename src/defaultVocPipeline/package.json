@@ -1,0 +1,15 @@
+{
+  "name": "defaultvocpipeline",
+  "version": "1.0.0",
+  "description": "This is a node module that downloads, parses, indexes and stores a predefined list of RDF vocabularies",
+  "main": "downloadParseCommit.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "rdf-parse": "^1.8.0",
+    "streamify-string": "^1.0.1"
+  },
+  "author": "",
+  "license": "ISC"
+}
