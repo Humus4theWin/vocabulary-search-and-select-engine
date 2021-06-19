@@ -34,3 +34,4 @@ defaultVoc:
   stage: build
   script:
    - echo "It works."
+   - mkdir testyo
