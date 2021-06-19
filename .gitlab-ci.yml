@@ -26,10 +26,8 @@ pages:
     - cp -r dist/* public
     #
     - echo "Running Default Vocabulary Pipeline..."
-    - pwd
-    - cd src/defaultVocPipeline
-    - npm install
-    - vocabs=$(node ./downloadParseCommit.js)
+    - npm install --prefix src/defaultVocPipeline
+    - vocabs=$(node src/defaultVocPipeline/downloadParseCommit.js)
     #- rm ????
     - echo $vocabs >public/defaultVocabularies.json
   artifacts:
