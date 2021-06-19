@@ -34,4 +34,7 @@ defaultVoc:
   stage: build
   script:
    - echo "It works."
-   - mkdir testyo
+   - echo "Writing to file" >public/dtest.json
+  artifacts:
+    paths:
+      - public/dtest.json
