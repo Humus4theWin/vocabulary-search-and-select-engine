@@ -1,102 +1,117 @@
-// vocabs
-// todo steal from him https://github.com/cfjedimaster/vue-demos/blob/master/idb/src/api/idb.js
+const DB_NAME = "PROCEED";
+const DB_VERSION = 1;
+let DB;
 
-let db;
+export default {
+  async getDb() {
+    return new Promise((resolve, reject) => {
+      if (DB) {
+        return resolve(DB);
+      }
+      console.log("OPENING DB", DB);
+      let request = window.indexedDB.open(DB_NAME, DB_VERSION);
 
-function initiate() {
-  console.log("indexDB initiate");
-  if (!window.indexedDB)
-    window.indexedDB =
-      window.indexedDB ||
-      window.mozIndexedDB ||
-      window.webkitIndexedDB ||
-      window.msIndexedDB;
-  window.IDBTransaction =
-    window.IDBTransaction ||
-    window.webkitIDBTransaction ||
-    window.msIDBTransaction;
-  window.IDBKeyRange =
-    window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
+      request.onerror = (e) => {
+        console.log("Error opening db", e);
+        reject("Error");
+      };
 
-  let DBOpenRequest = window.indexedDB.open("PROCEED", 1);
-  DBOpenRequest.onsuccess = function () {
-    db = DBOpenRequest.result;
-  };
-  DBOpenRequest.onupgradeneeded = function (event) {
-    console.log("onupgradeneeded");
-    db = event.target.result;
-    db.createObjectStore("Vocabs", { keyPath: "sourceURL" });
-    db.createObjectStore("Terms", { keyPath: "IRI" });
-  };
-}
+      request.onsuccess = (e) => {
+        DB = e.target.result;
+        resolve(DB);
+      };
 
-/**
- *
- * @returns {[{sourceURL: string, baseURL: string, numberOfQuads: number, state: string, type: string}]}
- * Array of Vocabularies
- */
-function getAllVocabularies() {
-  console.log("indexDB getAllVocabularies");
-  // TBD
-  return [
-    {
-      sourceURL: "", // schema.org/vocabularieForIoT
-      baseURL: "", // schema.org/
-      numberOfQuads: 0,
-      state: "", // default, loading, parsing, ready
-      type: "",
-    },
-  ];
-}
+      request.onupgradeneeded = (e) => {
+        console.log("onupgradeneeded");
+        let db = e.target.result;
+        db.createObjectStore("Vocabs", { keyPath: "sourceURL" });
+        db.createObjectStore("Terms", { keyPath: "IRI" });
+      };
+    });
+  },
+  /*async deleteCat(cat) {
 
-/**
- *
- * @param vocab {sourceURL: string, baseURL: string, numberOfQuads: number, state: string, type: string}
- */
+    let db = await this.getDb();
 
-// eslint-disable-next-line no-unused-vars
-async function addVocabulary(vocab) {
-  console.log("indexDB addVocabulary");
-  let transaction = db.transaction(["Vocabs"], "readwrite");
-  let store = transaction.objectStore("Vocabs");
-  store.put(vocab);
+    return new Promise(resolve => {
 
-  await store.oncomplete;
-}
+      let trans = db.transaction(['cats'],'readwrite');
+      trans.oncomplete = () => {
+        resolve();
+      };
 
-// quads  ??
+      let store = trans.objectStore('cats');
+      store.delete(cat.id);
+    });
+  },*/
+  async getAllVocabularies() {
+    let db = await this.getDb();
 
-// indexed terms
+    return new Promise((resolve) => {
+      let trans = db.transaction(["Vocabs"], "readonly");
+      trans.oncomplete = () => {
+        resolve(vocabs);
+      };
 
-/**
- *
- * @returns {{IRI: string, vocabSourceURL: string, ...any : string}}
- * can contain any number of attributes
- */
-function getAllTerms() {
-  console.log("indexDB getAllTerms");
-  /*  return {
-    IRI: "",
-    vocabSourceURL: ""
-  };*/
+      let store = trans.objectStore("Vocabs");
+      let vocabs = [];
 
-  let transaction = db.transaction(["Vocabs"], "readwrite");
-  let store = transaction.objectStore("Vocabs");
-  return store.getAll();
-}
+      store.openCursor().onsuccess = (e) => {
+        let cursor = e.target.result;
+        if (cursor) {
+          vocabs.push(cursor.value);
+          cursor.continue();
+        }
+      };
+    });
+  },
 
-// eslint-disable-next-line no-unused-vars
-function addAllTerms(termsArray) {
-  let transaction = db.transaction(["Terms"], "readwrite");
-  let store = transaction.objectStore("Terms");
-  termsArray.forEach((term) => store.put(term));
-  console.log("indexDB addAllTerms");
-}
+  async addVocabulary(vocab) {
+    let db = await this.getDb();
 
-export {
-  getAllVocabularies,
-  addVocabulary,
-  getAllTerms,
-  addAllTerms,
-  initiate,
+    return new Promise((resolve) => {
+      let trans = db.transaction(["Vocabs"], "readwrite");
+      trans.oncomplete = () => {
+        resolve();
+      };
+
+      let store = trans.objectStore("Vocabs");
+      store.put(vocab);
+    });
+  },
+  async getAllTerms() {
+    let db = await this.getDb();
+
+    return new Promise((resolve) => {
+      let trans = db.transaction(["Terms"], "readonly");
+      trans.oncomplete = () => {
+        resolve(terms);
+      };
+
+      let store = trans.objectStore("Terms");
+      let terms = [];
+
+      store.openCursor().onsuccess = (e) => {
+        let cursor = e.target.result;
+        if (cursor) {
+          terms.push(cursor.value);
+          cursor.continue();
+        }
+      };
+    });
+  },
+
+  async addTerms(terms) {
+    let db = await this.getDb();
+
+    return new Promise((resolve) => {
+      let trans = db.transaction(["Terms"], "readwrite");
+      trans.oncomplete = () => {
+        resolve();
+      };
+
+      let store = trans.objectStore("Terms");
+      terms.forEach((term) => store.put(term));
+    });
+  },
 };

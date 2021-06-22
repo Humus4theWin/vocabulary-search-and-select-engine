@@ -1,4 +1,4 @@
-import { addVocabulary, addAllTerms } from "./indexDB"; // getAllVocabularies getAllTerms
+import DB from "./indexDB"; // getAllVocabularies getAllTerms
 
 /** @type {*} */
 const store = {
@@ -15,6 +15,10 @@ const store = {
     rightDrawerState: false,
   },
   mutations: {
+    laodFromDB(state) {
+      DB.getAllVocabularies().then((res) => (state.vocabs = res));
+      DB.getAllTerms().then((res) => (state.vocabTerms = res));
+    },
     /**
      * saves the word, which the user choose, from the list of SearchField
      * @param state current state
@@ -31,7 +35,7 @@ const store = {
     addVocab(state, vocab) {
       console.log(vocab);
       state.vocabs.push(vocab);
-      addVocabulary(vocab);
+      DB.addVocabulary(vocab);
     },
     /**
      * adds terms to the vocab, that matches the VocabUrl
@@ -41,7 +45,7 @@ const store = {
     addVocabTerms: function (state, data) {
       console.log(data);
       state.vocabTerms.push(...data);
-      addAllTerms(data);
+      DB.addTerms(data);
     },
     /**
      * adds a new term (subject, predicate, object), created by the user to terms
@@ -54,7 +58,7 @@ const store = {
     },
     /**
      * toggles the boolean value of the LEFT navigation drawer (triggered by user click)
-     * @param state current state
+     * @param state 1current state
      */
     toggleLeftDrawerState(state) {
       state.leftDrawerState = !state.leftDrawerState;
@@ -73,6 +77,7 @@ const store = {
      * @return state.vocabs
      */
     vocabularies: (state) => {
+      //todo: rename getVocabulareis
       return state.vocabs;
     },
     /**

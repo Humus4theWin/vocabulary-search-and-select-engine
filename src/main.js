@@ -7,16 +7,14 @@ import Vuex from "vuex";
 import VueWorker from "vue-worker";
 import store from "./data/store";
 
-import { initiate } from "./data/indexDB";
-
-initiate();
-
 Vue.config.productionTip = false;
 Vue.use(Vuetify);
 Vue.use(Vuex);
 Vue.use(VueWorker);
 
 let storeObj = new Vuex.Store(store.store); // get from store
+
+storeObj.commit("laodFromDB");
 
 let app = new Vue({
   vuetify,
