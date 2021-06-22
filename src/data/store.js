@@ -1,10 +1,14 @@
+import { addVocabulary, addAllTerms } from "./indexDB";
+
 /** @type {*} */
 const store = {
   state: {
     //contains the added vocabs {amount, baseURL, data, quads:[{}],terms:[{}], type, url}
     vocabs: [],
     //contains terms {subject, predicate, object} added by the user
-    terms: [],
+    vocabTerms: [],
+
+    ownTermAttributes: [],
     //contains the results of the search
     search: "",
     leftDrawerState: false,
@@ -27,23 +31,26 @@ const store = {
     addVocab(state, vocab) {
       console.log(vocab);
       state.vocabs.push(vocab);
+      addVocabulary(vocab);
     },
     /**
      * adds terms to the vocab, that matches the VocabUrl
      * @param state
-     * @param {Object} data - {VocabUrl, terms}
+     * @param Array data - [{{IRI: string, vocabSourceURL: string, ...any : string}}]
      */
     addVocabTerms: function (state, data) {
-      let selected = state.vocabs.filter((vocab) => vocab.url === data.url);
-      selected[0].terms = data.terms;
+      console.log(data);
+      state.vocabTerms.push(...data);
+      addAllTerms(data);
     },
     /**
      * adds a new term (subject, predicate, object), created by the user to terms
      * @param state current state
-     * @param term subject, predicate, object
+     * @param attribute {subject, predicate, object}
      */
-    addTerm: function (state, term) {
-      state.terms.push(term);
+    addTerm: function (state, attribute) {
+      // todo: rename
+      state.ownTermAttributes.push(attribute);
     },
     /**
      * toggles the boolean value of the LEFT navigation drawer (triggered by user click)
@@ -94,25 +101,26 @@ const store = {
     /**
      * returns all terms, which the user has added
      * @param state
-     * @return state.terms
+     * @return [{subject:string, predicate:string, object:string}]
      */
     terms: (state) => {
-      return state.terms;
+      // todo: rename to ermAttributes
+      return state.ownTermAttributes;
     },
     /**
-       * returns all terms from all vocab
-       * @todo refactor JSDoc of function? Format not clear
-       * @param state
-       * @return {term[]}
-  
-       * @typedef {Object} term
-       * @property {string} label the name of the term (aka. the subject)
-       * @property {string} url the IRI of the Term (aka. the subject)
-       * term can have additional arrtibues (key/val pairs), containning other predicate/object data for the given subject (lable/url)
-       * access them through: Object.keys(<term>)
-       */
+     * returns all terms from all vocab
+     * @todo refactor JSDoc of function? Format not clear
+     * @param state
+     * @return {term[]}
+
+     * @typedef {Object} term
+     * @property {string} label the name of the term (aka. the subject)
+     * @property {string} url the IRI of the Term (aka. the subject)
+     * term can have additional arrtibues (key/val pairs), containning other predicate/object data for the given subject (lable/url)
+     * access them through: Object.keys(<term>)
+     */
     getVocabTerms(state) {
-      return state.vocabs.flatMap((vocab) => vocab.terms);
+      return state.vocabTerms;
     },
     /**
      * returns the outcome of the user's choice after searching throw the added vocabs, saved in state.search

@@ -133,8 +133,9 @@ export default {
         .filter((quad) => quad.predicate.value.includes("label"))
         .map((quad) => {
           return {
-            url: quad.subject.value,
+            IRI: quad.subject.value,
             label: quad.object.value,
+            vocabSourceURL: url,
           };
         });
       console.log(quads);
@@ -154,7 +155,7 @@ export default {
 
         return term;
       });
-      this.$store.commit("addVocabTerms", { url: url, terms: terms });
+      this.$store.commit("addVocabTerms", terms);
     },
   },
 };
