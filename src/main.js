@@ -7,6 +7,10 @@ import Vuex from "vuex";
 import VueWorker from "vue-worker";
 import store from "./data/store";
 
+import { initiate } from "./data/indexDB";
+
+initiate();
+
 Vue.config.productionTip = false;
 Vue.use(Vuetify);
 Vue.use(Vuex);

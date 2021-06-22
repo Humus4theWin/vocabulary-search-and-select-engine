@@ -2,9 +2,6 @@ import rdfParser from "rdf-parse";
 
 // eslint-disable-next-line no-unused-vars
 function onmessage(event) {
-  console.log("webWorker says hello");
-  console.log(this);
-  console.log(event);
   let url = event.data[0];
   let type = event.data[1];
   importVocab(url, type);

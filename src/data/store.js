@@ -1,4 +1,4 @@
-import { addVocabulary, addAllTerms } from "./indexDB";
+import { addVocabulary, addAllTerms } from "./indexDB"; // getAllVocabularies getAllTerms
 
 /** @type {*} */
 const store = {
