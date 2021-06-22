@@ -1,0 +1,12 @@
+{
+  "vocabularyList": [
+    {
+      "name": "Schema.org",
+      "downloadURL": "https://schema.org/version/latest/schemaorg-current-https.jsonld"
+    },
+    {
+      "name": "Australian Government Locator Service",
+      "downloadURL": "http://www.agls.gov.au/agls/terms"
+    }
+  ]
+}

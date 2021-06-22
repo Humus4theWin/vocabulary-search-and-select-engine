@@ -17,6 +17,7 @@ pages:
   image: node:latest
   stage: deploy # List of stages for jobs, and their order of execution
   script:
+    - echo "$TESTKEY"
     #
     - echo "Running Static Page Deployment..."
     - npm install --progress=false

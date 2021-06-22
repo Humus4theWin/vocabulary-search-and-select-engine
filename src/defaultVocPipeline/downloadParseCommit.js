@@ -4,19 +4,7 @@
  */
 
 const rdfParser = require("rdf-parse").default;
-
-let defaultVocabularies = [
-  {
-    name: "Schema.org",
-    downloadURL:
-      "https://schema.org/version/latest/schemaorg-current-https.jsonld",
-  },
-  {
-    name: "Australian Government Locator Service",
-    downloadURL: "http://www.agls.gov.au/agls/terms",
-  },
-];
-
+const defaultVocabularies = require("./defaultVocabularies.json");
 let downloadedVocabularies = [];
 let parsedVocabularies = [];
 let indexedVocabularies = [];
@@ -24,7 +12,7 @@ let indexedVocabularies = [];
 runPipeline();
 
 async function runPipeline() {
-  await downloadVocabularies();
+  await downloadVocabularies(defaultVocabularies.vocabularyList);
   await parseVocabularies(downloadedVocabularies, 0);
 }
 
@@ -57,7 +45,6 @@ async function downloadVocabularies(downloadList = defaultVocabularies) {
     } catch (ex) {
       // if it fails, ignore this vocabulary for now
     }
-    
   }
 }
 
