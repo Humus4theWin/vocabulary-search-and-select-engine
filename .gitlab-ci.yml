@@ -8,6 +8,7 @@
 #
 # For more information, see: https://docs.gitlab.com/ee/ci/yaml/README.html#stages
 
+# Stage sequence, this is not needed at the momment, but I still added it
 stages:
   - build
   - test
@@ -17,20 +18,21 @@ pages:
   image: node:latest
   stage: deploy # List of stages for jobs, and their order of execution
   script:
-    - echo "$TESTKEY"
-    #
-    - echo "Running Static Page Deployment..."
-    - npm install --progress=false
-    - npm run build
-    - rm -rf public
-    - mkdir public
-    - cp -r dist/* public
-    #
-    - echo "Running Default Vocabulary Pipeline..."
+    # NIGHTLY_VOCABS == null  -> update default vocabularies and build static page
+    # NIGHTLY_VOCABS !== null -> only update default vocabularies
+    # Create a new "public" folder, only if NIGHTLY_VOCABS is null ()
+    - [ -z "$NIGHTLY_VOCABS" ] && rm -rf public
+    - [ -z "$NIGHTLY_VOCABS" ] && mkdir public
+    ### Nightly Vocabulary Update ###
+    - rm -f public/defaultVocabularies.json
     - npm install --prefix src/defaultVocPipeline
     - vocabs=$(node src/defaultVocPipeline/downloadParseCommit.js)
-    #- rm ????
     - echo $vocabs >public/defaultVocabularies.json
+    - [ -n "$NIGHTLY_VOCABS" ] && exit 1; # exit if NIGHTLY_VOCABS is non-empty (only update vocabs)
+    ### Static Page Build ####
+    - npm install --progress=false
+    - npm run build
+    - cp -r dist/* public
   artifacts:
     expire_in: 1 day
     paths:
@@ -38,13 +40,3 @@ pages:
   only:
     - master
     - 12-vocab-pipeline-initial-setup
-
-#defaultVoc:
-#  image: node:latest
-#  stage: build
-#  script:
-#    - echo "It works."
-#    - echo "Writing to file" >dtest.json
-#  artifacts:
-#    paths:
-#      - dtest.json
