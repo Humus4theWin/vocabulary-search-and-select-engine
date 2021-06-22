@@ -28,10 +28,9 @@ async function runPipeline() {
   await parseVocabularies(downloadedVocabularies, 0);
 }
 
-/** This function downloads and parses a list of vocabularies
+/** This function downloads a list of vocabularies
  *
  * @param {Dictionary} downloadList - A list of dictionaries containing the name and download URL of RDF vocabularies
- * @return {Array<Dictionary>} A list of vocabulary dictionaries as defined by Linus in src/components/AddVocab.vue
  *
  * @author Dimitri Staufer <staufer@tu-berlin.de>
  */
@@ -49,23 +48,23 @@ async function downloadVocabularies(downloadList = defaultVocabularies) {
     try {
       // load from remote server
       response = await fetch(url);
+      if (response.ok) {
+        //console.log("Downloaded Vocabulary: " + downloadList[i].name);
+        vocab.type = response.headers.get("content-type").split(";")[0];
+        vocab.data = await response.text();
+        downloadedVocabularies.push(vocab);
+      }
     } catch (ex) {
       // if it fails, ignore this vocabulary for now
     }
-    if (response.ok) {
-      //console.log("Downloaded Vocabulary: " + downloadList[i].name);
-      vocab.type = response.headers.get("content-type").split(";")[0];
-      vocab.data = await response.text();
-
-      downloadedVocabularies.push(vocab);
-    }
+    
   }
 }
 
-/** This function downloads and parses a list of vocabularies
+/** This recursive function parses a list of downloaded vocabularies and when complete calls indexVocabularies()
  *
- * @param {Dictionary} downloadList - A list of dictionaries containing the name and download URL of RDF vocabularies
- * @return {Array<Dictionary>} A list of vocabulary dictionaries as defined by Linus in src/components/AddVocab.vue
+ * @param {Dictionary} downloadedVocabularies - A list of vocabulary dictionaries as defined by Linus in src/components/AddVocab.vue
+ * @param {Number} index - The index of the vocabulary to parse
  *
  * @author Dimitri Staufer <staufer@tu-berlin.de>
  */
@@ -103,9 +102,6 @@ async function parseVocabularies(downloadedVocabularies, index) {
 
 /** This function indexes a list of vocabularies as defined by Linus in src/components/AddVocab.vue
  *
- * @param {Dictionary} downloadList - A list of dictionaries containing the name and download URL of RDF vocabularies
- * @return {Array<Dictionary>} A list containing { name: name, url: url, terms: terms } per vocabulary
- *
  * @author Dimitri Staufer <staufer@tu-berlin.de>
  */
 function indexVocabularies() {
@@ -140,5 +136,5 @@ function indexVocabularies() {
     });
     indexedVocabularies.push({ name: name, url: url, terms: terms });
   }
-  console.log(indexedVocabularies);
+  console.log(JSON.stringify(indexedVocabularies));
 }
