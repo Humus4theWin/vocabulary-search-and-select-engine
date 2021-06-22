@@ -51,7 +51,7 @@ async function importVocab(url, format) {
     })
     .on("data", (quad) => {
       vocab.quads.push(quad);
-      vocab.amount += 1;
+      vocab.numberOfQuads += 1;
     })
     .on("error", (error) => console.error(error))
     .on("end", () => {

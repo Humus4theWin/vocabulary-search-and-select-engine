@@ -10,9 +10,9 @@
       </thead>
       <tbody>
         <tr v-for="item in $store.getters.vocabularies" :key="item.name">
-          <td>{{ item.baseURL }}</td>
+          <td>{{ item.sourceURL }}</td>
           <td>{{ item.type }}</td>
-          <td>{{ item.amount }}</td>
+          <td>{{ item.numberOfQuads }}</td>
         </tr>
       </tbody>
     </template>
