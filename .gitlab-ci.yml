@@ -21,16 +21,14 @@ pages:
     # NIGHTLY_VOCABS == null  -> update default vocabularies and build static page
     # NIGHTLY_VOCABS !== null -> only update default vocabularies
     # Create a new "public" folder, only if NIGHTLY_VOCABS is null () --- NEEDS Debuggung
-    - '[ -z "$NIGHTLY_VOCABS" ] && echo is null'
-    - '[ -n "$NIGHTLY_VOCABS" ] && echo is non-null'
-    - "[ -z '$NIGHTLY_VOCABS' ] && rm -rf public"
-    - "[ -z '$NIGHTLY_VOCABS' ] && mkdir public"
+    - '[ -z "$NIGHTLY_VOCABS" ] && rm -rf public'
+    - '[ -z "$NIGHTLY_VOCABS" ] && mkdir public'
     ### Nightly Vocabulary Update ###
     - rm -f public/defaultVocabularies.json
     - npm install --prefix src/defaultVocPipeline
     - vocabs=$(node src/defaultVocPipeline/downloadParseCommit.js)
     - echo $vocabs >public/defaultVocabularies.json
-    - "[ -n '$NIGHTLY_VOCABS' ] && exit 0;" # exit, but complete pipeline, if NIGHTLY_VOCABS is non-null (only update vocabs)
+    - '[ -n "$NIGHTLY_VOCABS" ] && exit 0;' # exit, but complete pipeline, if NIGHTLY_VOCABS is non-null (only update vocabs)
     ### Static Page Build ####
     - npm install --progress=false
     - npm run build
