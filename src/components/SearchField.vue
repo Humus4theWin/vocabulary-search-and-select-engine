@@ -5,6 +5,7 @@
         v-model="model"
         :items="items"
         :loading="isLoading"
+        :search-input.sync="search"
         color="black"
         hide-no-data
         hide-selected
@@ -86,7 +87,23 @@ export default {
      * @return {any}
      */
     items() {
-      return this.$store.getters.getVocabTerms;
+      return this.entries;
+    },
+  },
+  watch: {
+    /**
+     * Is triggered when a charackter is typed in the search field.
+     * When the search contains more then 2 char, the list of terms is added to the entries for search.
+     * @param val contains the search input
+     */
+    search(val) {
+      if (val.length < 2) {
+        console.log(val + val.length);
+        this.entries = [];
+        return;
+      } else {
+        this.entries = this.$store.getters.getVocabTerms;
+      }
     },
   },
 };
