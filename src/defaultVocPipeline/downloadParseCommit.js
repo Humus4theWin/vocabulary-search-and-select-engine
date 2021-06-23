@@ -44,7 +44,8 @@ async function downloadLastDefaultVocabularies() {
     );
     if (response.ok) {
       let responseText = await response.text();
-      lastDefaultVocabularies = JSON.parse(responseText);
+      let responseJson = JSON.parse(responseText);
+      lastDefaultVocabularies = responseJson.vocabularies;
     } else {
       //console.log(response);
     }
@@ -88,7 +89,10 @@ async function downloadVocabularies(downloadList = defaultVocabularies) {
         downloadedVocabularies.push(vocab);
       } else {
         /* Download failed after 3 retries -> Check if there is on old pre-indexed version of the vocabulary on GitLab */
-        if (lastDefaultVocabularies !== null) {
+        if (
+          lastDefaultVocabularies !== null &&
+          lastDefaultVocabularies !== undefined
+        ) {
           for (let i = 0; i < lastDefaultVocabularies.length; i++) {
             if (lastDefaultVocabularies[i]["name"] == vocab.name) {
               indexedVocabularies.push(lastDefaultVocabularies[i][vocab.name]);
@@ -99,7 +103,10 @@ async function downloadVocabularies(downloadList = defaultVocabularies) {
       }
     } catch (ex) {
       /* Download failed after 3 retries -> Check if there is on old pre-indexed version of the vocabulary on GitLab */
-      if (lastDefaultVocabularies !== null) {
+      if (
+        lastDefaultVocabularies !== null &&
+        lastDefaultVocabularies !== undefined
+      ) {
         for (let i = 0; i < lastDefaultVocabularies.length; i++) {
           if (lastDefaultVocabularies[i]["name"] == vocab.name) {
             indexedVocabularies.push(lastDefaultVocabularies[i][vocab.name]);
@@ -188,5 +195,12 @@ function indexVocabularies() {
     });
     indexedVocabularies.push({ name: name, url: url, terms: terms });
   }
-  console.log(JSON.stringify(indexedVocabularies));
+  const d = new Date();
+  let output = {
+    pipelineVersion: "0.0.1",
+    lastUpdate: d.toISOString(),
+    vocabularyCount: indexedVocabularies.length,
+    vocabularies: indexedVocabularies,
+  };
+  console.log(JSON.stringify(output));
 }
