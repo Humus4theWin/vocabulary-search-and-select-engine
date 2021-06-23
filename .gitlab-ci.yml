@@ -27,7 +27,7 @@ pages:
     - rm -f public/defaultVocabularies.json
     - npm install --prefix src/defaultVocPipeline
     - vocabs=$(node src/defaultVocPipeline/downloadParseCommit.js)
-    #- '[[ "$vocabs" == "0" ]] && exit 1;' # exit, but fail the pipline (if the vocab-fetch failed)
+    - '[[ "$vocabs" == "" ]] && exit 1;' # exit, but fail the pipline (if the vocab-fetch failed)
     - echo $vocabs >public/defaultVocabularies.json
     - '[ -n "$NIGHTLY_VOCABS" ] && exit 0;' # exit, but complete pipeline (if NIGHTLY_VOCABS is non-null)
     ### Static Page Build ####
