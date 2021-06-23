@@ -10,7 +10,7 @@
       </thead>
       <tbody>
         <tr v-for="item in $store.getters.vocabularies" :key="item.name">
-          <td>{{ item.baseURL }}</td>
+          <td>{{ item.url }}</td>
           <td>{{ item.type }}</td>
           <td>{{ item.amount }}</td>
         </tr>
