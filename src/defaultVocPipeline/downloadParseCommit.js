@@ -189,5 +189,5 @@ function indexVocabularies() {
     indexedVocabularies.push({ name: name, url: url, terms: terms });
   }
   console.log(JSON.stringify(indexedVocabularies));
-  process.exit(1); // exit with success code 1 (terminate any other possible async processes)
+  //process.exit(1); // exit with success code 1 (terminate any other possible async processes)
 }
