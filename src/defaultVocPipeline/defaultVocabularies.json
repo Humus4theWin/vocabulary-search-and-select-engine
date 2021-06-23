@@ -7,6 +7,26 @@
     {
       "name": "Australian Government Locator Service",
       "downloadURL": "http://www.agls.gov.au/agls/terms"
+    },
+    {
+      "name": "OM 2: Units of Measure",
+      "downloadURL": "http://www.foodvoc.org/data/om-2.ttl"
+    },
+    {
+      "name": "Thing Description (TD) Ontology",
+      "downloadURL": "https://raw.githubusercontent.com/w3c/wot-thing-description/main/ontology/td.ttl"
+    },
+    {
+      "name": "Smart Applications REFerence Ontology",
+      "downloadURL": "https://saref.etsi.org/core/v3.1.1/saref.jsonld"
+    },
+    {
+      "name": "Main QUDT (Quantities, Units, Dimensions, and Types) Ontology",
+      "downloadURL": "http://qudt.org/2.1/schema/qudt"
+    },
+    {
+      "name": "QUDT (Quantities, Units, Dimensions, and Types) Units Vocabulary",
+      "downloadURL": "http://qudt.org/2.1/vocab/unit"
     }
   ]
 }

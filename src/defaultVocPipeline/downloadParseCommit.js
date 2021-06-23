@@ -5,6 +5,11 @@
 
 const rdfParser = require("rdf-parse").default;
 const defaultVocabularies = require("./defaultVocabularies.json");
+const originalFetch = require("isomorphic-fetch");
+const fetch = require("fetch-retry")(originalFetch);
+//const fs = require('fs')
+
+let lastDefaultVocabularies = [];
 let downloadedVocabularies = [];
 let parsedVocabularies = [];
 let indexedVocabularies = [];
@@ -12,8 +17,41 @@ let indexedVocabularies = [];
 runPipeline();
 
 async function runPipeline() {
+  await downloadLastDefaultVocabularies();
   await downloadVocabularies(defaultVocabularies.vocabularyList);
   await parseVocabularies(downloadedVocabularies, 0);
+}
+
+/** This function downloads a list of vocabularies
+ *
+ * @param {Dictionary} downloadList - A list of dictionaries containing the name and download URL of RDF vocabularies
+ *
+ * @author Dimitri Staufer <staufer@tu-berlin.de>
+ */
+async function downloadLastDefaultVocabularies() {
+  let response;
+  try {
+    response = await fetch(
+      "https://dbpms-proceed.gitlab.io/vocabulary-search-and-select-engine/defaultVocabularies.json",
+      {
+        headers: { Accept: "application/json,application/rdf+xml,text/html" },
+        retries: 3,
+        // eslint-disable-next-line no-unused-vars
+        retryDelay: function (attempt, error, response) {
+          return Math.pow(2, attempt) * 3000; // 3000, 6000, 12000
+        },
+      }
+    );
+    if (response.ok) {
+      let responseText = await response.text();
+      lastDefaultVocabularies = JSON.parse(responseText);
+    } else {
+      //console.log(response);
+    }
+  } catch (ex) {
+    //console.log("error");
+    //console.log(ex);
+  }
 }
 
 /** This function downloads a list of vocabularies
@@ -35,15 +73,40 @@ async function downloadVocabularies(downloadList = defaultVocabularies) {
     let response;
     try {
       // load from remote server
-      response = await fetch(url);
+      response = await fetch(url, {
+        headers: { Accept: "application/json,application/rdf+xml,text/html" },
+        retries: 3,
+        // eslint-disable-next-line no-unused-vars
+        retryDelay: function (attempt, error, response) {
+          return Math.pow(2, attempt) * 3000; // 3000, 6000, 12000
+        },
+      });
       if (response.ok) {
         //console.log("Downloaded Vocabulary: " + downloadList[i].name);
         vocab.type = response.headers.get("content-type").split(";")[0];
         vocab.data = await response.text();
         downloadedVocabularies.push(vocab);
+      } else {
+        /* Download failed after 3 retries -> Check if there is on old pre-indexed version of the vocabulary on GitLab */
+        if (lastDefaultVocabularies !== null) {
+          for (let i = 0; i < lastDefaultVocabularies.length; i++) {
+            if (lastDefaultVocabularies[i]["name"] == vocab.name) {
+              indexedVocabularies.push(lastDefaultVocabularies[i][vocab.name]);
+            }
+          }
+        }
+        //console.log(response);
       }
     } catch (ex) {
-      // if it fails, ignore this vocabulary for now
+      /* Download failed after 3 retries -> Check if there is on old pre-indexed version of the vocabulary on GitLab */
+      if (lastDefaultVocabularies !== null) {
+        for (let i = 0; i < lastDefaultVocabularies.length; i++) {
+          if (lastDefaultVocabularies[i]["name"] == vocab.name) {
+            indexedVocabularies.push(lastDefaultVocabularies[i][vocab.name]);
+          }
+        }
+      }
+      //console.log(ex);
     }
   }
 }
@@ -75,6 +138,7 @@ async function parseVocabularies(downloadedVocabularies, index) {
       })
       // eslint-disable-next-line no-unused-vars
       .on("error", (error) => {
+        // continue
         parseVocabularies(downloadedVocabularies, index + 1);
       })
       .on("end", () => {
@@ -83,6 +147,7 @@ async function parseVocabularies(downloadedVocabularies, index) {
         parseVocabularies(downloadedVocabularies, index + 1);
       });
   } else {
+    // Parsed all available vocabularies
     indexVocabularies();
   }
 }
@@ -124,4 +189,5 @@ function indexVocabularies() {
     indexedVocabularies.push({ name: name, url: url, terms: terms });
   }
   console.log(JSON.stringify(indexedVocabularies));
+  process.exit(1); // exit with success code 1 (terminate any other possible async processes)
 }
