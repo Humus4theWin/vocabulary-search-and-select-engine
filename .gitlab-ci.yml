@@ -34,8 +34,6 @@ pages:
     - npm install --progress=false
     - npm run build
     - cp -r dist/* public
-    ### Output again, in case the static page build overwrote ###
-    - echo $vocabs >public/defaultVocabularies.json
   artifacts:
     expire_in: 1 day
     paths:
