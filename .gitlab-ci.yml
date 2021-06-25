@@ -33,8 +33,6 @@ pages:
     #- '[[ "$vocabs" == "" ]] && cp -r public_copy/* public' # copy the last website build back to the public folder (vocab-fetch failed)
     #- '[[ "$vocabs" == "" ]] && exit 1;' # exit and FAIL the pipline to ensure no files are overwritten (vocab-fetch failed)
     - echo $vocabs >public/defaultVocabularies.json
-    - cd public
-    - ls
     - cd public_copy
     - ls
     - '[ -n "$NIGHTLY_VOCABS" ] && cp -r public_copy/* public' # copy the last website build back to the public folder
