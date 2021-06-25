@@ -20,9 +20,9 @@ pages:
   script:
     # NIGHTLY_VOCABS == null  -> update default vocabularies and build static page
     # NIGHTLY_VOCABS !== null -> only update default vocabularies
-    - rm -f public/defaultVocabularies.json
-    - '[ -n "$NIGHTLY_VOCABS" ] && mkdir public_copy' # store the current website build, because it will be deleted in an nightly default voc cycle
-    - '[ -n "$NIGHTLY_VOCABS" ] && cp -r public/* public_copy' # store the current website build, because it will be deleted in an nightly default voc pipeline
+    #- rm -f public/defaultVocabularies.json
+    #- '[ -n "$NIGHTLY_VOCABS" ] && mkdir public_copy' # store the current website build, because it will be deleted in an nightly default voc cycle
+    #- '[ -n "$NIGHTLY_VOCABS" ] && cp -r public/* public_copy' # store the current website build, because it will be deleted in an nightly default voc pipeline
     #- '[ -z "$NIGHTLY_VOCABS" ] && rm -rf public' # only if NIGHTLY_VOCABS is null, i.e. full re-build of website
     #- '[ -z "$NIGHTLY_VOCABS" ] && mkdir public' # only if NIGHTLY_VOCABS is null, i.e. full re-build of website
     - rm -rf public
@@ -33,10 +33,8 @@ pages:
     #- '[[ "$vocabs" == "" ]] && cp -r public_copy/* public' # copy the last website build back to the public folder (vocab-fetch failed)
     #- '[[ "$vocabs" == "" ]] && exit 1;' # exit and FAIL the pipline to ensure no files are overwritten (vocab-fetch failed)
     - echo $vocabs >public/defaultVocabularies.json
-    - cd public_copy
-    - ls
-    - '[ -n "$NIGHTLY_VOCABS" ] && cp -r public_copy/* public' # copy the last website build back to the public folder
-    - '[ -n "$NIGHTLY_VOCABS" ] && exit 0;' # exit and COMPLETE the pipeline (nightly pipeline)
+    #- '[ -n "$NIGHTLY_VOCABS" ] && cp -r public_copy/* public' # copy the last website build back to the public folder
+    #- '[ -n "$NIGHTLY_VOCABS" ] && exit 0;' # exit and COMPLETE the pipeline (nightly pipeline)
     ### Static Page Build ####
     - npm install --progress=false
     - npm run build
