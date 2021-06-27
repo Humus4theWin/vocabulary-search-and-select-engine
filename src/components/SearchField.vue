@@ -1,23 +1,40 @@
 <template>
-  <v-toolbar dark color="teal">
-    <v-toolbar-title>State selection</v-toolbar-title>
+  <v-card>
     <v-autocomplete
       v-model="select"
       :loading="loading"
       :items="items"
       :search-input.sync="search"
+      item-text="label"
+      item-value="IRI"
       cache-items
       class="mx-4"
       flat
       hide-no-data
       hide-details
-      label="What state are you from?"
+      label="Terms"
       solo-inverted
     ></v-autocomplete>
+    <v-expand-transition>
+      <v-list v-if="select" class="info">
+        <v-list-item v-for="(field, i) in Object.keys(fields[0])" :key="i">
+          <v-list-item-content>
+            <v-list-item-title
+              class="descriptionTitle"
+              v-text="field"
+            ></v-list-item-title>
+            <v-list-item-subtitle
+              class="descriptionSubtitle"
+              v-text="fields[0][field]"
+            ></v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-expand-transition>
     <v-btn icon>
       <v-icon>mdi-dots-vertical</v-icon>
     </v-btn>
-  </v-toolbar>
+  </v-card>
 </template>
 
 <style>
@@ -34,21 +51,32 @@
 </style>
 
 <script>
+// https://gitlab.com/dBPMS-PROCEED/vocabulary-search-and-select-engine/-/blob/master/src/components/SearchField.vue
 export default {
   data: () => ({
     loading: false,
     items: [],
     search: null,
     select: null,
+    selecteditem: null,
   }),
   watch: {
     search(val) {
       val && val !== this.select && this.searchFunction(val);
     },
+    select(val) {
+      this.selectedItem = this.items.filter((term) => term.IRI === val)[0];
+      console.log(this.selectedItem);
+    },
+  },
+  computed: {
+    fields() {
+      return this.items.filter((term) => term.IRI === this.select);
+    },
   },
   methods: {
     /**
-     * Is triggered when a charackter is typed in the search field.
+     * Is triggered when a character is typed in the search field.
      * When the search contains more then 2 char, the list of terms is added to the entries for search.
      * @param val contains the search input
      */
@@ -81,6 +109,7 @@ export default {
           });
         });
       console.log(terms);
+      this.items = terms;
       return terms;
     },
 
