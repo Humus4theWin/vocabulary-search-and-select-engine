@@ -1,44 +1,23 @@
 <template>
-  <v-card>
-    <v-card-text>
-      <v-autocomplete
-        v-model="model"
+  <v-toolbar dark color="teal">
+    <v-toolbar-title>State selection</v-toolbar-title>
+    <v-autocomplete
+        v-model="select"
+        :loading="loading"
         :items="items"
-        :loading="isLoading"
         :search-input.sync="search"
-        color="black"
+        cache-items
+        class="mx-4"
+        flat
         hide-no-data
-        hide-selected
-        item-text="label"
-        item-value="url"
-        label="Terms"
-        placeholder="Start typing to search"
-        prepend-icon="mdi-database-search"
-        return-object
-      ></v-autocomplete>
-    </v-card-text>
-    <v-expand-transition>
-      <v-list v-if="model" class="info">
-        <v-row class="pa-8">
-          <v-btn class="ma-1" large color="primary">Subject</v-btn>
-          <v-btn class="ma-1" large color="primary">Predicate</v-btn>
-          <v-btn class="ma-1" large color="primary">Object</v-btn>
-        </v-row>
-        <v-list-item v-for="(field, i) in fields" :key="i">
-          <v-list-item-content>
-            <v-list-item-title
-              class="descriptionTitle"
-              v-text="field.value"
-            ></v-list-item-title>
-            <v-list-item-subtitle
-              class="descriptionSubtitle"
-              v-text="field.key"
-            ></v-list-item-subtitle>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-    </v-expand-transition>
-  </v-card>
+        hide-details
+        label="What state are you from?"
+        solo-inverted
+    ></v-autocomplete>
+    <v-btn icon>
+      <v-icon>mdi-dots-vertical</v-icon>
+    </v-btn>
+  </v-toolbar>
 </template>
 
 <style>
@@ -47,6 +26,7 @@
   font-weight: 500;
   text-align: left;
 }
+
 .descriptionSubtitle {
   color: lightgrey !important;
   text-align: left;
@@ -56,55 +36,68 @@
 <script>
 export default {
   data: () => ({
-    descriptionLimit: 60,
-    entries: [],
-    isLoading: false,
-    model: null,
+    loading: false,
+    items: [],
     search: null,
+    select: null,
   }),
-
-  computed: {
-    /**
-     * returns fields which matches search
-     * @return {{value, key: string}[]|*[]}
-     */
-    fields() {
-      if (!this.model) return [];
-
-      return Object.keys(this.model).map((key) => {
-        if (key === "url") {
-          this.$store.commit("saveSearchedWord", this.model[key]);
-          console.log(this.model[key]);
-        }
-        return {
-          key,
-          value: this.model[key] || "n/a",
-        };
-      });
-    },
-    /**
-     * returns the vocab terms (attributes)
-     * @return {any}
-     */
-    items() {
-      return this.entries;
+  watch: {
+    search(val) {
+      val && val !== this.select && this.searchFunction(val)
     },
   },
-  watch: {
+  methods: {
     /**
      * Is triggered when a charackter is typed in the search field.
      * When the search contains more then 2 char, the list of terms is added to the entries for search.
      * @param val contains the search input
      */
-    search(val) {
+    querySelections(val) {
+      this.loading = true
+      // Simulated ajax query
       if (val.length < 2) {
         console.log(val + val.length);
         this.entries = [];
         return;
       } else {
         this.entries = this.$store.getters.getVocabTerms;
+
+
       }
     },
+    searchFunction(searchString, filterCriteria) {
+      if (filterCriteria === undefined)
+        filterCriteria = this.$store.getters.getFilterCriteria;
+      if (searchString === undefined)
+        searchString = ""   //todo: get from store this.$store.getters....;
+      let terms = this.$store.getters.getVocabTerms;
+
+      filterCriteria.filter(criteria => criteria.isUsed).forEach(criteria => {
+
+        terms = terms.filter(term => this.getFilterFunction(criteria.searchType)(searchString, term[criteria.predicate]))
+        console.log(criteria.predicate)
+        console.log(searchString)
+        console.log(criteria.searchType)
+        console.log(terms)
+        console.log("----")
+      })
+      console.log(terms)
+      return terms;
+    },
+
+    getFilterFunction(searchType) {
+      switch (searchType) {
+        case "matches":
+          return (a, b) => (a === b);
+        case "unequals":
+          return (a, b) => (a !== b);
+        case "includes":
+          return (a, b) => (a.includes(b));
+        case "excludes":
+          return (a, b) => (!a.includes(b));
+
+      }
+    }
   },
 };
 </script>
