@@ -45,5 +45,3 @@ pages:
       - public
   only:
     - master
-    - 12-vocab-pipeline-initial-setup
-    - 15-fix-deletion-issue-of-pipeline
