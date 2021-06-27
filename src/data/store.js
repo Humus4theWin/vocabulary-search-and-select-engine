@@ -70,6 +70,19 @@ const store = {
     toggleRightDrawerState(state) {
       state.rightDrawerState = !state.rightDrawerState;
     },
+    /**
+     *
+     * @param state
+     * @param Array of {object}
+     *
+     * @property {boolean} isUsed if the criteria is applied
+     * @property {string} predicate the IRI of the predicate, being filtered on
+     * @property {string} searchType  enum, how to filter the Terms on the predicate
+     */
+    setFilterCriteria(state, data){
+      state.filterCiteria = data;
+      DB.updateFilterCriteria(data)
+    },
   },
   getters: {
     /**
