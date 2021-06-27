@@ -2,17 +2,17 @@
   <v-toolbar dark color="teal">
     <v-toolbar-title>State selection</v-toolbar-title>
     <v-autocomplete
-        v-model="select"
-        :loading="loading"
-        :items="items"
-        :search-input.sync="search"
-        cache-items
-        class="mx-4"
-        flat
-        hide-no-data
-        hide-details
-        label="What state are you from?"
-        solo-inverted
+      v-model="select"
+      :loading="loading"
+      :items="items"
+      :search-input.sync="search"
+      cache-items
+      class="mx-4"
+      flat
+      hide-no-data
+      hide-details
+      label="What state are you from?"
+      solo-inverted
     ></v-autocomplete>
     <v-btn icon>
       <v-icon>mdi-dots-vertical</v-icon>
@@ -43,7 +43,7 @@ export default {
   }),
   watch: {
     search(val) {
-      val && val !== this.select && this.searchFunction(val)
+      val && val !== this.select && this.searchFunction(val);
     },
   },
   methods: {
@@ -53,7 +53,7 @@ export default {
      * @param val contains the search input
      */
     querySelections(val) {
-      this.loading = true
+      this.loading = true;
       // Simulated ajax query
       if (val.length < 2) {
         console.log(val + val.length);
@@ -61,43 +61,41 @@ export default {
         return;
       } else {
         this.entries = this.$store.getters.getVocabTerms;
-
-
       }
     },
     searchFunction(searchString, filterCriteria) {
       if (filterCriteria === undefined)
         filterCriteria = this.$store.getters.getFilterCriteria;
-      if (searchString === undefined)
-        searchString = ""   //todo: get from store this.$store.getters....;
+      if (searchString === undefined) searchString = ""; //todo: get from store this.$store.getters....;
       let terms = this.$store.getters.getVocabTerms;
+      console.log(filterCriteria);
 
-      filterCriteria.filter(criteria => criteria.isUsed).forEach(criteria => {
-
-        terms = terms.filter(term => this.getFilterFunction(criteria.searchType)(searchString, term[criteria.predicate]))
-        console.log(criteria.predicate)
-        console.log(searchString)
-        console.log(criteria.searchType)
-        console.log(terms)
-        console.log("----")
-      })
-      console.log(terms)
+      filterCriteria
+        .filter((criteria) => criteria.isUsed)
+        .forEach((criteria) => {
+          terms = terms.filter((term) => {
+            return this.getFilterFunction(criteria.searchType)(
+              term[criteria["predicate"]],
+              searchString
+            );
+          });
+        });
+      console.log(terms);
       return terms;
     },
 
     getFilterFunction(searchType) {
       switch (searchType) {
         case "matches":
-          return (a, b) => (a === b);
+          return (a, b) => a === b;
         case "unequals":
-          return (a, b) => (a !== b);
+          return (a, b) => a !== b;
         case "includes":
-          return (a, b) => (a.includes(b));
+          return (a, b) => a.includes(b);
         case "excludes":
-          return (a, b) => (!a.includes(b));
-
+          return (a, b) => !a.includes(b);
       }
-    }
+    },
   },
 };
 </script>

@@ -83,9 +83,9 @@ const store = {
      * @property {string} predicate the IRI of the predicate, being filtered on
      * @property {string} searchType  enum, how to filter the Terms on the predicate
      */
-    setFilterCriteria(state, data){
+    setFilterCriteria(state, data) {
       state.filterCiteria = data;
-      DB.updateFilterCriteria(data)
+      DB.updateFilterCriteria(data);
     },
   },
   getters: {
@@ -155,7 +155,8 @@ const store = {
      * @property {string} searchType  enum, how to filter the Terms on the predicate
      */
     getFilterCriteria(state) {
-      return state.filterCriteria ;
+      console.log(state.filterCriteria);
+      return state.filterCriteria;
     },
     /**
      * returns the outcome of the user's choice after searching throw the added vocabs, saved in state.search
