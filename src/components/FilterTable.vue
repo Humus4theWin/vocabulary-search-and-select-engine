@@ -142,6 +142,7 @@ export default {
 
   methods: {
     initialize() {
+      this.editedItem = Object.assign({}, this.defaultItem);
       this.filterCriteria = this.$store.getters.getFilterCriteria;
       this.predicates = [
         ...new Set(Object.keys(...this.$store.getters.getVocabTerms)),

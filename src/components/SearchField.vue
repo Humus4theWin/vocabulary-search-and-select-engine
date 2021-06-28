@@ -3,8 +3,8 @@
     <v-autocomplete
       v-model="select"
       :items="terms"
-      :loading="isLoading"
       :search-input.sync="search"
+      :filter="filterObjects"
       item-text="label"
       item-value="IRI"
       cache-items
@@ -55,26 +55,37 @@
 export default {
   data: () => ({
     terms: [],
-    isLoading: false,
     search: null,
     select: null,
     selecteditem: null,
   }),
+  created() {
+    this.terms = this.$store.getters.getVocabTerms;
+  },
   watch: {
     search(val) {
-      val && val !== this.select && this.searchFunction(val);
-    },
-    select(val) {
-      console.log(val);
-      // this.selectedItem = this.terms.filter((term) => term.IRI === val)[0];
-    },
-  },
-  computed: {
-    fields() {
-      return this.terms.filter((term) => term.IRI === this.select);
+      val !== undefined; // &&
+      //val.length > 0 &&
+      // this.searchFunction(val);
     },
   },
   methods: {
+    filterObjects(item, queryText) {
+      console.log(item);
+      return this.$store.getters.getFilterCriteria
+        .filter((criteria) => criteria.isUsed)
+        .map((criteria) => {
+          return (
+            item[criteria["predicate"]] !== undefined &&
+            this.getFilterFunction(criteria.searchType)(
+              item[criteria["predicate"]],
+              queryText
+            )
+          );
+        })
+        .every((b) => b === true);
+    },
+
     /**
      * Is triggered when a character is typed in the search field.
      * When the search contains more then 2 char, the list of terms is added to the entries for search.
@@ -91,7 +102,6 @@ export default {
       }
     },
     searchFunction(searchString, filterCriteria) {
-      this.isLoading = true;
       if (filterCriteria === undefined)
         filterCriteria = this.$store.getters.getFilterCriteria;
       if (searchString === undefined) searchString = ""; //todo: get from store this.$store.getters....;
@@ -113,7 +123,6 @@ export default {
         });
       console.log(terms);
       this.terms = terms;
-      this.isLoading = false;
       return terms;
     },
 
