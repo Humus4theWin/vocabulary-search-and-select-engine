@@ -132,11 +132,12 @@ export default {
       val || this.closeDelete();
     },
     filterCriteria(val) {
-      this.$store.commit("setFilterCriteria", val);
+      console.log("val");
+      console.log(val);
     },
   },
 
-  created() {
+  beforeMount() {
     this.initialize();
   },
 
@@ -144,6 +145,7 @@ export default {
     initialize() {
       this.editedItem = Object.assign({}, this.defaultItem);
       this.filterCriteria = this.$store.getters.getFilterCriteria;
+
       this.predicates = [
         ...new Set(Object.keys(...this.$store.getters.getVocabTerms)),
       ];
@@ -153,17 +155,20 @@ export default {
       this.editedIndex = this.filterCriteria.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
+      this.$store.commit("setFilterCriteria", this.filterCriteria);
     },
 
     deleteItem(item) {
       this.editedIndex = this.filterCriteria.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialogDelete = true;
+      this.$store.commit("setFilterCriteria", this.filterCriteria);
     },
 
     deleteItemConfirm() {
       this.filterCriteria.splice(this.editedIndex, 1);
       this.closeDelete();
+      this.$store.commit("setFilterCriteria", this.filterCriteria);
     },
 
     close() {
@@ -180,6 +185,7 @@ export default {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
       });
+      this.$store.commit("setFilterCriteria", this.filterCriteria);
     },
 
     save() {
@@ -189,6 +195,7 @@ export default {
         this.filterCriteria.push(this.editedItem);
       }
       this.close();
+      this.$store.commit("setFilterCriteria", this.filterCriteria);
     },
   },
 };

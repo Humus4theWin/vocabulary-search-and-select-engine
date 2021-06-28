@@ -71,7 +71,6 @@ export default {
   },
   methods: {
     filterObjects(item, queryText) {
-      console.log(item);
       return this.$store.getters.getFilterCriteria
         .filter((criteria) => criteria.isUsed)
         .map((criteria) => {
