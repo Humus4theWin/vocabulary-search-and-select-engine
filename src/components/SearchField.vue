@@ -3,6 +3,7 @@
     <v-autocomplete
       v-model="select"
       :items="terms"
+      :loading="isLoading"
       :search-input.sync="search"
       item-text="label"
       item-value="IRI"
@@ -12,10 +13,11 @@
       hide-no-data
       hide-details
       label="Terms"
+      return-object
     ></v-autocomplete>
     <v-expand-transition>
       <v-list v-if="select" class="info">
-        <v-list-item v-for="(field, i) in Object.keys(fields[0])" :key="i">
+        <v-list-item v-for="(field, i) in Object.keys(select)" :key="i">
           <v-list-item-content>
             <v-list-item-title
               class="descriptionTitle"
@@ -23,7 +25,7 @@
             ></v-list-item-title>
             <v-list-item-subtitle
               class="descriptionSubtitle"
-              v-text="fields[0][field]"
+              v-text="select[field]"
             ></v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
@@ -53,6 +55,7 @@
 export default {
   data: () => ({
     terms: [],
+    isLoading: false,
     search: null,
     select: null,
     selecteditem: null,
@@ -62,8 +65,8 @@ export default {
       val && val !== this.select && this.searchFunction(val);
     },
     select(val) {
-      this.selectedItem = this.terms.filter((term) => term.IRI === val)[0];
-      console.log(this.selectedItem);
+      console.log(val);
+      // this.selectedItem = this.terms.filter((term) => term.IRI === val)[0];
     },
   },
   computed: {
@@ -88,6 +91,7 @@ export default {
       }
     },
     searchFunction(searchString, filterCriteria) {
+      this.isLoading = true;
       if (filterCriteria === undefined)
         filterCriteria = this.$store.getters.getFilterCriteria;
       if (searchString === undefined) searchString = ""; //todo: get from store this.$store.getters....;
@@ -109,6 +113,7 @@ export default {
         });
       console.log(terms);
       this.terms = terms;
+      this.isLoading = false;
       return terms;
     },
 
