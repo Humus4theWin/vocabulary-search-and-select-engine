@@ -156,7 +156,8 @@ export default {
     });
   },
 
-  async updateFilterCriteria(filterCriterion) {
+  async updateFilterCriteria(filterCriteria) {
+    //array of criteria
     let db = await this.getDb();
 
     return new Promise((resolve) => {
@@ -166,7 +167,8 @@ export default {
       };
 
       let store = trans.objectStore("Filter");
-      store.put(filterCriterion);
+      store.clear(); //todo: may refactor to handle single CRUD Events
+      filterCriteria.forEach((criteria) => store.put(criteria));
     });
   },
 };

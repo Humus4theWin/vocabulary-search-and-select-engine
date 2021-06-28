@@ -131,6 +131,9 @@ export default {
     dialogDelete(val) {
       val || this.closeDelete();
     },
+    filterCriteria(val) {
+      this.$store.commit("setFilterCriteria", val);
+    },
   },
 
   created() {
