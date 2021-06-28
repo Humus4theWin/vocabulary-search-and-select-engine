@@ -96,7 +96,7 @@ export default {
         filterCriteria = this.$store.getters.getFilterCriteria;
       if (searchString === undefined) searchString = ""; //todo: get from store this.$store.getters....;
       let terms = this.$store.getters.getVocabTerms;
-      console.log(filterCriteria);
+      //console.log(filterCriteria);
 
       filterCriteria
         .filter((criteria) => criteria.isUsed)

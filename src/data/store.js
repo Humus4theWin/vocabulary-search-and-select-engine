@@ -155,7 +155,7 @@ const store = {
      * @property {string} searchType  enum, how to filter the Terms on the predicate
      */
     getFilterCriteria(state) {
-      console.log(state.filterCriteria);
+      //console.log(state.filterCriteria);
       return state.filterCriteria;
     },
     /**

@@ -1,0 +1,4 @@
+diff a/src/data/store.js b/src/data/store.js	(rejected hunks)
+@@ -88 +88 @@ const store = {
+-      DB.updateFilterCriteria(data)
++      DB.updateFilterCriteria(data);
