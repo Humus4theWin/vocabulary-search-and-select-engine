@@ -2,8 +2,7 @@
   <v-card>
     <v-autocomplete
       v-model="select"
-      :loading="loading"
-      :items="items"
+      :items="terms"
       :search-input.sync="search"
       item-text="label"
       item-value="IRI"
@@ -13,7 +12,6 @@
       hide-no-data
       hide-details
       label="Terms"
-      solo-inverted
     ></v-autocomplete>
     <v-expand-transition>
       <v-list v-if="select" class="info">
@@ -54,8 +52,7 @@
 // https://gitlab.com/dBPMS-PROCEED/vocabulary-search-and-select-engine/-/blob/master/src/components/SearchField.vue
 export default {
   data: () => ({
-    loading: false,
-    items: [],
+    terms: [],
     search: null,
     select: null,
     selecteditem: null,
@@ -65,13 +62,13 @@ export default {
       val && val !== this.select && this.searchFunction(val);
     },
     select(val) {
-      this.selectedItem = this.items.filter((term) => term.IRI === val)[0];
+      this.selectedItem = this.terms.filter((term) => term.IRI === val)[0];
       console.log(this.selectedItem);
     },
   },
   computed: {
     fields() {
-      return this.items.filter((term) => term.IRI === this.select);
+      return this.terms.filter((term) => term.IRI === this.select);
     },
   },
   methods: {
@@ -81,14 +78,13 @@ export default {
      * @param val contains the search input
      */
     querySelections(val) {
-      this.loading = true;
       // Simulated ajax query
       if (val.length < 2) {
         console.log(val + val.length);
         this.entries = [];
         return;
       } else {
-        this.entries = this.$store.getters.getVocabTerms;
+        this.terms = this.$store.getters.getVocabTerms;
       }
     },
     searchFunction(searchString, filterCriteria) {
@@ -96,20 +92,23 @@ export default {
         filterCriteria = this.$store.getters.getFilterCriteria;
       if (searchString === undefined) searchString = ""; //todo: get from store this.$store.getters....;
       let terms = this.$store.getters.getVocabTerms;
-      console.log(filterCriteria);
 
       filterCriteria
         .filter((criteria) => criteria.isUsed)
         .forEach((criteria) => {
+          console.log(criteria);
           terms = terms.filter((term) => {
-            return this.getFilterFunction(criteria.searchType)(
-              term[criteria["predicate"]],
-              searchString
+            return (
+              term[criteria["predicate"]] !== undefined &&
+              this.getFilterFunction(criteria.searchType)(
+                term[criteria["predicate"]],
+                searchString
+              )
             );
           });
         });
       console.log(terms);
-      this.items = terms;
+      this.terms = terms;
       return terms;
     },
 
