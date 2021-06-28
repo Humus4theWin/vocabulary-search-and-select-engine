@@ -83,8 +83,8 @@ const store = {
      * @property {string} predicate the IRI of the predicate, being filtered on
      * @property {string} searchType  enum, how to filter the Terms on the predicate
      */
-    setFilterCriteria(state, data) {
-      state.filterCiteria = data;
+    setFilterCriterion(state, data) {
+      state.filterCiteria.push(data);
       DB.updateFilterCriteria(data);
     },
   },
