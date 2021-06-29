@@ -52,8 +52,8 @@
 
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="close"> Cancel</v-btn>
-              <v-btn color="blue darken-1" text @click="save"> Save</v-btn>
+              <v-btn color="primary" text @click="close"> Cancel</v-btn>
+              <v-btn color="primary" text @click="save"> Save</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -64,12 +64,8 @@
             </v-card-title>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="closeDelete"
-                >Cancel
-              </v-btn>
-              <v-btn color="blue darken-1" text @click="deleteItemConfirm"
-                >OK
-              </v-btn>
+              <v-btn color="primary" text @click="closeDelete">Cancel </v-btn>
+              <v-btn color="primary" text @click="deleteItemConfirm">OK </v-btn>
               <v-spacer></v-spacer>
             </v-card-actions>
           </v-card>
@@ -91,6 +87,7 @@ export default {
   data: () => ({
     dialog: false,
     dialogDelete: false,
+    loading: true,
     headers: [
       {
         text: "in use",
@@ -103,6 +100,7 @@ export default {
       { text: "Actions", value: "actions", sortable: false },
     ],
     filterCriteria: [],
+    // predicates: [],
     editedIndex: -1,
     editedItem: {
       isUsed: true,
@@ -114,13 +112,20 @@ export default {
       searchType: "includes",
       predicate: 0,
     },
-    predicates: [],
     searchTypes: ["includes", "matches", "excludes", "unequals"],
   }),
 
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? "New Rule" : "Edit Rule";
+    },
+    predicates() {
+      // console.log("predicates")
+      if (this.$store.getters.getVocabTerms.length) {
+        return [...new Set(Object.keys(...this.$store.getters.getVocabTerms))];
+      } else {
+        return [];
+      }
     },
   },
 
@@ -145,10 +150,10 @@ export default {
     initialize() {
       this.editedItem = Object.assign({}, this.defaultItem);
       this.filterCriteria = this.$store.getters.getFilterCriteria;
-
-      this.predicates = [
-        ...new Set(Object.keys(...this.$store.getters.getVocabTerms)),
-      ];
+      //this.predicates = [
+      //...new Set(Object.keys(...this.$store.getters.getVocabTerms)),
+      //];
+      console.log(this.predicates);
     },
 
     editItem(item) {

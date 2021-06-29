@@ -1,23 +1,24 @@
 <template>
   <v-card>
-    <v-autocomplete
-      v-model="select"
-      :items="terms"
-      :search-input.sync="search"
-      :filter="filterObjects"
-      item-text="label"
-      item-value="IRI"
-      cache-items
-      class="mx-4"
-      flat
-      hide-no-data
-      hide-details
-      label="Terms"
-      return-object
-    ></v-autocomplete>
+    <v-card-text class="pa-6">
+      <v-autocomplete
+        v-model="select"
+        :items="terms"
+        :search-input.sync="search"
+        :filter="filterObjects"
+        item-text="label"
+        item-value="IRI"
+        cache-items
+        class="mx-4"
+        hide-no-data
+        hide-details
+        label="Terms"
+        return-object
+      ></v-autocomplete>
+    </v-card-text>
     <v-expand-transition>
       <v-list v-if="select" class="info">
-        <v-list-item v-for="(field, i) in Object.keys(select)" :key="i">
+        <v-list-item v-for="(field, i) in fields" :key="i">
           <v-list-item-content>
             <v-list-item-title
               class="descriptionTitle"
@@ -31,9 +32,6 @@
         </v-list-item>
       </v-list>
     </v-expand-transition>
-    <v-btn icon>
-      <v-icon>mdi-dots-vertical</v-icon>
-    </v-btn>
   </v-card>
 </template>
 
@@ -60,29 +58,48 @@ export default {
     selecteditem: null,
   }),
   created() {
-    this.terms = this.$store.getters.getVocabTerms;
+    // this.terms = this.$store.getters.getVocabTerms;
   },
   watch: {
     search(val) {
-      val !== undefined; // &&
+      //val !== undefined;
+      if (val.length < 2) {
+        console.log(val + val.length);
+        this.terms = [];
+        return;
+      } else {
+        this.terms = this.$store.getters.getVocabTerms;
+      } // &&
       //val.length > 0 &&
       // this.searchFunction(val);
     },
   },
+  computed: {
+    fields() {
+      return Object.keys(this.select);
+    },
+  },
   methods: {
     filterObjects(item, queryText) {
-      return this.$store.getters.getFilterCriteria
-        .filter((criteria) => criteria.isUsed)
-        .map((criteria) => {
-          return (
-            item[criteria["predicate"]] !== undefined &&
-            this.getFilterFunction(criteria.searchType)(
-              item[criteria["predicate"]],
-              queryText
-            )
-          );
-        })
-        .every((b) => b === true);
+      // console.log(queryText)
+      // console.log(queryText.type)
+      console.log(item);
+      if (queryText.length > 2) {
+        return this.$store.getters.getFilterCriteria
+          .filter((criteria) => criteria.isUsed)
+          .map((criteria) => {
+            return (
+              item[criteria["predicate"]] !== undefined &&
+              this.getFilterFunction(criteria.searchType)(
+                item[criteria["predicate"]],
+                queryText
+              )
+            );
+          })
+          .every((b) => b === true);
+      } else {
+        return;
+      }
     },
 
     /**
@@ -93,7 +110,7 @@ export default {
     querySelections(val) {
       // Simulated ajax query
       if (val.length < 2) {
-        console.log(val + val.length);
+        console.log("search value {{val + val.length}}");
         this.entries = [];
         return;
       } else {
