@@ -81,19 +81,20 @@ function indexVocab(url, quads) {
   // add all attributes
   terms = terms.map((term) => {
     let attributes = quads.filter((quad) => {
-      return quad.subject.value === term.url;
+      return quad.subject.value === term.IRI;
     });
 
     attributes.forEach((attr) => {
       let val = attr.object.value;
-      if (val.length > this.descriptionLimit) {
-        val = val.slice(0, this.descriptionLimit) + "...";
-      }
+      //if (val.length > this.descriptionLimit) {
+      //  val = val.slice(0, this.descriptionLimit) + "...";
+      //}
       term[attr.predicate.value] = val;
     });
 
     return term;
   });
   window.App.$store.commit("addVocabTerms", terms);
+  console.log(terms);
 }
 export default onmessage;

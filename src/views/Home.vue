@@ -15,6 +15,9 @@
             <v-col cols="6">
               <SearchField />
             </v-col>
+            <v-col>
+              <FilterTable />
+            </v-col>
           </v-row>
         </v-col>
       </v-row>
@@ -25,10 +28,12 @@
 <script>
 // @ is an alias to /src
 import SearchField from "@/components/SearchField.vue";
+import FilterTable from "../components/FilterTable";
 
 export default {
   name: "Home",
   components: {
+    FilterTable,
     SearchField,
   },
 };

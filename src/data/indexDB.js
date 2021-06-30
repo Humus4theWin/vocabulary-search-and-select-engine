@@ -2,6 +2,19 @@ const DB_NAME = "PROCEED";
 const DB_VERSION = 1;
 let DB;
 
+let defaultFilterCriteria = [
+  {
+    isUsed: true,
+    predicate: "http://www.w3.org/2000/01/rdf-schema#label",
+    searchType: "includes",
+  },
+  {
+    isUsed: true,
+    predicate: "http://www.w3.org/2000/01/rdf-schema#comment",
+    searchType: "includes",
+  },
+];
+
 export default {
   async getDb() {
     return new Promise((resolve, reject) => {
@@ -26,6 +39,12 @@ export default {
         let db = e.target.result;
         db.createObjectStore("Vocabs", { keyPath: "sourceURL" });
         db.createObjectStore("Terms", { keyPath: "IRI" });
+        db.createObjectStore("Filter", { keyPath: "predicate" });
+        console.log(this.getFilterCriteria());
+        this.getFilterCriteria().then((arr) => {
+          if (arr.length === 0)
+            this.updateFilterCriteria(defaultFilterCriteria);
+        });
       };
     });
   },
@@ -112,6 +131,44 @@ export default {
 
       let store = trans.objectStore("Terms");
       terms.forEach((term) => store.put(term));
+    });
+  },
+
+  async getFilterCriteria() {
+    let db = await this.getDb();
+
+    return new Promise((resolve) => {
+      let trans = db.transaction(["Filter"], "readonly");
+      trans.oncomplete = () => {
+        resolve(criteria);
+      };
+
+      let store = trans.objectStore("Filter");
+      let criteria = [];
+
+      store.openCursor().onsuccess = (e) => {
+        let cursor = e.target.result;
+        if (cursor) {
+          criteria.push(cursor.value);
+          cursor.continue();
+        }
+      };
+    });
+  },
+
+  async updateFilterCriteria(filterCriteria) {
+    //array of criteria
+    let db = await this.getDb();
+
+    return new Promise((resolve) => {
+      let trans = db.transaction(["Filter"], "readwrite");
+      trans.oncomplete = () => {
+        resolve();
+      };
+
+      let store = trans.objectStore("Filter");
+      store.clear(); //todo: may refactor to handle single CRUD Events
+      filterCriteria.forEach((criteria) => store.put(criteria));
     });
   },
 };

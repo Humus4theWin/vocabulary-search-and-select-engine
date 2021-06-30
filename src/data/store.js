@@ -8,6 +8,9 @@ const store = {
     //contains terms {subject, predicate, object} added by the user
     vocabTerms: [],
 
+    // searchFilter
+    filterCriteria: [],
+
     ownTermAttributes: [],
     //contains the results of the search
     search: "",
@@ -18,6 +21,7 @@ const store = {
     laodFromDB(state) {
       DB.getAllVocabularies().then((res) => (state.vocabs = res));
       DB.getAllTerms().then((res) => (state.vocabTerms = res));
+      DB.getFilterCriteria().then((res) => (state.filterCriteria = res));
     },
     /**
      * saves the word, which the user choose, from the list of SearchField
@@ -69,6 +73,19 @@ const store = {
      */
     toggleRightDrawerState(state) {
       state.rightDrawerState = !state.rightDrawerState;
+    },
+    /**
+     *
+     * @param state
+     * @param Array of {object}
+     *
+     * @property {boolean} isUsed if the criteria is applied
+     * @property {string} predicate the IRI of the predicate, being filtered on
+     * @property {string} searchType  enum, how to filter the Terms on the predicate
+     */
+    setFilterCriteria(state, data) {
+      state.filterCiteria = data;
+      DB.updateFilterCriteria(data);
     },
   },
   getters: {
@@ -126,6 +143,20 @@ const store = {
      */
     getVocabTerms(state) {
       return state.vocabTerms;
+    },
+    /**
+     * returns all filter crieria
+     * @param state
+     * @return {fitlerCritera[]}
+
+     * @typedef Array of {object}
+     * @property {boolean} isUsed if the criteria is applied
+     * @property {string} predicate the IRI of the predicate, being filtered on
+     * @property {string} searchType  enum, how to filter the Terms on the predicate
+     */
+    getFilterCriteria(state) {
+      console.log(state.filterCriteria);
+      return state.filterCriteria;
     },
     /**
      * returns the outcome of the user's choice after searching throw the added vocabs, saved in state.search
