@@ -64,8 +64,8 @@
             </v-card-title>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="primary" text @click="closeDelete">Cancel </v-btn>
-              <v-btn color="primary" text @click="deleteItemConfirm">OK </v-btn>
+              <v-btn color="primary" text @click="closeDelete">Cancel</v-btn>
+              <v-btn color="primary" text @click="deleteItemConfirm">OK</v-btn>
               <v-spacer></v-spacer>
             </v-card-actions>
           </v-card>
@@ -151,12 +151,13 @@ export default {
 
   methods: {
     initialize() {
+      // not used
       this.editedItem = Object.assign({}, this.defaultItem);
-      this.filterCriteria = this.$store.getters.getFilterCriteria;
+      // this.filterCriteria = this.$store.getters.getFilterCriteria;
       //this.predicates = [
       //...new Set(Object.keys(...this.$store.getters.getVocabTerms)),
       //];
-      console.log(this.predicates);
+      // console.log(this.predicates);
     },
 
     editItem(item) {
