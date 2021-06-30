@@ -158,13 +158,17 @@ export default {
       };
     });
   },
-    async loadDefaultVocabs() {
+     async loadDefaultVocabs() {
     let res = await fetch(
       "https://dbpms-proceed.gitlab.io/vocabulary-search-and-select-engine/defaultVocabularies.json"
     );
     if (res.ok) {
       let json = await res.json();
-      this.addTerms(json);
+      json.vocabularies.forEach((vocab) => {
+        this.addTerms(vocab.terms);
+        vocab.terms = undefined;
+        this.addVocabulary(vocab);
+      });
     }
   },
 
