@@ -16,13 +16,11 @@ let storeObj = new Vuex.Store(store.store); // get from store
 
 storeObj.commit("laodFromDB");
 
-setTimeout(function () {
-  let app = new Vue({
-    vuetify,
-    router,
-    store: storeObj,
-    render: (h) => h(App),
-  }).$mount("#app");
+let app = new Vue({
+  vuetify,
+  router,
+  store: storeObj,
+  render: (h) => h(App),
+}).$mount("#app");
 
-  window.App = app; // todo: delete! workareound for WebWorker, until it is a "real" WebWorker, not just a "function in another file"
-}, 0);
+window.App = app; // todo: delete! workareound for WebWorker, until it is a "real" WebWorker, not just a "function in another file"
