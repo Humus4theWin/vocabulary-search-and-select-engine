@@ -83,7 +83,7 @@ export default {
     filterObjects(item, queryText) {
       // console.log(queryText)
       // console.log(queryText.type)
-      console.log(item);
+      //console.log(item);
       if (queryText.length > 2) {
         return this.$store.getters.getFilterCriteria
           .filter((criteria) => criteria.isUsed)
