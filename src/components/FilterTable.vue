@@ -99,7 +99,7 @@ export default {
       { text: "Predicate", value: "predicate" },
       { text: "Actions", value: "actions", sortable: false },
     ],
-    filterCriteria: [],
+    //filterCriteria: [],
     // predicates: [],
     editedIndex: -1,
     editedItem: {
@@ -126,6 +126,9 @@ export default {
       } else {
         return [];
       }
+    },
+    filterCriteria() {
+      return this.$store.getters.getFilterCriteria;
     },
   },
 

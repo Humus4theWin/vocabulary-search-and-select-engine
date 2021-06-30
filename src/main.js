@@ -25,4 +25,4 @@ setTimeout(function () {
   }).$mount("#app");
 
   window.App = app; // todo: delete! workareound for WebWorker, until it is a "real" WebWorker, not just a "function in another file"
-}, 500);
+}, 0);
