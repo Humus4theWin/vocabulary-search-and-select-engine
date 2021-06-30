@@ -67,7 +67,7 @@ async function downloadVocabularies(downloadList = defaultVocabularies) {
     let url = downloadList[i].downloadURL;
     vocab.amount = 0;
     vocab.name = downloadList[i].name;
-    vocab.sourceURL = downloadList[i].downloadURL;
+    vocab.url = downloadList[i].downloadURL;
     vocab.terms = [];
     vocab.baseURL = "http://" + url.split("/")[2];
 
@@ -173,14 +173,14 @@ function indexVocabularies() {
       .filter((quad) => quad.predicate.value.includes("label"))
       .map((quad) => {
         return {
-          IRI: quad.subject.value,
+          url: quad.subject.value,
           label: quad.object.value,
         };
       });
     // add all attributes
     terms = terms.map((term) => {
       let attributes = quads.filter((quad) => {
-        return quad.subject.value === term.IRI;
+        return quad.subject.value === term.url;
       });
 
       attributes.forEach((attr) => {
@@ -193,7 +193,7 @@ function indexVocabularies() {
 
       return term;
     });
-    indexedVocabularies.push({ name: name, sourceURL: url, terms: terms });
+    indexedVocabularies.push({ name: name, url: url, terms: terms });
   }
   const d = new Date();
   let output = {
