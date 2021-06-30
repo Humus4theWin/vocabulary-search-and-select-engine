@@ -45,6 +45,9 @@ export default {
           if (arr.length === 0)
             this.updateFilterCriteria(defaultFilterCriteria);
         });
+        this.getAllTerms().then((arr) => {
+          if (arr.length === 0) this.loadDefaultVocabs();
+        });
       };
     });
   },
@@ -154,6 +157,19 @@ export default {
         }
       };
     });
+  },
+  async loadDefaultVocabs() {
+    let res = await fetch(
+      "https://dbpms-proceed.gitlab.io/vocabulary-search-and-select-engine/defaultVocabularies.json"
+    );
+    if (res.ok) {
+      let json = await res.json();
+      json.vocabularies.forEach((vocab) => {
+        this.addTerms(vocab.terms);
+        vocab.terms = undefined;
+        this.addVocabulary(vocab);
+      });
+    }
   },
 
   async updateFilterCriteria(filterCriteria) {
