@@ -1,76 +1,115 @@
 <template>
-  <v-col
-    class="newCapabilityMenu"
-    cols="4"
-    :style="{ flex: drawerState ? '0 0 33.3333%' : '0 0 0%' }"
-  >
+  <v-col class="newCapabilityMenu">
     <v-col class="pa-8">
-      <h1 class="white--text" style="line-height: 1.3 !important">
+      <h1 class="mb-10 white--text" style="line-height: 1.3 !important">
         New Capability
       </h1>
-      <v-text-field
-        class="pt-5"
-        label="Capability Name"
-        placeholder="Untitled Capability"
-        color="white"
-        filled
-      ></v-text-field>
+
       <v-card class="mx-auto mb-5">
         <v-app-bar flat color="#74b559">
           <v-toolbar-title class="text-h6 white--text pl-0">
-            Subject
+            Name (e.g. schema:PhotographAction)
           </v-toolbar-title>
-          <v-spacer></v-spacer>
-          <v-btn color="white" icon>
-            <v-icon>mdi-delete</v-icon>
-          </v-btn>
         </v-app-bar>
-        <v-card-title>SL 3D Scanner</v-card-title>
-        <v-card-text class="text-left">
-          <v-expansion-panels :value="drawerState ? 0 : 1">
-            <v-expansion-panel>
-              <v-expansion-panel-header> Description </v-expansion-panel-header>
-              <v-expansion-panel-content>
-                3D scanning device for measuring the three-dimensional shape of
-                an object using projected light patterns and a camera system.
-              </v-expansion-panel-content>
-            </v-expansion-panel>
-          </v-expansion-panels>
-        </v-card-text>
+        <SearchField />
       </v-card>
 
       <v-card class="mx-auto mb-5">
         <v-app-bar flat color="#74b559">
           <v-toolbar-title class="text-h6 white--text pl-0">
-            Predicate
+            Same As (optional)
           </v-toolbar-title>
-          <v-spacer></v-spacer>
-          <v-btn color="white" icon>
-            <v-icon>mdi-delete</v-icon>
-          </v-btn>
         </v-app-bar>
-        <v-card-title>Scans</v-card-title>
-        <v-card-text class="text-left">
-          <v-expansion-panels :value="drawerState ? 0 : 1">
-            <v-expansion-panel>
-              <v-expansion-panel-header> Description </v-expansion-panel-header>
-              <v-expansion-panel-content>
-                To examine systematically (as by passing a beam of radiation
-                over or through) in order to obtain data especially for display
-                or storage.
-              </v-expansion-panel-content>
-            </v-expansion-panel>
-          </v-expansion-panels>
-        </v-card-text>
+        <SearchField />
       </v-card>
 
       <v-card class="mx-auto mb-5">
         <v-app-bar flat color="#74b559">
           <v-toolbar-title class="text-h6 white--text pl-0">
-            Object
+            JavaScript Filename
+          </v-toolbar-title>
+        </v-app-bar>
+        <v-card-text class="text-left">
+          <v-text-field
+            v-model="firstname"
+            :rules="nameRules"
+            label='Default: "Index.js"'
+            required
+          ></v-text-field>
+        </v-card-text>
+      </v-card>
+
+      <v-card class="mx-auto mb-5">
+        <v-app-bar flat color="#1d2a36">
+          <v-toolbar-title class="text-h6 white--text pl-0">
+            Inputs
           </v-toolbar-title>
           <v-spacer></v-spacer>
+          <v-btn class="ma-0" text icon color="white">
+            <v-icon>mdi-plus</v-icon>
+          </v-btn>
         </v-app-bar>
+        <v-card-text class="text-left">
+          <v-col>
+            <v-row>
+              <v-card class="mx-auto mb-5" style="width: 50%">
+                <v-app-bar flat color="#1d2a36">
+                  <v-toolbar-title class="text-h7 white--text pl-0">
+                    schema:width
+                  </v-toolbar-title>
+                  <v-spacer></v-spacer>
+                  <v-btn class="ma-0" text icon color="white">
+                    <v-icon>mdi-delete</v-icon>
+                  </v-btn>
+                </v-app-bar>
+                <v-card-text class="text-left">
+                  <v-expansion-panels class="pt-4">
+                    <v-expansion-panel>
+                      <v-expansion-panel-header>
+                        Properties
+                      </v-expansion-panel-header>
+                      <v-expansion-panel-content>
+                        <v-col>
+                          <v-row align="center" justify="center">
+                            <div class="grey--text mb-3">Required</div>
+                            <v-spacer></v-spacer>
+                            <v-checkbox
+                              class="mb-3"
+                              color="#1d2a36"
+                            ></v-checkbox>
+                          </v-row>
+                        </v-col>
+
+                        <v-col>
+                          <div class="grey--text mb-3">
+                            Kind of Value aka. fno:predicate (e.g. schema:width)
+                          </div>
+                          <SearchField class="ma-2" />
+                        </v-col>
+
+                        <v-col>
+                          <div class="grey--text mb-3">
+                            Data Type aka. foo:parameter (e.g. schema:Integer)
+                          </div>
+                          <SearchField class="ma-2" />
+                        </v-col>
+                      </v-expansion-panel-content>
+                    </v-expansion-panel>
+
+                    <v-expansion-panel>
+                      <v-expansion-panel-header>
+                        Custom Properties
+                      </v-expansion-panel-header>
+                      <v-expansion-panel-content>
+                        We can use this: https://he-tree-vue.phphe.com/
+                      </v-expansion-panel-content>
+                    </v-expansion-panel>
+                  </v-expansion-panels>
+                </v-card-text>
+              </v-card>
+            </v-row>
+          </v-col>
+        </v-card-text>
       </v-card>
     </v-col>
 
@@ -85,23 +124,19 @@
   background-color: #343c4a;
   transition: all 0.5s;
   transition-timing-function: ease-out;
-}
-
-.newCapabilityMenu .theme--light.v-label {
-  color: rgba(255, 255, 255, 0.6);
-}
-
-.newCapabilityMenu .theme--light.v-input input,
-.newCapabilityMenu .theme--light.v-input textarea {
-  color: rgba(255, 255, 255, 0.87);
+  height: 100%;
 }
 </style>
 
 <script>
 import { mapGetters, mapMutations } from "vuex";
+import SearchField from "@/components/SearchField.vue";
 
 export default {
   name: "RightDrawer",
+  components: {
+    SearchField,
+  },
   computed: {
     ...mapGetters({
       drawer: "rightDrawerState", // map `this.rightDrawerState()` to `this.$store.dispatch('rightDrawerState')`

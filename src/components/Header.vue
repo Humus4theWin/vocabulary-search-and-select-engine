@@ -33,12 +33,12 @@
 
           <v-spacer></v-spacer>
 
-          <v-btn icon v-if="!rightDrawer" @click="toggleRightDrawerState()"
+          <!--<v-btn icon v-if="!rightDrawer" @click="toggleRightDrawerState()"
             ><v-icon>mdi-arrow-left</v-icon>
           </v-btn>
           <v-btn icon v-else @click="toggleRightDrawerState()"
             ><v-icon>mdi-arrow-right</v-icon>
-          </v-btn>
+          </v-btn>-->
         </v-toolbar>
       </v-card>
     </v-col>
