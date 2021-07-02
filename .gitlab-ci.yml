@@ -45,3 +45,4 @@ pages:
       - public
   only:
     - master
+    - 20-improve-search-include-e-g-synonyms
