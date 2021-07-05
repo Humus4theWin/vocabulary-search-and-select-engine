@@ -50,6 +50,7 @@
 
 <script>
 // https://gitlab.com/dBPMS-PROCEED/vocabulary-search-and-select-engine/-/blob/master/src/components/SearchField.vue
+
 export default {
   data: () => ({
     terms: [],
@@ -85,18 +86,27 @@ export default {
       // console.log(queryText.type)
       //console.log(item);
       if (queryText.length > 2) {
-        return this.$store.getters.getFilterCriteria
-          .filter((criteria) => criteria.isUsed)
-          .map((criteria) => {
-            return (
-              item[criteria["predicate"]] !== undefined &&
-              this.getFilterFunction(criteria.searchType)(
-                item[criteria["predicate"]],
-                queryText
-              )
-            );
-          })
-          .every((b) => b === true);
+        let result_original_search_string =
+          this.$store.getters.getFilterCriteria
+            .filter((criteria) => criteria.isUsed)
+            .map((criteria) => {
+              return (
+                item[criteria["predicate"]] !== undefined &&
+                this.getFilterFunction(criteria.searchType)(
+                  item[criteria["predicate"]],
+                  queryText
+                )
+              );
+            })
+            .every((b) => b === true);
+
+        /* const synonyms = require('./src/synonyms.js')
+          synonyms(queryText).forEach((synonym) =>{
+            // every synonym must be looked up with the filter criteria in the database
+            console.log(synonym)
+          })*/
+
+        return result_original_search_string;
       } else {
         return;
       }

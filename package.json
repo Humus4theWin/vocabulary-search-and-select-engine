@@ -11,13 +11,16 @@
   "dependencies": {
     "core-js": "^3.6.5",
     "material-design-icons-iconfont": "^6.1.0",
+    "node-wordnet": "^0.1.12",
     "rdf-parse": "^1.8.0",
     "streamify-string": "^1.0.1",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
     "vue-worker": "^1.2.1",
     "vuetify": "^2.4.0",
-    "vuex": "^3.6.2"
+    "vuex": "^3.6.2",
+    "wndb-with-exceptions": "^3.0.2",
+    "wordnet-db": "^3.1.14"
   },
   "devDependencies": {
     "@mdi/font": "^5.9.55",
