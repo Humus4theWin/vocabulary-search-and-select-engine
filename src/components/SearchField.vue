@@ -51,6 +51,8 @@
 <script>
 // https://gitlab.com/dBPMS-PROCEED/vocabulary-search-and-select-engine/-/blob/master/src/components/SearchField.vue
 
+import getSynonyms from "@/synonyms";
+
 export default {
   data: () => ({
     terms: [],
@@ -82,11 +84,13 @@ export default {
   },
   methods: {
     filterObjects(item, queryText) {
-      // console.log(queryText)
+      //console.log("text")
+      //console.log(queryText)
+      //console.log(getSynonyms('dog'))
       // console.log(queryText.type)
       //console.log(item);
       if (queryText.length > 2) {
-        let result_original_search_string =
+        const result_original_search_string =
           this.$store.getters.getFilterCriteria
             .filter((criteria) => criteria.isUsed)
             .map((criteria) => {
@@ -99,17 +103,36 @@ export default {
               );
             })
             .every((b) => b === true);
-
-        /* const synonyms = require('./src/synonyms.js')
-          synonyms(queryText).forEach((synonym) =>{
+        /*getSynonyms(queryText).forEach((synonym) => {
             // every synonym must be looked up with the filter criteria in the database
             console.log(synonym)
           })*/
+        console.log(getSynonyms("dog"));
 
         return result_original_search_string;
       } else {
         return;
       }
+    },
+
+    getSynonyms(searchString) {
+      const WordNet = require("node-wordnet");
+      const wordnet = new WordNet("../node_modules/wordnet-db/dict");
+      console.log("it works");
+      let synonyms = [];
+      wordnet.lookup(searchString, (results) => {
+        results.forEach((result) => {
+          console.log("------------------------------------");
+          console.log(result.synsetOffset);
+          console.log(result.pos);
+          console.log(result.lemma);
+          console.log(result.synonyms);
+          console.log(result.pos);
+          console.log(result.gloss);
+          synonyms.push(result.synonyms);
+        });
+      });
+      return synonyms.flat();
     },
 
     /**
