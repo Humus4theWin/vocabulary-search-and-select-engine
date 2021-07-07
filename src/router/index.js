@@ -24,6 +24,12 @@ const routes = [
       import(/* webpackChunkName: "createTerm" */ "../views/CreateTerm"),
   },
   {
+    path: "/capability",
+    name: "Capability",
+    component: () =>
+      import(/* webpackChunkName: "notfound" */ "../views/Capability"),
+  },
+  {
     path: "/404",
     alias: "*",
     name: "NotFound",

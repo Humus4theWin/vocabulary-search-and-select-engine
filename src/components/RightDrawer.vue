@@ -137,6 +137,7 @@ export default {
   components: {
     SearchField,
   },
+
   computed: {
     ...mapGetters({
       drawer: "rightDrawerState", // map `this.rightDrawerState()` to `this.$store.dispatch('rightDrawerState')`
