@@ -1,14 +1,5 @@
 <template>
-  <CustomTree :value="treeData">
-    <span slot-scope="{ node, path, tree }">
-      <input
-        type="checkbox"
-        :checked="node.$checked"
-        @change="tree.toggleCheck(node, path)"
-      />
-      {{ node.text }}
-    </span>
-  </CustomTree>
+  <CustomTree :value="treeData" draggable droppable> </CustomTree>
 </template>
 <script>
 import "he-tree-vue/dist/he-tree-vue.css";

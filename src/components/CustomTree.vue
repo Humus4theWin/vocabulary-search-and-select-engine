@@ -18,6 +18,7 @@ export default {
     };
   },
   computed: {
+    //function for counting the nodes
     total() {
       let i = 0;
       this.walkTreeData(() => {
@@ -27,6 +28,7 @@ export default {
     },
   },
   methods: {
+    //defines structure of every node
     overrideSlotDefault({ node, path, tree }, original) {
       return (
         <div class="node-content">
@@ -48,6 +50,7 @@ export default {
         </div>
       );
     },
+    //defines header
     blockHeader() {
       return (
         <div class="header">
@@ -64,6 +67,7 @@ export default {
         </div>
       );
     },
+    //defines footer
     blockFooter() {
       return (
         <div class="footer">
@@ -71,7 +75,7 @@ export default {
         </div>
       );
     },
-    //
+    //adds a new node with given text
     add() {
       this.treeData.push({ text: `node ${hp.randString(3).toLowerCase()}` });
     },
