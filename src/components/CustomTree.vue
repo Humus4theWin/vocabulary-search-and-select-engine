@@ -75,7 +75,7 @@ export default {
         </div>
       );
     },
-    //adds a new node with given text
+    //adds a new node with given
     add() {
       this.treeData.push({ text: `node ${hp.randString(3).toLowerCase()}` });
     },

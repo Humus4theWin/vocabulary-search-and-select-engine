@@ -1,5 +1,8 @@
 <template>
-  <CustomTree :value="treeData" draggable droppable> </CustomTree>
+  <v-row>
+    <CustomTree :value="treeData" draggable droppable> </CustomTree>
+    <v-btn v-on:click="updateStructure">add Vocab</v-btn>
+  </v-row>
 </template>
 <script>
 import "he-tree-vue/dist/he-tree-vue.css";
@@ -16,6 +19,15 @@ export default {
         },
       ],
     };
+  },
+  methods: {
+    updateStructure() {
+      let node = this.treeData;
+      while (node.children !== undefined) {
+        console.log(node.text);
+        node = node.children;
+      }
+    },
   },
 };
 </script>
