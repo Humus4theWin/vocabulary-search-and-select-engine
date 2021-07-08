@@ -1,11 +1,6 @@
 <template>
   <v-app>
-    <split-pane
-      v-on:resize="resize"
-      :min-percent="25"
-      :default-percent="57"
-      split="vertical"
-    >
+    <split-pane :min-percent="25" :default-percent="40" split="vertical">
       <template slot="paneL">
         <v-col class="leftView">
           <Header />
@@ -44,11 +39,12 @@
   }
 }
 
+html {
+  background-color: #343c4a;
+}
+
 .leftView {
   height: calc(100% - 200px);
-}
-.rightView {
-  height: 100%;
 }
 .actionBar {
   margin-top: 25px;

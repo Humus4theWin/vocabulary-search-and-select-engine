@@ -11,7 +11,7 @@
         hide-selected
         item-text="label"
         item-value="url"
-        label="Terms"
+        v-bind:label="searchLabel"
         placeholder="Start typing to search"
         prepend-icon="mdi-database-search"
         return-object
@@ -62,7 +62,12 @@ export default {
     model: null,
     search: null,
   }),
-
+  props: {
+    searchLabel: {
+      type: String,
+      default: "Terms",
+    },
+  },
   computed: {
     /**
      * returns fields which matches search

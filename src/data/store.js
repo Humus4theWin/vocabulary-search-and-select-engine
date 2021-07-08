@@ -9,6 +9,15 @@ const store = {
     search: "",
     leftDrawerState: false,
     rightDrawerState: false,
+    //contains the properties, such as kindOfCapability and inputs/outputs of new capabilities
+    newCapability: {
+      kindOfCapability: "",
+      fileName: "",
+      functionName: "",
+      sameAs: "",
+      inputs: [],
+      outputs: [],
+    },
   },
   mutations: {
     /**
@@ -58,6 +67,89 @@ const store = {
      */
     toggleRightDrawerState(state) {
       state.rightDrawerState = !state.rightDrawerState;
+    },
+
+    /**
+     * TODO Description
+     * @param state current state
+     */
+    newCapChangeKindOfCapability(state, value) {
+      state.newCapability.kindOfCapability = value;
+    },
+    /**
+     * TODO Description
+     * @param state current state
+     */
+    newCapChangeFileName(state, value) {
+      state.newCapability.fileName = value;
+    },
+    /**
+     * TODO Description
+     * @param state current state
+     */
+    newCapChangeFunctionName(state, value) {
+      state.newCapability.functionName = value;
+    },
+    /**
+     * TODO Description
+     * @param state current state
+     */
+    newCapChangeSameAs(state, value) {
+      state.newCapability.sameAs = value;
+    },
+    /**
+     * TODO Description
+     * @param state current state
+     */
+    newCapAddCapabilityInput(state, input) {
+      state.newCapability.inputs.push(input);
+    },
+    /**
+     * TODO Description
+     * @param state current state
+     */
+    newCapRemoveCapabilityInput(state, index) {
+      state.newCapability.inputs.splice(index, 1);
+    },
+    /**
+     * TODO Description
+     * @param state current state
+     */
+    newCapAddCapabilityOutput(state, output) {
+      state.newCapability.outputs.push(output);
+    },
+    /**
+     * TODO Description
+     * @param state current state
+     */
+    newCapRemoveCapabilityOutput(state, index) {
+      state.newCapability.outputs.splice(index, 1);
+    },
+    /**
+     * TODO Description
+     * @param state current state
+     */
+    newCapChangeCapabilityInputProperty(
+      state,
+      { inputIndex, propertyKey, value }
+    ) {
+      // The input array needs to be recreated using 'splice()' so the UI updates automatically
+      let input = state.newCapability.inputs[inputIndex];
+      input[propertyKey] = value;
+      state.newCapability.inputs.splice(inputIndex, 1, input);
+    },
+    /**
+     * TODO Description
+     * @param state current state
+     */
+    newCapChangeCapabilityOutputProperty(
+      state,
+      { outputIndex, propertyKey, value }
+    ) {
+      // The input array needs to be recreated using 'splice()' so the UI updates automatically
+      let output = state.newCapability.outputs[outputIndex];
+      output[propertyKey] = value;
+      state.newCapability.outputs.splice(outputIndex, 1, output);
     },
   },
   getters: {
@@ -120,6 +212,55 @@ const store = {
      */
     search: (state) => {
       return state.search;
+    },
+
+    /**
+     * ToDo Description
+     * @param state
+     * @return {String}
+     */
+    newCapKindOfCapability: (state) => {
+      return state.newCapability.kindOfCapability;
+    },
+    /**
+     * ToDo Description
+     * @param state
+     * @return {String}
+     */
+    newCapFileName: (state) => {
+      return state.newCapability.fileName;
+    },
+    /**
+     * ToDo Description
+     * @param state
+     * @return {String}
+     */
+    newCapFunctionName: (state) => {
+      return state.newCapability.functionName;
+    },
+    /**
+     * ToDo Description
+     * @param state
+     * @return {String}
+     */
+    newCapSameAs: (state) => {
+      return state.newCapability.sameAs;
+    },
+    /**
+     * ToDo Description
+     * @param state
+     * @return state.inputs
+     */
+    newCapInputs: (state) => {
+      return state.newCapability.inputs;
+    },
+    /**
+     * ToDo Description
+     * @param state
+     * @return state.outputs
+     */
+    newCapOutputs: (state) => {
+      return state.newCapability.outputs;
     },
   },
 };
