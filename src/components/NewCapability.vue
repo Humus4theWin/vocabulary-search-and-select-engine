@@ -41,6 +41,8 @@
         </v-card-text>
       </v-card>
 
+      <!-- INPUTS -->
+
       <v-card class="ma-5 capabilityCard">
         <v-app-bar flat color="#1d2a36">
           <v-toolbar-title
@@ -194,39 +196,84 @@
         </v-card-text>
       </v-card>
 
-      <v-card class="ma-5 capIO">
+      <!-- OUTPUTS -->
+
+      <v-card class="ma-5 capIO" color="#3b4453">
         <v-app-bar flat color="#1d2a36">
-          <v-toolbar-title class="text-h6 white--text pl-0">
+          <v-toolbar-title
+            class="text-h6 white--text pl-2"
+            style="font-weight: 400"
+          >
             Outputs
           </v-toolbar-title>
           <v-spacer></v-spacer>
-          <v-btn class="ma-0" text icon color="white">
+          <v-btn
+            class="ma-0"
+            text
+            icon
+            color="white"
+            @click="addCapabilityOutput({})"
+          >
             <v-icon>mdi-plus</v-icon>
           </v-btn>
         </v-app-bar>
-        <v-card-text class="text-left">
-          <v-col>
-            <v-row>
-              <v-card class="mx-auto mb-5">
+        <v-card-text class="text-center">
+          <v-col align="center" justify="center">
+            <v-row align="center" justify="center">
+              <p v-show="outputs().length == 0" style="color: white">
+                Use the "+" Button to add your first output.
+              </p>
+              <v-card
+                v-for="(output, index) in outputs()"
+                :key="index"
+                class="ma-3"
+                color="#5c6473"
+              >
                 <v-app-bar flat color="#1d2a36">
-                  <v-toolbar-title class="text-h7 white--text pl-0">
-                    schema:width
+                  <v-toolbar-title class="text-h7 white--text pl-2">
+                    {{
+                      outputs()[index].parameterName != null &&
+                      outputs()[index].parameterName != undefined &&
+                      outputs()[index].parameterName != ""
+                        ? "Output #" +
+                          String(index + 1) +
+                          " (" +
+                          outputs()[index].parameterName +
+                          ")"
+                        : "Output #" + String(index + 1)
+                    }}
                   </v-toolbar-title>
                   <v-spacer></v-spacer>
-                  <v-btn class="ma-0" text icon color="white">
+                  <v-btn
+                    class="ma-0"
+                    text
+                    icon
+                    color="white"
+                    @click="removeCapabilityOutput(index)"
+                  >
                     <v-icon>mdi-delete</v-icon>
                   </v-btn>
                 </v-app-bar>
                 <v-card-text class="text-left">
-                  <v-expansion-panels class="pt-4">
+                  <v-expansion-panels class="pt-2">
                     <v-expansion-panel>
                       <v-expansion-panel-header>
-                        Properties
+                        Default Properties
                       </v-expansion-panel-header>
                       <v-expansion-panel-content>
                         <v-col>
                           <div class="grey--text mb-3">Parameter Name</div>
-                          <v-text-field label='e.g., "w"'></v-text-field>
+                          <v-text-field
+                            label='e.g., "w" or "width"'
+                            v-model="outputs()[index].parameterName"
+                            @input="
+                              changeCapabilityOutputProperty({
+                                outputIndex: index,
+                                propertyKey: 'parameterName',
+                                value: outputs()[index].parameterName,
+                              })
+                            "
+                          ></v-text-field>
                         </v-col>
 
                         <v-col>
@@ -264,7 +311,7 @@
                         <v-col>
                           <div class="grey--text mb-3">Encoding</div>
                           <SearchField
-                            searchLabel='e.g., "somevocab:jpg"'
+                            searchLabel='e.g., "image/jpg"'
                             class="ma-2"
                           />
                         </v-col>
@@ -292,7 +339,12 @@
         </v-card-text>
       </v-card>
 
-      <v-btn class="mt-5" x-large color="white" style="min-width: 100%"
+      <v-btn
+        class="mt-5"
+        x-large
+        color="white"
+        style="min-width: 100%"
+        @click="generateJSON()"
         >Generate JSON-LD File</v-btn
       >
     </v-row>
@@ -312,6 +364,23 @@
 <script>
 import { mapGetters, mapMutations } from "vuex";
 import SearchField from "@/components/SearchField.vue";
+
+let parametersTemplate = [];
+
+let jsFunctionTemplate = {
+  "@id": null,
+  "@type": "fnoi:JavaScriptFunction",
+  "dbpedia-owl:filename": null,
+};
+
+let mappingTemplate = {
+  "@id": null,
+  "@type": "fno:Mapping",
+  "fno:function": null,
+  "fno:implementation": null,
+  "fno:parameterMapping": [],
+  "fno:returnMapping": [],
+};
 
 export default {
   name: "NewCapability",
@@ -341,6 +410,63 @@ export default {
       changeCapabilityInputProperty: "newCapChangeCapabilityInputProperty", // map `this.newCapChangeCapabilityInputProperty()` to `this.$store.dispatch('newCapChangeCapabilityInputProperty')`
       changeCapabilityOutputProperty: "newCapChangeCapabilityOutputProperty", // map `this.newCapChangeCapabilityOutputProperty()` to `this.$store.dispatch('newCapChangeCapabilityOutputProperty')`
     }),
+    generateJSON() {
+      this.ioToJson();
+
+      // eslint-disable-next-line no-unused-vars
+      let outputTemplate = {
+        "@context": {
+          // eslint-disable-next-line prettier/prettier
+          schema: "https://schema.org/",
+          // eslint-disable-next-line prettier/prettier
+          fno: "https://w3id.org/function/ontology#",
+          // eslint-disable-next-line prettier/prettier
+          fnoi: "https://w3id.org/function/vocabulary/implementation",
+          "dbpedia-owl": "http://dbpedia.org/ontology/",
+        },
+        "@graph": [
+          {
+            "@id": "_:capability",
+            "schema:potentialAction": { "@id": null, "@type": [] },
+          },
+          {
+            "@id": null,
+            "fno:expects": { "@list": [] },
+            "fno:returns": { "@list": [] },
+          },
+          parametersTemplate,
+          jsFunctionTemplate,
+          mappingTemplate,
+        ],
+      };
+
+      // For now, show the generated JSON as string in a new tab for debugging
+      let jsonOutputTest = window.open(
+        "data:text/json," +
+          encodeURIComponent(JSON.stringify(outputTemplate, null, 2)),
+        "_blank"
+      );
+      jsonOutputTest.focus();
+    },
+    ioToJson() {
+      parametersTemplate = [];
+      for (let i = 0; i < this.inputs().length; i++) {
+        parametersTemplate.push({
+          "@id": "_:" + this.inputs()[i].parameterName + "Parameter",
+          "fno:predicate": [],
+          "@type": [],
+          "fno:required": null,
+        });
+      }
+      for (let i = 0; i < this.outputs().length; i++) {
+        parametersTemplate.push({
+          "@id": "_:" + this.outputs()[i].parameterName + "Parameter",
+          "fno:predicate": [],
+          "@type": [],
+          "fno:required": null,
+        });
+      }
+    },
   },
 };
 </script>
