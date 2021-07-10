@@ -198,6 +198,7 @@ function indexVocabularies() {
       sourceURL: url,
       numberOfQuads: quads.length,
       terms: terms,
+      isUsed: true
     });
   }
   const d = new Date();
