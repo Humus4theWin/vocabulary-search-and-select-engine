@@ -175,6 +175,7 @@ function indexVocabularies() {
         return {
           IRI: quad.subject.value,
           label: quad.object.value,
+          sourceURL: url
         };
       });
     // add all attributes
@@ -190,7 +191,6 @@ function indexVocabularies() {
         }
         term[attr.predicate.value] = val;
       });
-      term.sourceURL = url;
       return term;
     });
     indexedVocabularies.push({
