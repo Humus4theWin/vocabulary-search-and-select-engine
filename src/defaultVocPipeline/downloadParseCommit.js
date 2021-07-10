@@ -193,7 +193,12 @@ function indexVocabularies() {
 
       return term;
     });
-    indexedVocabularies.push({ name: name, sourceURL: url, terms: terms });
+    indexedVocabularies.push({
+      name: name,
+      sourceURL: url,
+      numberOfQuads: quads.length,
+      terms: terms,
+    });
   }
   const d = new Date();
   let output = {
