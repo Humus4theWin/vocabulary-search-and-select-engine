@@ -175,7 +175,7 @@ function indexVocabularies() {
         return {
           IRI: quad.subject.value,
           label: quad.object.value,
-          sourceURL: url
+          vocabSourceURL: url
         };
       });
     // add all attributes
