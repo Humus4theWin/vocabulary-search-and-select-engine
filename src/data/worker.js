@@ -1,11 +1,19 @@
+/*eslint-disable*/
 import rdfParser from "rdf-parse";
 
 // eslint-disable-next-line no-unused-vars
 function onmessage(event) {
+
+}
+
+addEventListener("message", (event) => {
+  console.log(event);
+
+  console.log("onmessage");
   let url = event.data[0];
   let type = event.data[1];
   importVocab(url, type);
-}
+});
 
 /**
  * imports vocabulary and parses quads; adds it to Vuex
@@ -85,11 +93,10 @@ function indexVocab(url, quads) {
     });
 
     attributes.forEach((attr) => {
-      let val = attr.object.value;
       //if (val.length > this.descriptionLimit) {
       //  val = val.slice(0, this.descriptionLimit) + "...";
       //}
-      term[attr.predicate.value] = val;
+      term[attr.predicate.value] = attr.object.value;
     });
 
     return term;
