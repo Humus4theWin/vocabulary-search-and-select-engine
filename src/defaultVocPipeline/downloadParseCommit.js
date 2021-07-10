@@ -166,7 +166,7 @@ async function parseVocabularies(downloadedVocabularies, index) {
 function indexVocabularies() {
   for (let i = 0; i < parsedVocabularies.length; i++) {
     let name = parsedVocabularies[i].name;
-    let url = parsedVocabularies[i].url;
+    let url = parsedVocabularies[i].sourceURL ;
     let quads = parsedVocabularies[i].quads;
 
     let terms = quads
