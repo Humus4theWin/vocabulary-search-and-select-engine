@@ -61,6 +61,7 @@ async function importVocab(url, format) {
       //console.log("All done!");
       indexVocab(url, vocab.quads);
       vocab.quads = undefined
+      vocab.date = new Date().toISOString()
       postMessage(["addVocab",vocab]);
     });
 }
@@ -94,7 +95,7 @@ function indexVocab(url, quads) {
       //}
       term[attr.predicate.value] = attr.object.value;
     });
-
+    term.sourceURL = url;
     return term;
   });
   postMessage(["addVocabTerms", terms]);
