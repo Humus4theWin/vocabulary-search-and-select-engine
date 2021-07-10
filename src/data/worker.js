@@ -1,15 +1,8 @@
 /*eslint-disable*/
 import rdfParser from "rdf-parse";
 
-// eslint-disable-next-line no-unused-vars
-function onmessage(event) {
-
-}
-
 addEventListener("message", (event) => {
-  console.log(event);
 
-  console.log("onmessage");
   let url = event.data[0];
   let type = event.data[1];
   importVocab(url, type);
@@ -43,7 +36,7 @@ async function importVocab(url, format) {
     vocab.type = response.headers.get("content-type").split(";")[0];
     vocab.data = await response.text();
   } else {
-    console.log("error: " + url);
+    //console.log("error: " + url);
     return;
   }
   if (format) vocab.type = format;
@@ -63,9 +56,12 @@ async function importVocab(url, format) {
     })
     .on("error", (error) => console.error(error))
     .on("end", () => {
-      window.App.$store.commit("addVocab", vocab);
-      console.log("All done!");
+      //post vocabs
+
+      //console.log("All done!");
       indexVocab(url, vocab.quads);
+      vocab.quads = undefined
+      postMessage(["addVocab",vocab]);
     });
 }
 
@@ -85,7 +81,7 @@ function indexVocab(url, quads) {
         vocabSourceURL: url,
       };
     });
-  console.log(quads);
+  //console.log(quads);
   // add all attributes
   terms = terms.map((term) => {
     let attributes = quads.filter((quad) => {
@@ -101,7 +97,7 @@ function indexVocab(url, quads) {
 
     return term;
   });
-  window.App.$store.commit("addVocabTerms", terms);
-  console.log(terms);
+  postMessage(["addVocabTerms", terms]);
+  //console.log(terms);
 }
 export default onmessage;

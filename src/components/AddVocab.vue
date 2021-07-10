@@ -80,6 +80,18 @@ export default {
 
       const worker = new Worker("../data/worker", { type: "module" });
 
+      worker.onmessage = (message) => {
+        console.log(message);
+        switch (message.data[0]) {
+          case "addVocab":
+            window.App.$store.commit("addVocab", message.data[1]);
+            break;
+          case "addVocabTerms":
+            window.App.$store.commit("addVocabTerms", message.data[1]);
+            break;
+        }
+      };
+
       worker.postMessage([this.addURL, this.select.state]);
 
       //clean up
