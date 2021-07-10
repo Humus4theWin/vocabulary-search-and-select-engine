@@ -43,16 +43,29 @@
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
+                    <v-select
+                      v-model="editedItem.type"
+                      :hint="`${select.abbr}`"
+                      :items="items"
+                      item-text="abbr"
+                      item-value="state"
+                      label="Select format"
+                      persistent-hint
+                      single-line
+                    ></v-select>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
                     <v-text-field
                       v-model="editedItem.numberOfQuads"
                       label="Number of Quads"
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field
+                    <v-select
+                      :items="[true, false]"
                       v-model="editedItem.isUsed"
-                      label="used for search"
-                    ></v-text-field>
+                      label="in use"
+                    ></v-select>
                   </v-col>
                 </v-row>
               </v-container>
@@ -109,11 +122,11 @@ export default {
       },
       { text: "date", value: "date" },
       { text: "Source URL", value: "sourceURL" },
+      { text: "Source type", value: "type" },
       { text: "Number of Quads", value: "numberOfQuads" },
       { text: "used for search", value: "isUsed" },
       { text: "Actions", value: "actions", sortable: false },
     ],
-    desserts: [],
     editedIndex: -1,
     editedItem: {
       name: "",
@@ -129,6 +142,21 @@ export default {
       numberOfQuads: 0,
       isUsed: true,
     },
+
+    select: { state: undefined, abbr: "auto" },
+    items: [
+      { state: "application/trig", abbr: ".trig" },
+      { state: "application/n-quads", abbr: ".nq, .nquads" },
+      { state: "text/turtle", abbr: ".ttl, .turtle" },
+      { state: "application/n-triples", abbr: ".nt, .ntriples" },
+      { state: "application/ld+json", abbr: ".jsonld" },
+      { state: "application/json", abbr: ".json" },
+      { state: "application/rdf+xml", abbr: ".rdf, .rdfxml, .owl" },
+      { state: "text/html", abbr: ".html, .htm," },
+      { state: "application/xhtml+xml", abbr: ".xhtml, .xht" },
+      { state: "mage/svg+xml", abbr: ".xml" },
+      { state: "application/xml", abbr: ".svg, .svgz" },
+    ],
   }),
 
   computed: {
@@ -154,23 +182,33 @@ export default {
   },
 
   methods: {
-    initialize() {},
+    initialize() {
+      this.editedItem = Object.assign({}, this.defaultItem);
+    },
 
     editItem(item) {
-      this.editedIndex = this.desserts.indexOf(item);
+      this.editedIndex = this.vocabularies.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
+      this.$store.commit("setVocabs", this.vocabularies);
     },
 
     deleteItem(item) {
-      this.editedIndex = this.desserts.indexOf(item);
+      this.editedIndex = this.vocabularies.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialogDelete = true;
     },
 
     deleteItemConfirm() {
-      this.desserts.splice(this.editedIndex, 1);
+      this.vocabularies.splice(this.editedIndex, 1);
       this.closeDelete();
+      this.$store.commit("setVocabs", this.vocabularies);
+      console.log(this.editedItem.sourceURL);
+      let filteredTerms = this.$store.getters.getVocabTerms.filter(
+        (term) => term.vocabSourceURL !== this.editedItem.sourceURL
+      );
+      console.log(filteredTerms);
+      this.$store.commit("setVocabTerms", filteredTerms);
     },
 
     close() {
@@ -187,15 +225,35 @@ export default {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
       });
+      this.$store.commit("setVocabs", this.vocabularies);
     },
 
     save() {
       if (this.editedIndex > -1) {
-        Object.assign(this.desserts[this.editedIndex], this.editedItem);
+        Object.assign(this.vocabularies[this.editedIndex], this.editedItem);
       } else {
-        this.desserts.push(this.editedItem);
+        this.vocabularies.push(this.editedItem);
+        this.addVocab();
       }
       this.close();
+      this.$store.commit("setVocabs", this.vocabularies);
+    },
+    addVocab() {
+      const worker = new Worker("../data/worker", { type: "module" });
+
+      worker.onmessage = (message) => {
+        console.log(message);
+        switch (message.data[0]) {
+          case "addVocab":
+            window.App.$store.commit("addVocab", message.data[1]);
+            break;
+          case "addVocabTerms":
+            window.App.$store.commit("addVocabTerms", message.data[1]);
+            break;
+        }
+      };
+
+      worker.postMessage([this.editedItem.sourceURL, this.editedItem.type]);
     },
   },
 };

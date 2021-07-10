@@ -37,9 +37,21 @@ const store = {
      * @param {Object} vocab a rdf vocab
      */
     addVocab(state, vocab) {
-      console.log(vocab);
-      state.vocabs.push(vocab);
-      DB.addVocabulary(vocab);
+      state.vocabs = state.vocabs.filter(
+        (v) => v.sourceURL !== vocab.sourceURL
+      );
+      state.vocabs = [...state.vocabs, vocab];
+      DB.updateVocabularys(state.vocabs);
+    },
+    /**
+     * overwrites the list of available vocabs
+     * @param state current state
+     * @param [{Object}] vocab a rdf vocab
+     */
+    setVocabs(state, vocabs) {
+      console.log(vocabs);
+      state.vocabs = vocabs;
+      DB.updateVocabularys(vocabs);
     },
     /**
      * adds terms to the vocab, that matches the VocabUrl
@@ -50,6 +62,16 @@ const store = {
       console.log(data);
       state.vocabTerms.push(...data);
       DB.addTerms(data);
+    },
+    /**
+     * adds terms to the vocab, that matches the VocabUrl
+     * @param state
+     * @param Array data - [{{IRI: string, vocabSourceURL: string, ...any : string}}]
+     */
+    setVocabTerms: function (state, data) {
+      console.log(data);
+      state.vocabTerms = data;
+      DB.updateTerms(data);
     },
     /**
      * adds a new term (subject, predicate, object), created by the user to terms

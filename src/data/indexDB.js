@@ -173,6 +173,21 @@ export default {
     }
   },
 
+  async updateVocabularys(vocabs) {
+    let db = await this.getDb();
+
+    return new Promise((resolve) => {
+      let trans = db.transaction(["Vocabs"], "readwrite");
+      trans.oncomplete = () => {
+        resolve();
+      };
+
+      let store = trans.objectStore("Vocabs");
+      store.clear(); //todo: may refactor to handle single CRUD Events
+      vocabs.forEach((criteria) => store.put(criteria));
+    });
+  },
+
   async updateFilterCriteria(filterCriteria) {
     //array of criteria
     let db = await this.getDb();
@@ -186,6 +201,21 @@ export default {
       let store = trans.objectStore("Filter");
       store.clear(); //todo: may refactor to handle single CRUD Events
       filterCriteria.forEach((criteria) => store.put(criteria));
+    });
+  },
+
+  async updateTerms(terms) {
+    let db = await this.getDb();
+
+    return new Promise((resolve) => {
+      let trans = db.transaction(["Terms"], "readwrite");
+      trans.oncomplete = () => {
+        resolve();
+      };
+
+      let store = trans.objectStore("Terms");
+      store.clear(); //todo: may refactor to handle single CRUD Events
+      terms.forEach((criteria) => store.put(criteria));
     });
   },
 };
