@@ -100,9 +100,10 @@
     <template v-slot:item.actions="{ item }">
       <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil</v-icon>
       <v-icon small @click="deleteItem(item)"> mdi-delete</v-icon>
+      <v-icon small @click="refreshItem(item)"> mdi-refresh</v-icon>
     </template>
     <template v-slot:no-data>
-      <v-btn color="primary" @click="initialize"> Reset</v-btn>
+      <v-btn color="primary" @click="loadDefaultVocabs"> Load Defaults</v-btn>
     </template>
   </v-data-table>
 </template>
@@ -198,6 +199,11 @@ export default {
       this.editedItem = Object.assign({}, item);
       this.dialogDelete = true;
     },
+    refreshItem(item) {
+      this.editedIndex = this.vocabularies.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.addVocab();
+    },
 
     deleteItemConfirm() {
       this.vocabularies.splice(this.editedIndex, 1);
@@ -238,6 +244,7 @@ export default {
       this.close();
       this.$store.commit("setVocabs", this.vocabularies);
     },
+
     addVocab() {
       const worker = new Worker("../data/worker", { type: "module" });
 
@@ -254,6 +261,20 @@ export default {
       };
 
       worker.postMessage([this.editedItem.sourceURL, this.editedItem.type]);
+    },
+    async loadDefaultVocabs() {
+      let res = await fetch(
+        "https://dbpms-proceed.gitlab.io/vocabulary-search-and-select-engine/defaultVocabularies.json"
+      );
+      if (res.ok) {
+        let json = await res.json();
+        json.vocabularies.forEach((vocab) => {
+          window.App.$store.commit("addVocabTerms", vocab.terms);
+          vocab.terms = undefined;
+          vocab.date = json.lastUpdate;
+          window.App.$store.commit("addVocab", vocab);
+        });
+      }
     },
   },
 };

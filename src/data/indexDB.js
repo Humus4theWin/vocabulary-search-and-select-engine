@@ -45,9 +45,9 @@ export default {
           if (arr.length === 0)
             this.updateFilterCriteria(defaultFilterCriteria);
         });
-        this.getAllTerms().then((arr) => {
-          if (arr.length === 0) this.loadDefaultVocabs();
-        });
+        // this.getAllTerms().then((arr) => {
+        //  if (arr.length === 0) this.loadDefaultVocabs();
+        // });
       };
     });
   },

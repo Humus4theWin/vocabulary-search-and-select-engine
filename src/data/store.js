@@ -40,6 +40,10 @@ const store = {
       state.vocabs = state.vocabs.filter(
         (v) => v.sourceURL !== vocab.sourceURL
       );
+      let vocabName =
+        vocab.name ||
+        state.vocabs.filter((v) => v.sourceURL === vocab.sourceURL).name;
+      vocab.name = vocabName;
       state.vocabs = [...state.vocabs, vocab];
       DB.updateVocabularys(state.vocabs);
     },
