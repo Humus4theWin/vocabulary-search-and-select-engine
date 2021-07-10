@@ -1,353 +1,422 @@
 <template>
-  <v-col class="pa-8">
-    <v-row align="center" justify="center">
-      <v-card class="ma-5 capabilityCard">
-        <v-app-bar flat color="#1d2a36">
-          <v-toolbar-title
-            class="text-h6 white--text pl-2"
-            style="font-weight: 400"
-          >
-            Kind of Capability
-          </v-toolbar-title>
-        </v-app-bar>
-        <SearchField searchLabel='e.g., "schema.org/PhotographAction"' />
-      </v-card>
-
-      <v-card class="ma-5 capabilityCard">
-        <v-app-bar flat color="#1d2a36">
-          <v-toolbar-title
-            class="text-h6 white--text pl-2"
-            style="font-weight: 400"
-          >
-            File Name
-          </v-toolbar-title>
-        </v-app-bar>
-        <v-card-text class="text-left">
-          <v-text-field label='e.g., "index.js"' required></v-text-field>
-        </v-card-text>
-      </v-card>
-
-      <v-card class="ma-5 capabilityCard">
-        <v-app-bar flat color="#1d2a36">
-          <v-toolbar-title
-            class="text-h6 white--text pl-2"
-            style="font-weight: 400"
-          >
-            Function Name (optional)
-          </v-toolbar-title>
-        </v-app-bar>
-        <v-card-text class="text-left">
-          <v-text-field label='e.g., "takePhoto()"' required></v-text-field>
-        </v-card-text>
-      </v-card>
-
-      <!-- INPUTS -->
-
-      <v-card class="ma-5 capabilityCard">
-        <v-app-bar flat color="#1d2a36">
-          <v-toolbar-title
-            class="text-h6 white--text pl-2"
-            style="font-weight: 400"
-          >
-            Same As (optional)
-          </v-toolbar-title>
-        </v-app-bar>
-        <SearchField searchLabel='e.g., "schema.org/OtherAction"' />
-      </v-card>
-
-      <v-card class="ma-5 capIO" color="#3b4453">
-        <v-app-bar flat color="#1d2a36">
-          <v-toolbar-title
-            class="text-h6 white--text pl-2"
-            style="font-weight: 400"
-          >
-            Inputs
-          </v-toolbar-title>
-          <v-spacer></v-spacer>
-          <v-btn
-            class="ma-0"
-            text
-            icon
-            color="white"
-            @click="addCapabilityInput({})"
-          >
-            <v-icon>mdi-plus</v-icon>
-          </v-btn>
-        </v-app-bar>
-        <v-card-text class="text-center">
-          <v-col align="center" justify="center">
-            <v-row align="center" justify="center">
-              <p v-show="inputs().length == 0" style="color: white">
-                Use the "+" Button to add your first input.
-              </p>
-              <v-card
-                v-for="(input, index) in inputs()"
-                :key="index"
-                class="ma-3"
-                color="#5c6473"
-              >
-                <v-app-bar flat color="#1d2a36">
-                  <v-toolbar-title class="text-h7 white--text pl-2">
-                    {{
-                      inputs()[index].parameterName != null &&
-                      inputs()[index].parameterName != undefined &&
-                      inputs()[index].parameterName != ""
-                        ? "Input #" +
-                          String(index + 1) +
-                          " (" +
-                          inputs()[index].parameterName +
-                          ")"
-                        : "Input #" + String(index + 1)
-                    }}
-                  </v-toolbar-title>
-                  <v-spacer></v-spacer>
-                  <v-btn
-                    class="ma-0"
-                    text
-                    icon
-                    color="white"
-                    @click="removeCapabilityInput(index)"
-                  >
-                    <v-icon>mdi-delete</v-icon>
-                  </v-btn>
-                </v-app-bar>
-                <v-card-text class="text-left">
-                  <v-expansion-panels class="pt-2">
-                    <v-expansion-panel>
-                      <v-expansion-panel-header>
-                        Default Properties
-                      </v-expansion-panel-header>
-                      <v-expansion-panel-content>
-                        <v-col>
-                          <div class="grey--text mb-3">Parameter Name</div>
-                          <v-text-field
-                            label='e.g., "w" or "width"'
-                            v-model="inputs()[index].parameterName"
-                            @input="
-                              changeCapabilityInputProperty({
-                                inputIndex: index,
-                                propertyKey: 'parameterName',
-                                value: inputs()[index].parameterName,
-                              })
-                            "
-                          ></v-text-field>
-                        </v-col>
-
-                        <v-col>
-                          <v-row align="center" justify="center">
-                            <div class="grey--text mb-3 ml-3">Required</div>
-                            <v-spacer></v-spacer>
-                            <v-checkbox
-                              class="mb-3"
-                              color="#1d2a36"
-                            ></v-checkbox>
-                          </v-row>
-                        </v-col>
-
-                        <v-col>
-                          <div class="grey--text mb-3">Kind of Value</div>
-                          <SearchField
-                            searchLabel='e.g., "schema.org/width"'
-                            class="ma-2"
-                          />
-                        </v-col>
-
-                        <v-col>
-                          <div class="grey--text mb-3">Data Type</div>
-                          <SearchField
-                            searchLabel='e.g., "xs:integer"'
-                            class="ma-2"
-                          />
-                        </v-col>
-
-                        <v-col>
-                          <div class="grey--text mb-3">Unit</div>
-                          <v-text-field label='e.g., "px"'></v-text-field>
-                        </v-col>
-
-                        <v-col>
-                          <div class="grey--text mb-3">Encoding</div>
-                          <SearchField
-                            searchLabel='e.g., "image/jpg"'
-                            class="ma-2"
-                          />
-                        </v-col>
-
-                        <v-col>
-                          <div class="grey--text mb-3">Default Value</div>
-                          <v-text-field label='e.g., "43"'></v-text-field>
-                        </v-col>
-                      </v-expansion-panel-content>
-                    </v-expansion-panel>
-
-                    <v-expansion-panel>
-                      <v-expansion-panel-header>
-                        Additional Properties
-                      </v-expansion-panel-header>
-                      <v-expansion-panel-content>
-                        Michael's job
-                      </v-expansion-panel-content>
-                    </v-expansion-panel>
-                  </v-expansion-panels>
-                </v-card-text>
-              </v-card>
-            </v-row>
-          </v-col>
-        </v-card-text>
-      </v-card>
-
-      <!-- OUTPUTS -->
-
-      <v-card class="ma-5 capIO" color="#3b4453">
-        <v-app-bar flat color="#1d2a36">
-          <v-toolbar-title
-            class="text-h6 white--text pl-2"
-            style="font-weight: 400"
-          >
-            Outputs
-          </v-toolbar-title>
-          <v-spacer></v-spacer>
-          <v-btn
-            class="ma-0"
-            text
-            icon
-            color="white"
-            @click="addCapabilityOutput({})"
-          >
-            <v-icon>mdi-plus</v-icon>
-          </v-btn>
-        </v-app-bar>
-        <v-card-text class="text-center">
-          <v-col align="center" justify="center">
-            <v-row align="center" justify="center">
-              <p v-show="outputs().length == 0" style="color: white">
-                Use the "+" Button to add your first output.
-              </p>
-              <v-card
-                v-for="(output, index) in outputs()"
-                :key="index"
-                class="ma-3"
-                color="#5c6473"
-              >
-                <v-app-bar flat color="#1d2a36">
-                  <v-toolbar-title class="text-h7 white--text pl-2">
-                    {{
-                      outputs()[index].parameterName != null &&
-                      outputs()[index].parameterName != undefined &&
-                      outputs()[index].parameterName != ""
-                        ? "Output #" +
-                          String(index + 1) +
-                          " (" +
-                          outputs()[index].parameterName +
-                          ")"
-                        : "Output #" + String(index + 1)
-                    }}
-                  </v-toolbar-title>
-                  <v-spacer></v-spacer>
-                  <v-btn
-                    class="ma-0"
-                    text
-                    icon
-                    color="white"
-                    @click="removeCapabilityOutput(index)"
-                  >
-                    <v-icon>mdi-delete</v-icon>
-                  </v-btn>
-                </v-app-bar>
-                <v-card-text class="text-left">
-                  <v-expansion-panels class="pt-2">
-                    <v-expansion-panel>
-                      <v-expansion-panel-header>
-                        Default Properties
-                      </v-expansion-panel-header>
-                      <v-expansion-panel-content>
-                        <v-col>
-                          <div class="grey--text mb-3">Parameter Name</div>
-                          <v-text-field
-                            label='e.g., "w" or "width"'
-                            v-model="outputs()[index].parameterName"
-                            @input="
-                              changeCapabilityOutputProperty({
-                                outputIndex: index,
-                                propertyKey: 'parameterName',
-                                value: outputs()[index].parameterName,
-                              })
-                            "
-                          ></v-text-field>
-                        </v-col>
-
-                        <v-col>
-                          <v-row align="center" justify="center">
-                            <div class="grey--text mb-3 ml-3">Required</div>
-                            <v-spacer></v-spacer>
-                            <v-checkbox
-                              class="mb-3"
-                              color="#1d2a36"
-                            ></v-checkbox>
-                          </v-row>
-                        </v-col>
-
-                        <v-col>
-                          <div class="grey--text mb-3">Kind of Value</div>
-                          <SearchField
-                            searchLabel='e.g., "schema.org/width"'
-                            class="ma-2"
-                          />
-                        </v-col>
-
-                        <v-col>
-                          <div class="grey--text mb-3">Data Type</div>
-                          <SearchField
-                            searchLabel='e.g., "xs:integer"'
-                            class="ma-2"
-                          />
-                        </v-col>
-
-                        <v-col>
-                          <div class="grey--text mb-3">Unit</div>
-                          <v-text-field label='e.g., "px"'></v-text-field>
-                        </v-col>
-
-                        <v-col>
-                          <div class="grey--text mb-3">Encoding</div>
-                          <SearchField
-                            searchLabel='e.g., "image/jpg"'
-                            class="ma-2"
-                          />
-                        </v-col>
-
-                        <v-col>
-                          <div class="grey--text mb-3">Default Value</div>
-                          <v-text-field label='e.g., "43"'></v-text-field>
-                        </v-col>
-                      </v-expansion-panel-content>
-                    </v-expansion-panel>
-
-                    <v-expansion-panel>
-                      <v-expansion-panel-header>
-                        Additional Properties
-                      </v-expansion-panel-header>
-                      <v-expansion-panel-content>
-                        Michael's job
-                      </v-expansion-panel-content>
-                    </v-expansion-panel>
-                  </v-expansion-panels>
-                </v-card-text>
-              </v-card>
-            </v-row>
-          </v-col>
-        </v-card-text>
-      </v-card>
-
-      <v-btn
-        class="mt-5"
-        x-large
-        color="white"
-        style="min-width: 100%"
-        @click="generateJSON()"
-        >Generate JSON-LD File</v-btn
+  <v-col>
+    <v-row>
+      <h1
+        class="ma-8 white--text"
+        :style="{
+          color: capabilityName().value
+            ? 'white !important'
+            : '#808080 !important',
+        }"
       >
+        {{ capabilityName().value || "Unnamed Capability" }}
+      </h1>
+      <v-spacer></v-spacer>
+      <v-btn class="ma-8" text icon color="white" @click="clearCapability()">
+        <v-icon x-large>mdi-backspace</v-icon>
+      </v-btn>
     </v-row>
+
+    <v-col class="pa-8">
+      <v-row align="center" justify="center">
+        <v-card class="ma-5 capabilityCard">
+          <v-app-bar flat color="#1d2a36">
+            <v-toolbar-title
+              class="text-h6 white--text pl-2"
+              style="font-weight: 400"
+            >
+              Capability Name
+            </v-toolbar-title>
+          </v-app-bar>
+          <v-card-text class="text-left">
+            <v-text-field
+              label='e.g., "PhotographAction"'
+              required
+              v-model="capabilityName().value"
+              @input="changeCapabilityName(capabilityName().value)"
+            ></v-text-field>
+          </v-card-text>
+        </v-card>
+
+        <v-card class="ma-5 capabilityCard">
+          <v-app-bar flat color="#1d2a36">
+            <v-toolbar-title
+              class="text-h6 white--text pl-2"
+              style="font-weight: 400"
+            >
+              Kind of Capability
+            </v-toolbar-title>
+          </v-app-bar>
+          <SearchField searchLabel='e.g., "schema.org/PhotographAction"' />
+        </v-card>
+
+        <v-card class="ma-5 capabilityCard">
+          <v-app-bar flat color="#1d2a36">
+            <v-toolbar-title
+              class="text-h6 white--text pl-2"
+              style="font-weight: 400"
+            >
+              File Name
+            </v-toolbar-title>
+          </v-app-bar>
+          <v-card-text class="text-left">
+            <v-text-field label='e.g., "index.js"' required></v-text-field>
+          </v-card-text>
+        </v-card>
+
+        <v-card class="ma-5 capabilityCard">
+          <v-app-bar flat color="#1d2a36">
+            <v-toolbar-title
+              class="text-h6 white--text pl-2"
+              style="font-weight: 400"
+            >
+              Function Name (optional)
+            </v-toolbar-title>
+          </v-app-bar>
+          <v-card-text class="text-left">
+            <v-text-field label='e.g., "takePhoto()"' required></v-text-field>
+          </v-card-text>
+        </v-card>
+
+        <v-card class="ma-5 capabilityCard">
+          <v-app-bar flat color="#1d2a36">
+            <v-toolbar-title
+              class="text-h6 white--text pl-2"
+              style="font-weight: 400"
+            >
+              Same As (optional)
+            </v-toolbar-title>
+          </v-app-bar>
+          <SearchField searchLabel='e.g., "schema.org/OtherAction"' />
+        </v-card>
+
+        <!-- INPUTS -->
+
+        <v-card class="ma-5 capIO" color="#3b4453">
+          <v-app-bar flat color="#1d2a36">
+            <v-toolbar-title
+              class="text-h6 white--text pl-2"
+              style="font-weight: 400"
+            >
+              Inputs
+            </v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-btn
+              class="ma-0"
+              text
+              icon
+              color="white"
+              @click="addCapabilityInput({})"
+            >
+              <v-icon>mdi-plus</v-icon>
+            </v-btn>
+          </v-app-bar>
+          <v-card-text class="text-center">
+            <v-col align="center" justify="center">
+              <v-row align="center" justify="center">
+                <p v-show="inputs().length == 0" style="color: white">
+                  Use the "+" Button to add your first input.
+                </p>
+                <v-card
+                  v-for="(input, index) in inputs()"
+                  :key="index"
+                  class="ma-3"
+                  color="#5c6473"
+                >
+                  <v-app-bar flat color="#1d2a36">
+                    <v-toolbar-title class="text-h7 white--text pl-2">
+                      {{
+                        inputs()[index].parameterName != null &&
+                        inputs()[index].parameterName != undefined &&
+                        inputs()[index].parameterName != ""
+                          ? "Input #" +
+                            String(index + 1) +
+                            " (" +
+                            inputs()[index].parameterName +
+                            ")"
+                          : "Input Parameter #" + String(index + 1)
+                      }}
+                    </v-toolbar-title>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                      class="ma-0"
+                      text
+                      icon
+                      color="white"
+                      @click="removeCapabilityInput(index)"
+                    >
+                      <v-icon>mdi-delete</v-icon>
+                    </v-btn>
+                  </v-app-bar>
+                  <v-card-text class="text-left">
+                    <v-expansion-panels class="pt-2">
+                      <v-expansion-panel>
+                        <v-expansion-panel-header>
+                          Properties
+                        </v-expansion-panel-header>
+                        <v-expansion-panel-content>
+                          <v-col>
+                            <div class="grey--text mb-3">Parameter Name</div>
+                            <v-text-field
+                              label='e.g., "w" or "width"'
+                              v-model="inputs()[index].parameterName"
+                              @input="
+                                changeCapabilityInputProperty({
+                                  inputIndex: index,
+                                  propertyKey: 'parameterName',
+                                  value: inputs()[index].parameterName,
+                                })
+                              "
+                            ></v-text-field>
+                          </v-col>
+
+                          <v-col>
+                            <v-row align="center" justify="center">
+                              <div class="grey--text mb-3 ml-3">Required</div>
+                              <v-spacer></v-spacer>
+                              <v-checkbox
+                                class="mb-3"
+                                color="#1d2a36"
+                                v-model="inputs()[index].required"
+                                @input="
+                                  changeCapabilityInputProperty({
+                                    inputIndex: index,
+                                    propertyKey: 'required',
+                                    value: inputs()[index].required,
+                                  })
+                                "
+                              ></v-checkbox>
+                            </v-row>
+                          </v-col>
+
+                          <v-col>
+                            <v-row align="center" justify="center">
+                              <div class="grey--text mb-3 ml-3">
+                                Complex Type
+                              </div>
+                              <v-spacer></v-spacer>
+                              <v-checkbox
+                                class="mb-3"
+                                color="#1d2a36"
+                                v-model="inputs()[index].complex"
+                                @input="
+                                  changeCapabilityInputProperty({
+                                    inputIndex: index,
+                                    propertyKey: 'complex',
+                                    value: inputs()[index].complex,
+                                  })
+                                "
+                              ></v-checkbox>
+                            </v-row>
+                          </v-col>
+
+                          <v-col>
+                            <div class="grey--text mb-3">Kind of Value</div>
+                            <SearchField
+                              searchLabel='e.g., "schema.org/width"'
+                              class="ma-2"
+                            />
+                          </v-col>
+
+                          <v-col>
+                            <div class="grey--text mb-3">Data Type</div>
+                            <SearchField
+                              searchLabel='e.g., "xs:integer"'
+                              class="ma-2"
+                            />
+                          </v-col>
+                          <!-- START: This is only needed, if the input is not of complex type -->
+                          <v-col v-show="outputs().length == 0">
+                            <v-col>
+                              <div class="grey--text mb-3">Unit</div>
+                              <v-text-field label='e.g., "px"'></v-text-field>
+                            </v-col>
+
+                            <v-col>
+                              <div class="grey--text mb-3">Encoding</div>
+                              <SearchField
+                                searchLabel='e.g., "image/jpg"'
+                                class="ma-2"
+                              />
+                            </v-col>
+                            <v-col>
+                              <div class="grey--text mb-3">Default Value</div>
+                              <v-text-field label='e.g., "43"'></v-text-field>
+                            </v-col>
+                          </v-col>
+                          <!-- END: This is only needed, if the input is not of complex type -->
+                        </v-expansion-panel-content>
+                      </v-expansion-panel>
+
+                      <v-expansion-panel>
+                        <v-expansion-panel-header>
+                          Sub Parameters / hasPart (if complex)
+                        </v-expansion-panel-header>
+                        <v-expansion-panel-content>
+                          Michael's job
+                        </v-expansion-panel-content>
+                      </v-expansion-panel>
+                    </v-expansion-panels>
+                  </v-card-text>
+                </v-card>
+              </v-row>
+            </v-col>
+          </v-card-text>
+        </v-card>
+
+        <!-- OUTPUTS -->
+
+        <v-card class="ma-5 capIO" color="#3b4453">
+          <v-app-bar flat color="#1d2a36">
+            <v-toolbar-title
+              class="text-h6 white--text pl-2"
+              style="font-weight: 400"
+            >
+              Outputs
+            </v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-btn
+              class="ma-0"
+              text
+              icon
+              color="white"
+              @click="addCapabilityOutput({})"
+            >
+              <v-icon>mdi-plus</v-icon>
+            </v-btn>
+          </v-app-bar>
+          <v-card-text class="text-center">
+            <v-col align="center" justify="center">
+              <v-row align="center" justify="center">
+                <p v-show="outputs().length == 0" style="color: white">
+                  Use the "+" Button to add your first output.
+                </p>
+                <v-card
+                  v-for="(output, index) in outputs()"
+                  :key="index"
+                  class="ma-3"
+                  color="#5c6473"
+                >
+                  <v-app-bar flat color="#1d2a36">
+                    <v-toolbar-title class="text-h7 white--text pl-2">
+                      {{
+                        outputs()[index].parameterName != null &&
+                        outputs()[index].parameterName != undefined &&
+                        outputs()[index].parameterName != ""
+                          ? "Output #" +
+                            String(index + 1) +
+                            " (" +
+                            outputs()[index].parameterName +
+                            ")"
+                          : "Output #" + String(index + 1)
+                      }}
+                    </v-toolbar-title>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                      class="ma-0"
+                      text
+                      icon
+                      color="white"
+                      @click="removeCapabilityOutput(index)"
+                    >
+                      <v-icon>mdi-delete</v-icon>
+                    </v-btn>
+                  </v-app-bar>
+                  <v-card-text class="text-left">
+                    <v-expansion-panels class="pt-2">
+                      <v-expansion-panel>
+                        <v-expansion-panel-header>
+                          Default Properties
+                        </v-expansion-panel-header>
+                        <v-expansion-panel-content>
+                          <v-col>
+                            <div class="grey--text mb-3">Parameter Name</div>
+                            <v-text-field
+                              label='e.g., "w" or "width"'
+                              v-model="outputs()[index].parameterName"
+                              @input="
+                                changeCapabilityOutputProperty({
+                                  outputIndex: index,
+                                  propertyKey: 'parameterName',
+                                  value: outputs()[index].parameterName,
+                                })
+                              "
+                            ></v-text-field>
+                          </v-col>
+
+                          <v-col>
+                            <v-row align="center" justify="center">
+                              <div class="grey--text mb-3 ml-3">Required</div>
+                              <v-spacer></v-spacer>
+                              <v-checkbox
+                                class="mb-3"
+                                color="#1d2a36"
+                              ></v-checkbox>
+                            </v-row>
+                          </v-col>
+
+                          <v-col>
+                            <div class="grey--text mb-3">Kind of Value</div>
+                            <SearchField
+                              searchLabel='e.g., "schema.org/width"'
+                              class="ma-2"
+                            />
+                          </v-col>
+
+                          <v-col>
+                            <div class="grey--text mb-3">Data Type</div>
+                            <SearchField
+                              searchLabel='e.g., "xs:integer"'
+                              class="ma-2"
+                            />
+                          </v-col>
+
+                          <v-col>
+                            <div class="grey--text mb-3">Unit</div>
+                            <v-text-field label='e.g., "px"'></v-text-field>
+                          </v-col>
+
+                          <v-col>
+                            <div class="grey--text mb-3">Encoding</div>
+                            <SearchField
+                              searchLabel='e.g., "image/jpg"'
+                              class="ma-2"
+                            />
+                          </v-col>
+
+                          <v-col>
+                            <div class="grey--text mb-3">Default Value</div>
+                            <v-text-field label='e.g., "43"'></v-text-field>
+                          </v-col>
+                        </v-expansion-panel-content>
+                      </v-expansion-panel>
+
+                      <v-expansion-panel>
+                        <v-expansion-panel-header>
+                          Additional Properties
+                        </v-expansion-panel-header>
+                        <v-expansion-panel-content>
+                          Michael's job
+                        </v-expansion-panel-content>
+                      </v-expansion-panel>
+                    </v-expansion-panels>
+                  </v-card-text>
+                </v-card>
+              </v-row>
+            </v-col>
+          </v-card-text>
+        </v-card>
+
+        <v-btn
+          class="mt-5"
+          x-large
+          color="white"
+          style="min-width: 100%"
+          @click="generateJSON()"
+          >Generate JSON-LD File</v-btn
+        >
+      </v-row>
+    </v-col>
   </v-col>
 </template>
 
@@ -364,14 +433,6 @@
 <script>
 import { mapGetters, mapMutations } from "vuex";
 import SearchField from "@/components/SearchField.vue";
-
-let parametersTemplate = [];
-
-let jsFunctionTemplate = {
-  "@id": null,
-  "@type": "fnoi:JavaScriptFunction",
-  "dbpedia-owl:filename": null,
-};
 
 let mappingTemplate = {
   "@id": null,
@@ -391,6 +452,7 @@ export default {
   computed: {},
   methods: {
     ...mapGetters({
+      capabilityName: "newCapCapabilityName", // map `this.newCapCapabilityName()` to `this.$store.dispatch('newCapCapabilityName')`
       kindOfCapability: "newCapKindOfCapability", // map `this.newCapKindOfCapability()` to `this.$store.dispatch('newCapKindOfCapability')`
       fileName: "newCapFileName", // map `this.newCapFileName()` to `this.$store.dispatch('newCapFileName')`
       functionName: "newCapFunctionName", // map `this.newCapFunctionName()` to `this.$store.dispatch('newCapFunctionName')`
@@ -399,6 +461,7 @@ export default {
       outputs: "newCapOutputs", // map `this.newCapOutputs()` to `this.$store.dispatch('newCapOutputs')`
     }),
     ...mapMutations({
+      changeCapabilityName: "newCapChangeCapabilityName", // map `this.newCapChangeCapabilityName()` to `this.$store.dispatch('newCapChangeCapabilityName')`
       changeKindOfCapability: "newCapChangeKindOfCapability", // map `this.newCapChangeKindOfCapability()` to `this.$store.dispatch('newCapChangeKindOfCapability')`
       changeFileName: "newCapChangeFileName", // map `this.newCapChangeFileName()` to `this.$store.dispatch('newCapChangeFileName')`
       changeFunctionName: "newCapChangeFunctionName", // map `this.newCapChangeFunctionName()` to `this.$store.dispatch('newCapChangeFunctionName')`
@@ -409,33 +472,52 @@ export default {
       removeCapabilityOutput: "newCapRemoveCapabilityOutput", // map `this.newCapRemoveCapabilityOutput()` to `this.$store.dispatch('newCapRemoveCapabilityOutput')`
       changeCapabilityInputProperty: "newCapChangeCapabilityInputProperty", // map `this.newCapChangeCapabilityInputProperty()` to `this.$store.dispatch('newCapChangeCapabilityInputProperty')`
       changeCapabilityOutputProperty: "newCapChangeCapabilityOutputProperty", // map `this.newCapChangeCapabilityOutputProperty()` to `this.$store.dispatch('newCapChangeCapabilityOutputProperty')`
+      clearCapability: "newCapClear", // map `this.newCapClear()` to `this.$store.dispatch('newCapClear')`
     }),
     generateJSON() {
-      this.ioToJson();
+      let additionalVocabularies; // TODO: - add additional Vocabularies
 
       // eslint-disable-next-line no-unused-vars
       let outputTemplate = {
         "@context": {
-          // eslint-disable-next-line prettier/prettier
           schema: "https://schema.org/",
-          // eslint-disable-next-line prettier/prettier
           fno: "https://w3id.org/function/ontology#",
-          // eslint-disable-next-line prettier/prettier
           fnoi: "https://w3id.org/function/vocabulary/implementation",
           "dbpedia-owl": "http://dbpedia.org/ontology/",
+          xsd: "http://www.w3.org/2001/XMLSchema#",
+          ...(additionalVocabularies ? { additionalVocabularies } : {}),
         },
         "@graph": [
           {
             "@id": "_:capability",
-            "schema:potentialAction": { "@id": null, "@type": [] },
+            "schema:potentialAction": {
+              "@id":
+                this.capabilityName().value == ""
+                  ? "_:UnnamedCapabilityDefinition"
+                  : "_:" + this.capabilityName().value + "Definition",
+              "@type": [this.kindOfCapability(), "fno:Function"],
+            },
           },
           {
             "@id": null,
-            "fno:expects": { "@list": [] },
-            "fno:returns": { "@list": [] },
+            "fno:expects": {
+              "@list": this.ioToJson(this.inputs(), true).map((entry) => ({
+                "@id": entry["@id"],
+              })),
+            },
+            "fno:returns": {
+              "@list": this.ioToJson(this.outputs(), false).map((entry) => ({
+                "@id": entry["@id"],
+              })),
+            },
           },
-          parametersTemplate,
-          jsFunctionTemplate,
+          ...this.ioToJson(this.inputs(), true),
+          ...this.ioToJson(this.outputs(), false),
+          {
+            "@id": null,
+            "@type": "fnoi:JavaScriptFunction",
+            "dbpedia-owl:filename": this.fileName() || "index.js",
+          },
           mappingTemplate,
         ],
       };
@@ -448,24 +530,28 @@ export default {
       );
       jsonOutputTest.focus();
     },
-    ioToJson() {
-      parametersTemplate = [];
-      for (let i = 0; i < this.inputs().length; i++) {
-        parametersTemplate.push({
-          "@id": "_:" + this.inputs()[i].parameterName + "Parameter",
+    ioToJson(io, isInput) {
+      let parameters = [];
+      for (let i = 0; i < io.length; i++) {
+        let additionalValidationsFromMichael;
+        let properties = {
+          "@id": "_:" + io[i].parameterName + "Parameter",
           "fno:predicate": [],
-          "@type": [],
-          "fno:required": null,
-        });
+          "@type": isInput
+            ? io[i].complex
+              ? ["fno:Parameter", "xsd:complexType"]
+              : Array.from(new Set([...["fno:Parameter"], ...[io[i].dataType]]))
+            : io[i].complex
+            ? ["fno:Output", "xsd:complexType"]
+            : Array.from(new Set([...["fno:Output"], ...[io[i].dataType]])),
+          "fno:required": io[i].required,
+          ...(additionalValidationsFromMichael
+            ? { additionalValidationsFromMichael }
+            : {}),
+        };
+        parameters.push(properties);
       }
-      for (let i = 0; i < this.outputs().length; i++) {
-        parametersTemplate.push({
-          "@id": "_:" + this.outputs()[i].parameterName + "Parameter",
-          "fno:predicate": [],
-          "@type": [],
-          "fno:required": null,
-        });
-      }
+      return parameters;
     },
   },
 };

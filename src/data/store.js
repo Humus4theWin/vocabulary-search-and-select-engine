@@ -11,6 +11,7 @@ const store = {
     rightDrawerState: false,
     //contains the properties, such as kindOfCapability and inputs/outputs of new capabilities
     newCapability: {
+      name: "",
       kindOfCapability: "",
       fileName: "",
       functionName: "",
@@ -69,6 +70,13 @@ const store = {
       state.rightDrawerState = !state.rightDrawerState;
     },
 
+    /**
+     * TODO Description
+     * @param state current state
+     */
+    newCapChangeCapabilityName(state, value) {
+      state.newCapability.name = value;
+    },
     /**
      * TODO Description
      * @param state current state
@@ -151,6 +159,21 @@ const store = {
       output[propertyKey] = value;
       state.newCapability.outputs.splice(outputIndex, 1, output);
     },
+    /**
+     * TODO Description
+     * @param state current state
+     */
+    newCapClear(state) {
+      state.newCapability = {
+        name: "",
+        kindOfCapability: "",
+        fileName: "",
+        functionName: "",
+        sameAs: "",
+        inputs: [],
+        outputs: [],
+      };
+    },
   },
   getters: {
     /**
@@ -214,6 +237,14 @@ const store = {
       return state.search;
     },
 
+    /**
+     * ToDo Description
+     * @param state
+     * @return {String}
+     */
+    newCapCapabilityName: (state) => {
+      return { value: state.newCapability.name };
+    },
     /**
      * ToDo Description
      * @param state

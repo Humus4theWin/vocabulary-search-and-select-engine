@@ -1,8 +1,5 @@
 <template>
   <v-col class="newCapabilityColumn">
-    <h1 class="ma-8 white--text" style="line-height: 1.3 !important">
-      New Capability
-    </h1>
     <new-capability></new-capability>
   </v-col>
 </template>
