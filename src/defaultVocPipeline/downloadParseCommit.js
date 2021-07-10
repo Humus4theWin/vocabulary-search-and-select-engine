@@ -190,7 +190,7 @@ function indexVocabularies() {
         }
         term[attr.predicate.value] = val;
       });
-
+      term.sourceURL = url;
       return term;
     });
     indexedVocabularies.push({
