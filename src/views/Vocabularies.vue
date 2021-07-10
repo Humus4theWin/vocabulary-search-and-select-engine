@@ -15,7 +15,7 @@
 
 <script>
 import AddVocab from "@/components/AddVocab.vue";
-import vocabTable from "@/components/vocabTable.vue";
+import vocabTable from "@/components/VocabTableCRUD.vue";
 
 export default {
   name: "Home",

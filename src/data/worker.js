@@ -62,6 +62,7 @@ async function importVocab(url, format) {
       indexVocab(url, vocab.quads);
       vocab.quads = undefined
       vocab.date = new Date().toISOString()
+      vocab.isUsed = true
       postMessage(["addVocab",vocab]);
     });
 }
