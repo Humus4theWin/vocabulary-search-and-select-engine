@@ -1,11 +1,13 @@
 <template>
   <v-autocomplete
-    v-model="values"
+    v-model="selected"
     :items="predicates"
     dense
     chips
     multiple
     clearable
+    deletable-chips
+    @change="changed"
     solo
   ></v-autocomplete>
 </template>
@@ -17,11 +19,7 @@ export default {
     values: [],
     value: null,
   }),
-  watch: {
-    values(val) {
-      console.log(val);
-    },
-  },
+
   computed: {
     predicates() {
       window.i = this.$store.getters.getVocabTerms;
@@ -42,6 +40,21 @@ export default {
       } else {
         return [];
       }
+    },
+    selected() {
+      return this.$store.getters.getFilterCriteria.map((c) => c.predicate);
+    },
+  },
+  methods: {
+    changed(val) {
+      console.log(val);
+      let criteria = val.map((uri) => {
+        return {
+          predicate: uri,
+          priority: 1,
+        };
+      });
+      this.$store.commit("setFilterCriteria", criteria);
     },
   },
   selected() {},
