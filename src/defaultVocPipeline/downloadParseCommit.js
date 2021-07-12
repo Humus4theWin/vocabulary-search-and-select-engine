@@ -168,6 +168,7 @@ function indexVocabularies() {
     let name = parsedVocabularies[i].name;
     let url = parsedVocabularies[i].sourceURL ;
     let quads = parsedVocabularies[i].quads;
+    let type = parsedVocabularies[i].type;
 
     let terms = quads
       .filter((quad) => quad.predicate.value.includes("label"))
@@ -175,7 +176,8 @@ function indexVocabularies() {
         return {
           IRI: quad.subject.value,
           label: quad.object.value,
-          vocabSourceURL: url
+          vocabSourceURL: url,
+          type: type
         };
       });
     // add all attributes
