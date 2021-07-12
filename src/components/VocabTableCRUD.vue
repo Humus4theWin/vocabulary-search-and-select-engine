@@ -6,6 +6,15 @@
     class="elevation-1"
   >
     <template v-slot:top>
+      <v-btn
+        v-if="oldVocabularies.length > 0"
+        color="primary"
+        dark
+        class="mb-2"
+        @click="refreshOldVocabularies"
+      >
+        reshresh Vocabularies
+      </v-btn>
       <v-toolbar flat>
         <v-toolbar-title>Vocabularies</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
@@ -16,6 +25,7 @@
               New Item
             </v-btn>
           </template>
+
           <v-card>
             <v-card-title>
               <span class="text-h5">{{ formTitle }}</span>
@@ -28,12 +38,6 @@
                     <v-text-field
                       v-model="editedItem.name"
                       label="Name"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field
-                      v-model="editedItem.date"
-                      label="Date"
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
@@ -53,12 +57,6 @@
                       persistent-hint
                       single-line
                     ></v-select>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field
-                      v-model="editedItem.numberOfQuads"
-                      label="Number of Quads"
-                    ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-select
@@ -167,6 +165,19 @@ export default {
     vocabularies() {
       return this.$store.getters.vocabularies;
     },
+    oldVocabularies() {
+      return this.$store.getters.vocabularies.filter((vocab) => {
+        let dt1 = new Date(Date.parse(vocab.date));
+        let dt2 = new Date();
+
+        let daysDifference = Math.floor(
+          (Date.UTC(dt2.getFullYear(), dt2.getMonth(), dt2.getDate()) -
+            Date.UTC(dt1.getFullYear(), dt1.getMonth(), dt1.getDate())) /
+            (1000 * 60 * 60 * 24)
+        );
+        return daysDifference >= 1;
+      });
+    },
   },
 
   watch: {
@@ -202,7 +213,7 @@ export default {
     refreshItem(item) {
       this.editedIndex = this.vocabularies.indexOf(item);
       this.editedItem = Object.assign({}, item);
-      this.addVocab();
+      this.addVocab(this.editedItem.sourceURL, this.editedItem.type);
     },
 
     deleteItemConfirm() {
@@ -239,13 +250,13 @@ export default {
         Object.assign(this.vocabularies[this.editedIndex], this.editedItem);
       } else {
         this.vocabularies.push(this.editedItem);
-        this.addVocab();
+        this.addVocab(this.editedItem.sourceURL, this.editedItem.type);
       }
       this.close();
       this.$store.commit("setVocabs", this.vocabularies);
     },
 
-    addVocab() {
+    addVocab(sourceURL, type) {
       const worker = new Worker("../data/worker", { type: "module" });
 
       worker.onmessage = (message) => {
@@ -260,7 +271,15 @@ export default {
         }
       };
 
-      worker.postMessage([this.editedItem.sourceURL, this.editedItem.type]);
+      worker.postMessage([sourceURL, type]);
+    },
+    async refreshOldVocabularies() {
+      await this.loadDefaultVocabs();
+
+      console.log(this.oldVocabularies);
+      this.oldVocabularies.forEach(
+        (vocab) => this.addVocab(vocab.sourceURL, vocab.type) // pass type?
+      );
     },
     async loadDefaultVocabs() {
       let res = await fetch(

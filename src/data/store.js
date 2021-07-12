@@ -37,14 +37,14 @@ const store = {
      * @param {Object} vocab a rdf vocab
      */
     addVocab(state, vocab) {
-      state.vocabs = state.vocabs.filter(
-        (v) => v.sourceURL !== vocab.sourceURL
+      let changedVocab = state.vocabs.filter(
+        (v) => v.sourceURL === vocab.sourceURL
+      )[0];
+      let index = state.vocabs.indexOf(changedVocab);
+      Object.keys(vocab).forEach(
+        (key) => (state.vocabs[index][key] = vocab[key])
       );
-      let vocabName =
-        vocab.name ||
-        state.vocabs.filter((v) => v.sourceURL === vocab.sourceURL).name;
-      vocab.name = vocabName;
-      state.vocabs = [...state.vocabs, vocab];
+
       DB.updateVocabularys(state.vocabs);
     },
     /**
