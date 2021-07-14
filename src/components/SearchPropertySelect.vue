@@ -12,11 +12,7 @@
     return-object
   >
     <template #selection="data">
-      <draggable
-        :id="data.predicate"
-        v-model="selected"
-        v-bind="dragOptionsChips"
-      >
+      <draggable :id="data.index" v-model="selected" v-bind="dragOptionsChips">
         <v-chip
           :key="data.item.predicate"
           @mousedown.stop
@@ -42,7 +38,7 @@ export default {
   components: {
     draggable,
   },
-
+  //7watch: {},
   computed: {
     dragOptionsChips() {
       return {
@@ -74,21 +70,21 @@ export default {
       }
     },
     selected: {
-      get: function () {
-        let val = this.$store.getters.getFilterCriteria;
-        console.log("get");
-        console.log(val);
-        return val;
+      get() {
+        return this.$store.getters.getFilterCriteria;
       },
-      set: function (val) {
-        console.log("set");
-        console.log(val);
-
+      set(val) {
+        //      console.log("set");
+        //     console.log(val);
         this.$store.commit("setFilterCriteria", val);
       },
     },
   },
   methods: {
+    updateSelectedPredicates(selected) {
+      console.log(selected);
+      this.$store.commit("setFilterCriteria", selected);
+    },
     move(val) {
       console.log("move");
       console.log(val);
@@ -98,15 +94,19 @@ export default {
       console.log(val);
     },
     remove(item) {
+      console.log("remove");
       console.log(item);
-      console.log(this.selected);
+      console.log(this.$store.getters.getFilterCriteria);
+
       let index = -1;
-      for (let i = 0; i < this.selected.length; i++) {
-        if (this.selected[i].predicate === item.predicate) index = i;
+      for (let i = 0; i < this.$store.getters.getFilterCriteria.length; i++) {
+        if (
+          this.$store.getters.getFilterCriteria[i].predicate === item.predicate
+        )
+          index = i;
       }
       console.log(index);
-      if (index >= 0) this.selected = this.selected.splice(index, 1);
-      console.log(this.selected.splice(index, 1));
+      if (index >= 0) this.selected.splice(index, 1);
     },
   },
 };

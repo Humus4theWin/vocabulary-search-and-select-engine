@@ -59,11 +59,11 @@ async function importVocab(url, format) {
       //post vocabs
 
       //console.log("All done!");
-      indexVocab(url, vocab.quads);
+      indexVocab(url, vocab);
       vocab.quads = undefined
       vocab.date = new Date().toISOString()
       vocab.isUsed = true
-      postMessage(["addVocab",vocab]);
+      //postMessage(["addVocab",vocab]);
     });
 }
 
@@ -72,7 +72,8 @@ async function importVocab(url, format) {
  * @param url
  * @param quads
  */
-function indexVocab(url, quads) {
+function indexVocab(url, vocab) {
+  let quads = vocab.quads
   //find terms in other Thread
   let terms = quads
     .filter((quad) => quad.predicate.value.includes("label"))
@@ -99,7 +100,8 @@ function indexVocab(url, quads) {
     term.sourceURL = url;
     return term;
   });
-  postMessage(["addVocabTerms", terms]);
+  vocab.terms = terms
+  postMessage(["addVocab", vocab]);
   //console.log(terms);
 }
 export default onmessage;

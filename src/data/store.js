@@ -84,7 +84,9 @@ const store = {
      * @property {string} searchType  enum, how to filter the Terms on the predicate
      */
     setFilterCriteria(state, data) {
-      state.filterCiteria = data;
+      state.filterCriteria = data;
+      console.log("setFilterCriteria");
+      console.log(data);
       let criteria = {
         //todo: refactor
         predicate: "array",
@@ -203,7 +205,6 @@ const store = {
          * @property {string} searchType  enum, how to filter the Terms on the predicate
          */
     getFilterCriteria(state) {
-      console.log(state.filterCriteria);
       return state.filterCriteria;
     },
     /**
