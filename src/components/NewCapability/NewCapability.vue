@@ -206,7 +206,7 @@ export default {
                   ? [...this.ioToJson(io[i]["sub"], isInput)]
                   : [],
             },
-            "fno:required": io[i].required.value,
+            ...(isInput ? { "fno:required": io[i].required.value } : {}),
             ...(additionalValidations ? { additionalValidations } : {}),
           };
         } else {
@@ -224,7 +224,7 @@ export default {
                   new Set([...["fno:Output"], ...[io[i].dataType.value]])
                 )
               : ["fno:Output"],
-            "fno:required": io[i].required.value,
+            ...(isInput ? { "fno:required": io[i].required.value } : {}),
             ...(additionalValidations ? { additionalValidations } : {}),
           };
         }
