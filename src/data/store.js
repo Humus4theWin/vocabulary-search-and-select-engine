@@ -1,4 +1,4 @@
-import DB from "./indexDB"; // getAllVocabularies getAllTerms
+import DB from "./genericIndexDB"; // getAllVocabularies getAllTerms
 
 /** @type {*} */
 const store = {
@@ -7,7 +7,6 @@ const store = {
     vocabs: [],
     //contains terms {subject, predicate, object} added by the user
     vocabTerms: [],
-
     // searchFilter
     filterCriteria: [],
 
@@ -18,21 +17,11 @@ const store = {
     rightDrawerState: false,
   },
   mutations: {
-    laodFromDB(state) {
-      DB.getAllVocabularies().then((res) => (state.vocabs = res));
-      DB.getAllTerms().then((res) => (state.vocabTerms = res));
-      DB.getFilterCriteria().then(
-        (res) => (state.filterCriteria = res[0].value)
-      );
+    async laodFromDB(state) {
+      state.vocabs = await DB.getAll(DB.dbNames.VOCABULARIES);
+      state.vocabTerms = await DB.getAll(DB.dbNames.TERMS);
     },
-    /**
-     * saves the word, which the user choose, from the list of SearchField
-     * @param state current state
-     * @param {string} word string of searched
-     */
-    saveSearchedWord(state, word) {
-      state.search = word;
-    },
+
     /**
      * adds a vocab (quads) to the list of available vocabs
      * @param state current state
@@ -51,17 +40,7 @@ const store = {
         );
       }
 
-      DB.updateVocabularys(state.vocabs);
-    },
-    /**
-     * overwrites the list of available vocabs
-     * @param state current state
-     * @param [{Object}] vocab a rdf vocab
-     */
-    setVocabs(state, vocabs) {
-      console.log(vocabs);
-      state.vocabs = vocabs;
-      DB.updateVocabularys(vocabs);
+      DB.overwriteAll(DB.dbNames.VOCABULARIES, state.vocabs);
     },
     /**
      * adds terms to the vocab, that matches the VocabUrl
@@ -71,7 +50,35 @@ const store = {
     addVocabTerms: function (state, data) {
       console.log(data);
       state.vocabTerms.push(...data);
-      DB.addTerms(data);
+      DB.putAll(DB.dbNames.TERMS, data);
+    },
+    /**
+     * overwrites the list of available vocabs
+     * @param state current state
+     * @param [{Object}] vocab a rdf vocab
+     */
+    setVocabs(state, vocabs) {
+      state.vocabs = vocabs;
+      DB.overwriteAll(DB.dbNames.VOCABULARIES, vocabs);
+    },
+    /**
+     *
+     * @param state
+     * @param Array of {object}
+     *
+     * @property {boolean} isUsed if the criteria is applied
+     * @property {string} predicate the IRI of the predicate, being filtered on
+     * @property {string} searchType  enum, how to filter the Terms on the predicate
+     */
+    setFilterCriteria(state, data) {
+      state.filterCiteria = data;
+      let criteria = {
+        //todo: refactor
+        predicate: "array",
+        value: data,
+      };
+      return criteria;
+      //DB.updateFilterCriteria([criteria]);
     },
     /**
      * adds terms to the vocab, that matches the VocabUrl
@@ -81,8 +88,9 @@ const store = {
     setVocabTerms: function (state, data) {
       console.log(data);
       state.vocabTerms = data;
-      DB.updateTerms(data);
+      DB.overwriteAll(DB.dbNames.TERMSdata);
     },
+
     /**
      * adds a new term (subject, predicate, object), created by the user to terms
      * @param state current state
@@ -107,22 +115,12 @@ const store = {
       state.rightDrawerState = !state.rightDrawerState;
     },
     /**
-     *
-     * @param state
-     * @param Array of {object}
-     *
-     * @property {boolean} isUsed if the criteria is applied
-     * @property {string} predicate the IRI of the predicate, being filtered on
-     * @property {string} searchType  enum, how to filter the Terms on the predicate
+     * saves the word, which the user choose, from the list of SearchField
+     * @param state current state
+     * @param {string} word string of searched
      */
-    setFilterCriteria(state, data) {
-      state.filterCiteria = data;
-      let criteria = {
-        //todo: refactor
-        predicate: "array",
-        value: data,
-      };
-      DB.updateFilterCriteria([criteria]);
+    saveSearchedWord(state, word) {
+      state.search = word;
     },
   },
   getters: {
