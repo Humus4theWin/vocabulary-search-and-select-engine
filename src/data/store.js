@@ -8,7 +8,7 @@ const store = {
     //contains terms {subject, predicate, object} added by the user
     vocabTerms: [],
     // searchFilter
-    filterCriteria: [],
+    filterPredicates: [],
 
     ownTermAttributes: [],
     //contains the results of the search
@@ -20,6 +20,10 @@ const store = {
     async laodFromDB(state) {
       state.vocabs = await DB.getAll(DB.dbNames.VOCABULARIES);
       state.vocabTerms = await DB.getAll(DB.dbNames.TERMS);
+      state.filterPredicates = await DB.getSingle(
+        DB.dbNames.SETTINGS,
+        DB.settingsKeys.PREDICATES
+      );
     },
 
     /**
@@ -84,16 +88,16 @@ const store = {
      * @property {string} searchType  enum, how to filter the Terms on the predicate
      */
     setFilterCriteria(state, data) {
-      state.filterCriteria = data;
+      state.filterPredicates = data;
       console.log("setFilterCriteria");
       console.log(data);
       let criteria = {
         //todo: refactor
-        predicate: "array",
+        key: DB.settingsKeys.PREDICATES,
         value: data,
       };
-      return criteria;
-      //DB.updateFilterCriteria([criteria]);
+
+      DB.putSingle(DB.dbNames.SETTINGS, criteria);
     },
     /**
      * adds terms to the vocab, that matches the VocabUrl
@@ -205,7 +209,7 @@ const store = {
          * @property {string} searchType  enum, how to filter the Terms on the predicate
          */
     getFilterCriteria(state) {
-      return state.filterCriteria;
+      return state.filterPredicates;
     },
     /**
      * returns the outcome of the user's choice after searching throw the added vocabs, saved in state.search

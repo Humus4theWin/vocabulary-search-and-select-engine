@@ -6,12 +6,15 @@ export default {
   dbNames: {
     VOCABULARIES: "Vocabs",
     TERMS: "Terms",
-    //  SETTINGS: "Settings",
+    SETTINGS: "Settings",
   },
   dbIndexes: {
     VOCABULARIES: "sourceURL",
     TERMS: "IRI",
-    // SETTINGS: "key",
+    SETTINGS: "key",
+  },
+  settingsKeys: {
+    PREDICATES: "predicates",
   },
 
   async getDb() {
@@ -60,6 +63,26 @@ export default {
         if (cursor) {
           elements.push(cursor.value);
           cursor.continue();
+        }
+      };
+    });
+  },
+  async getSingle(dbName, keyName) {
+    let db = await this.getDb();
+
+    return new Promise((resolve) => {
+      let trans = db.transaction([dbName], "readonly");
+      trans.oncomplete = () => {
+        resolve(element.fin);
+      };
+
+      let store = trans.objectStore(dbName);
+      let element = undefined;
+
+      store.openCursor().onsuccess = (e) => {
+        let cursor = e.target.result;
+        if (cursor.value.column.indexOf(keyName) !== -1) {
+          element = cursor.value;
         }
       };
     });

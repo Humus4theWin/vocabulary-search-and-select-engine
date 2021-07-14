@@ -285,6 +285,7 @@ export default {
       );
     },
     async importDefaultVocabs() {
+      this.$store.commit("setFilterCriteria", ["IRI", "label"]);
       this.loadDefaultVocabs();
     },
     async loadDefaultVocabs(selectedVocabsURLs) {
