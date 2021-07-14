@@ -68,24 +68,8 @@ export default {
     });
   },
   async getSingle(dbName, keyName) {
-    let db = await this.getDb();
-
-    return new Promise((resolve) => {
-      let trans = db.transaction([dbName], "readonly");
-      trans.oncomplete = () => {
-        resolve(element.fin);
-      };
-
-      let store = trans.objectStore(dbName);
-      let element = undefined;
-
-      store.openCursor().onsuccess = (e) => {
-        let cursor = e.target.result;
-        if (cursor.value.column.indexOf(keyName) !== -1) {
-          element = cursor.value;
-        }
-      };
-    });
+    let allData = await this.getAll(dbName);
+    return allData.find((elem) => elem.key === keyName).value;
   },
   async putSingle(dbName, value) {
     let db = await this.getDb();
