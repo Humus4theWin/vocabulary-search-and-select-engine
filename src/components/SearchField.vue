@@ -12,7 +12,8 @@
         class="mx-4"
         hide-no-data
         hide-details
-        label="Terms"
+        placeholder="Start typing to search"
+        v-bind:label="searchLabel"
         return-object
       ></v-autocomplete>
     </v-card-text>
@@ -72,6 +73,12 @@ export default {
       } // &&
       //val.length > 0 &&
       // this.searchFunction(val);
+    },
+  },
+  props: {
+    searchLabel: {
+      type: String,
+      default: "Terms",
     },
   },
   computed: {
