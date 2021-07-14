@@ -285,7 +285,10 @@ export default {
       );
     },
     async importDefaultVocabs() {
-      this.$store.commit("setFilterCriteria", ["IRI", "label"]);
+      this.$store.commit("setFilterCriteria", [
+        "label",
+        "http://www.w3.org/2000/01/rdf-schema#comment",
+      ]);
       this.loadDefaultVocabs();
     },
     async loadDefaultVocabs(selectedVocabsURLs) {

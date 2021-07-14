@@ -86,19 +86,12 @@ export default {
       //console.log(item);
       if (queryText.length > 2) {
         return this.$store.getters.getFilterCriteria
-          .filter((criteria) => criteria.isUsed)
-          .map((criteria) => {
-            return (
-              item[criteria["predicate"]] !== undefined &&
-              this.getFilterFunction(criteria.searchType)(
-                item[criteria["predicate"]],
-                queryText
-              )
-            );
-          })
-          .every((b) => b === true);
-      } else {
-        return;
+          .map(
+            (criterion) =>
+              item[criterion.predicate] !== undefined &&
+              item[criterion.predicate].includes(queryText)
+          )
+          .some((e) => e);
       }
     },
 
