@@ -12,9 +12,15 @@
     return-object
   >
     <template #selection="data">
-      <draggable :id="data.index" v-model="selected" v-bind="dragOptionsChips">
+      <draggable
+        :id="data.index"
+        :list="selected"
+        v-bind="dragOptionsChips"
+        :move="move"
+        @change="change"
+      >
         <v-chip
-          :key="data.item.predicate"
+          :key="data.item.index"
           @mousedown.stop
           @click.stop
           close
@@ -33,6 +39,7 @@ import draggable from "vuedraggable";
 export default {
   data: () => ({
     values: [],
+    dragged: {},
     value: null,
   }),
   components: {
@@ -74,7 +81,7 @@ export default {
         return this.$store.getters.getFilterCriteria;
       },
       set(val) {
-        //      console.log("set");
+        console.log("set");
         //     console.log(val);
         this.$store.commit("setFilterCriteria", val);
       },
@@ -85,28 +92,45 @@ export default {
       console.log(selected);
       this.$store.commit("setFilterCriteria", selected);
     },
-    move(val) {
-      console.log("move");
-      console.log(val);
+    move: function (value) {
+      this.dragged = {
+        from: parseInt(value.from.id),
+        to: parseInt(value.to.id),
+        newIndex: value.draggedContext.futureIndex,
+      };
     },
-    change(val) {
-      console.log("change");
-      console.log(val);
+    change: function (value) {
+      console.log(value);
+      let selected = this.selected;
+      if (value.removed) {
+        // insert
+        selected.splice(
+          this.dragged.to + this.dragged.newIndex,
+          0,
+          selected[this.dragged.from]
+        );
+        // delete
+        if (this.dragged.from < this.dragged.to)
+          // LTR
+          selected.splice(this.dragged.from, 1);
+        // RTL
+        else selected.splice(this.dragged.from + 1, 1);
+      }
+      this.selected = selected;
     },
     remove(item) {
+      let selected = this.selected;
       console.log("remove");
       console.log(item);
-      console.log(this.$store.getters.getFilterCriteria);
+      console.log(selected);
 
       let index = -1;
-      for (let i = 0; i < this.$store.getters.getFilterCriteria.length; i++) {
-        if (
-          this.$store.getters.getFilterCriteria[i].predicate === item.predicate
-        )
-          index = i;
+      for (let i = 0; i < selected.length; i++) {
+        if (selected[i].predicate === item.predicate) index = i;
       }
       console.log(index);
-      if (index >= 0) this.selected.splice(index, 1);
+      if (index >= 0) selected.splice(index, 1);
+      this.selected = selected;
     },
   },
 };
