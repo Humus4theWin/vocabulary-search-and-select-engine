@@ -286,7 +286,8 @@ export default {
     },
     async importDefaultVocabs() {
       this.$store.commit("setFilterCriteria", [
-        "label",
+        //todo: refactor make object, or only store URLs in the sotore
+        "http://www.w3.org/2000/01/rdf-schema#label",
         "http://www.w3.org/2000/01/rdf-schema#comment",
       ]);
       this.loadDefaultVocabs();
