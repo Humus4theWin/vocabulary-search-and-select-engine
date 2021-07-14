@@ -50,9 +50,6 @@
 
 <script>
 // https://gitlab.com/dBPMS-PROCEED/vocabulary-search-and-select-engine/-/blob/master/src/components/SearchField.vue
-
-import getSynonyms from "@/synonyms";
-
 export default {
   data: () => ({
     terms: [],
@@ -84,55 +81,25 @@ export default {
   },
   methods: {
     filterObjects(item, queryText) {
-      //console.log("text")
-      //console.log(queryText)
-      //console.log(getSynonyms('dog'))
+      // console.log(queryText)
       // console.log(queryText.type)
       //console.log(item);
       if (queryText.length > 2) {
-        const result_original_search_string =
-          this.$store.getters.getFilterCriteria
-            .filter((criteria) => criteria.isUsed)
-            .map((criteria) => {
-              return (
-                item[criteria["predicate"]] !== undefined &&
-                this.getFilterFunction(criteria.searchType)(
-                  item[criteria["predicate"]],
-                  queryText
-                )
-              );
-            })
-            .every((b) => b === true);
-        /*getSynonyms(queryText).forEach((synonym) => {
-            // every synonym must be looked up with the filter criteria in the database
-            console.log(synonym)
-          })*/
-        console.log(getSynonyms("dog"));
-
-        return result_original_search_string;
+        return this.$store.getters.getFilterCriteria
+          .filter((criteria) => criteria.isUsed)
+          .map((criteria) => {
+            return (
+              item[criteria["predicate"]] !== undefined &&
+              this.getFilterFunction(criteria.searchType)(
+                item[criteria["predicate"]],
+                queryText
+              )
+            );
+          })
+          .every((b) => b === true);
       } else {
         return;
       }
-    },
-
-    getSynonyms(searchString) {
-      const WordNet = require("node-wordnet");
-      const wordnet = new WordNet("../node_modules/wordnet-db/dict");
-      console.log("it works");
-      let synonyms = [];
-      wordnet.lookup(searchString, (results) => {
-        results.forEach((result) => {
-          console.log("------------------------------------");
-          console.log(result.synsetOffset);
-          console.log(result.pos);
-          console.log(result.lemma);
-          console.log(result.synonyms);
-          console.log(result.pos);
-          console.log(result.gloss);
-          synonyms.push(result.synonyms);
-        });
-      });
-      return synonyms.flat();
     },
 
     /**
