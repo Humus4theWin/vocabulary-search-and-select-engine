@@ -2,7 +2,7 @@
   <v-data-table
     :headers="headers"
     :items="vocabularies"
-    sort-by="calories"
+    sort-by="name"
     class="elevation-1"
   >
     <template v-slot:top>
@@ -101,7 +101,7 @@
       <v-icon small @click="refreshItem(item)"> mdi-refresh</v-icon>
     </template>
     <template v-slot:no-data>
-      <v-btn color="primary" @click="loadDefaultVocabs"> Load Defaults</v-btn>
+      <v-btn color="primary" @click="importDefaultVocabs"> Load Defaults</v-btn>
     </template>
   </v-data-table>
 </template>
@@ -116,7 +116,7 @@ export default {
       {
         text: "name",
         align: "start",
-        sortable: false,
+        sortable: true,
         value: "name",
       },
       { text: "date", value: "date" },
@@ -274,25 +274,38 @@ export default {
       worker.postMessage([sourceURL, type]);
     },
     async refreshOldVocabularies() {
-      await this.loadDefaultVocabs();
+      //first update defaults
+      await this.loadDefaultVocabs(
+        this.vocabularies.map((vocab) => vocab.sourceURL)
+      );
 
       console.log(this.oldVocabularies);
       this.oldVocabularies.forEach(
         (vocab) => this.addVocab(vocab.sourceURL, vocab.type) // pass type?
       );
     },
-    async loadDefaultVocabs() {
+    async importDefaultVocabs() {
+      this.loadDefaultVocabs();
+    },
+    async loadDefaultVocabs(selectedVocabsURLs) {
       let res = await fetch(
         "https://dbpms-proceed.gitlab.io/vocabulary-search-and-select-engine/defaultVocabularies.json"
       );
+
       if (res.ok) {
         let json = await res.json();
-        json.vocabularies.forEach((vocab) => {
-          window.App.$store.commit("addVocabTerms", vocab.terms);
-          vocab.terms = undefined;
-          vocab.date = json.lastUpdate;
-          window.App.$store.commit("addVocab", vocab);
-        });
+        json.vocabularies
+          //only store desired vocabs
+          .filter(
+            (vocab) =>
+              selectedVocabsURLs === undefined ||
+              selectedVocabsURLs.includes(vocab.sourceURL)
+          )
+          .forEach((vocab) => {
+            // window.App.$store.commit("addVocabTerms", vocab.terms);
+            vocab.date = json.lastUpdate;
+            window.App.$store.commit("addVocab", vocab);
+          });
       }
     },
   },

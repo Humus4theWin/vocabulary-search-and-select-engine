@@ -32,15 +32,28 @@ const store = {
         (v) => v.sourceURL === vocab.sourceURL
       )[0];
       if (changedVocab === undefined) {
+        state.vocabTerms = [...state.vocabTerms, ...vocab.terms];
+        DB.putAll(DB.dbNames.TERMS, [...vocab.terms]);
+
+        vocab.terms = undefined; //do not sore terms in vocabs
         state.vocabs = [...state.vocabs, vocab];
+        DB.putSingle(DB.dbNames.VOCABULARIES, vocab);
       } else {
         let index = state.vocabs.indexOf(changedVocab);
-        Object.keys(vocab).forEach(
-          (key) => (state.vocabs[index][key] = vocab[key])
-        );
-      }
+        Object.keys(vocab)
+          .filter((key) => key !== "terms") //do not sore terms in vocabs
+          .forEach((key) => (state.vocabs[index][key] = vocab[key]));
 
-      DB.overwriteAll(DB.dbNames.VOCABULARIES, state.vocabs);
+        let updatedTerms = this.state.vocabTerms.filter(
+          (term) => term.vocabSourceURL !== vocab.sourceURL
+        );
+        console.log(updatedTerms);
+        updatedTerms.push(...vocab.terms);
+        console.log(updatedTerms);
+        this.state.vocabTerms = updatedTerms;
+        DB.overwriteAll(DB.dbNames.VOCABULARIES, state.vocabs);
+        DB.overwriteAll(DB.dbNames.TERMS, state.vocabTerms);
+      }
     },
     /**
      * adds terms to the vocab, that matches the VocabUrl
@@ -165,30 +178,30 @@ const store = {
       return state.ownTermAttributes;
     },
     /**
-     * returns all terms from all vocab
-     * @todo refactor JSDoc of function? Format not clear
-     * @param state
-     * @return {term[]}
+         * returns all terms from all vocab
+         * @todo refactor JSDoc of function? Format not clear
+         * @param state
+         * @return {term[]}
 
-     * @typedef {Object} term
-     * @property {string} label the name of the term (aka. the subject)
-     * @property {string} url the IRI of the Term (aka. the subject)
-     * term can have additional arrtibues (key/val pairs), containning other predicate/object data for the given subject (lable/url)
-     * access them through: Object.keys(<term>)
-     */
+         * @typedef {Object} term
+         * @property {string} label the name of the term (aka. the subject)
+         * @property {string} url the IRI of the Term (aka. the subject)
+         * term can have additional arrtibues (key/val pairs), containning other predicate/object data for the given subject (lable/url)
+         * access them through: Object.keys(<term>)
+         */
     getVocabTerms(state) {
       return state.vocabTerms;
     },
     /**
-     * returns all filter crieria
-     * @param state
-     * @return {fitlerCritera[]}
+         * returns all filter crieria
+         * @param state
+         * @return {fitlerCritera[]}
 
-     * @typedef Array of {object}
-     * @property {boolean} isUsed if the criteria is applied
-     * @property {string} predicate the IRI of the predicate, being filtered on
-     * @property {string} searchType  enum, how to filter the Terms on the predicate
-     */
+         * @typedef Array of {object}
+         * @property {boolean} isUsed if the criteria is applied
+         * @property {string} predicate the IRI of the predicate, being filtered on
+         * @property {string} searchType  enum, how to filter the Terms on the predicate
+         */
     getFilterCriteria(state) {
       console.log(state.filterCriteria);
       return state.filterCriteria;

@@ -37,7 +37,7 @@ export default {
         let db = e.target.result;
         Object.keys(this.dbNames).forEach((dbName) => {
           let dbIndex = this.dbIndexes[dbName];
-          db.createObjectStore(dbName, { keyPath: dbIndex });
+          db.createObjectStore(this.dbNames[dbName], { keyPath: dbIndex });
         });
       };
     });
