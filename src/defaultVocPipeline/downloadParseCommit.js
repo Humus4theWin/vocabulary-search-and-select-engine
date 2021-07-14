@@ -166,7 +166,7 @@ async function parseVocabularies(downloadedVocabularies, index) {
 function indexVocabularies() {
   for (let i = 0; i < parsedVocabularies.length; i++) {
     let name = parsedVocabularies[i].name;
-    let url = parsedVocabularies[i].sourceURL ;
+    let url = parsedVocabularies[i].sourceURL;
     let quads = parsedVocabularies[i].quads;
     let type = parsedVocabularies[i].type;
 
@@ -177,7 +177,7 @@ function indexVocabularies() {
           IRI: quad.subject.value,
           label: quad.object.value,
           vocabSourceURL: url,
-          type: type
+          type: type,
         };
       });
     // add all attributes
@@ -200,7 +200,7 @@ function indexVocabularies() {
       sourceURL: url,
       numberOfQuads: quads.length,
       terms: terms,
-      isUsed: true
+      isUsed: true,
     });
   }
   const d = new Date();
