@@ -73,13 +73,7 @@ const store = {
     /**
      * TODO Description
      * @param state current state
-     */
-    newCapChangeCapabilityName(state, value) {
-      state.newCapability.name = value;
-    },
-    /**
-     * TODO Description
-     * @param state current state
+     * @param value
      */
     newCapChangeKindOfCapability(state, value) {
       state.newCapability.kindOfCapability = value;
@@ -95,43 +89,73 @@ const store = {
      * TODO Description
      * @param state current state
      */
-    newCapChangeFunctionName(state, value) {
-      state.newCapability.functionName = value;
+    newCapAddCapabilityInput(state, { input, inputIndex, subInputIndex }) {
+      if (subInputIndex >= 0) {
+        // Add new Sub Sub Input
+        state.newCapability.inputs[inputIndex]["sub"][subInputIndex][
+          "sub"
+        ].push(input);
+      } else if (inputIndex >= 0) {
+        // Add new Sub Input
+        input["sub"] = [];
+        state.newCapability.inputs[inputIndex]["sub"].push(input);
+      } else {
+        // Add new Input
+        input["sub"] = [];
+        state.newCapability.inputs.push(input);
+      }
     },
     /**
      * TODO Description
      * @param state current state
      */
-    newCapChangeSameAs(state, value) {
-      state.newCapability.sameAs = value;
+    newCapRemoveCapabilityInput(state, { index, subIndex, subsubIndex }) {
+      if (subsubIndex >= 0) {
+        state.newCapability.inputs[index]["sub"][subIndex]["sub"].splice(
+          subsubIndex,
+          1
+        );
+      } else if (subIndex >= 0) {
+        state.newCapability.inputs[index]["sub"].splice(subIndex, 1);
+      } else {
+        state.newCapability.inputs.splice(index, 1);
+      }
     },
     /**
      * TODO Description
      * @param state current state
      */
-    newCapAddCapabilityInput(state, input) {
-      state.newCapability.inputs.push(input);
+    newCapAddCapabilityOutput(state, { output, outputIndex, subOutputIndex }) {
+      if (subOutputIndex >= 0) {
+        // Add new Sub Sub Output
+        state.newCapability.outputs[outputIndex]["sub"][subOutputIndex][
+          "sub"
+        ].push(output);
+      } else if (outputIndex >= 0) {
+        // Add new Sub Output
+        output["sub"] = [];
+        state.newCapability.outputs[outputIndex]["sub"].push(output);
+      } else {
+        // Add new Output
+        output["sub"] = [];
+        state.newCapability.outputs.push(output);
+      }
     },
     /**
      * TODO Description
      * @param state current state
      */
-    newCapRemoveCapabilityInput(state, index) {
-      state.newCapability.inputs.splice(index, 1);
-    },
-    /**
-     * TODO Description
-     * @param state current state
-     */
-    newCapAddCapabilityOutput(state, output) {
-      state.newCapability.outputs.push(output);
-    },
-    /**
-     * TODO Description
-     * @param state current state
-     */
-    newCapRemoveCapabilityOutput(state, index) {
-      state.newCapability.outputs.splice(index, 1);
+    newCapRemoveCapabilityOutput(state, { index, subIndex, subsubIndex }) {
+      if (subsubIndex >= 0) {
+        state.newCapability.outputs[index]["sub"][subIndex]["sub"].splice(
+          subsubIndex,
+          1
+        );
+      } else if (subIndex >= 0) {
+        state.newCapability.outputs[index]["sub"].splice(subIndex, 1);
+      } else {
+        state.newCapability.outputs.splice(index, 1);
+      }
     },
     /**
      * TODO Description
@@ -139,11 +163,26 @@ const store = {
      */
     newCapChangeCapabilityInputProperty(
       state,
-      { inputIndex, propertyKey, value }
+      { inputIndex, subIndex, subsubIndex, propertyKey, value }
     ) {
       // The input array needs to be recreated using 'splice()' so the UI updates automatically
       let input = state.newCapability.inputs[inputIndex];
-      input[propertyKey] = value;
+      if (subsubIndex >= 0) {
+        input["sub"][subIndex]["sub"][subsubIndex][propertyKey] = value;
+      } else if (subIndex >= 0) {
+        input["sub"][subIndex][propertyKey] = value;
+        // Remove subsubinputs if complex is disabled
+        if (propertyKey == "complex" && value.value == false) {
+          input["sub"][subIndex]["sub"] = [];
+        }
+      } else {
+        input[propertyKey] = value;
+        // Remove subinputs if complex is disabled
+        if (propertyKey == "complex" && value.value == false) {
+          input["sub"] = [];
+        }
+      }
+
       state.newCapability.inputs.splice(inputIndex, 1, input);
     },
     /**
@@ -152,11 +191,26 @@ const store = {
      */
     newCapChangeCapabilityOutputProperty(
       state,
-      { outputIndex, propertyKey, value }
+      { outputIndex, subIndex, subsubIndex, propertyKey, value }
     ) {
-      // The input array needs to be recreated using 'splice()' so the UI updates automatically
+      // The output array needs to be recreated using 'splice()' so the UI updates automatically
       let output = state.newCapability.outputs[outputIndex];
-      output[propertyKey] = value;
+      if (subsubIndex >= 0) {
+        output["sub"][subIndex]["sub"][subsubIndex][propertyKey] = value;
+      } else if (subIndex >= 0) {
+        output["sub"][subIndex][propertyKey] = value;
+        // Remove subsuboutputs if complex is disabled
+        if (propertyKey == "complex" && value.value == false) {
+          output["sub"][subIndex]["sub"] = [];
+        }
+      } else {
+        output[propertyKey] = value;
+        // Remove suboutputs if complex is disabled
+        if (propertyKey == "complex" && value.value == false) {
+          output["sub"] = [];
+        }
+      }
+
       state.newCapability.outputs.splice(outputIndex, 1, output);
     },
     /**
@@ -242,16 +296,8 @@ const store = {
      * @param state
      * @return {String}
      */
-    newCapCapabilityName: (state) => {
-      return { value: state.newCapability.name };
-    },
-    /**
-     * ToDo Description
-     * @param state
-     * @return {String}
-     */
     newCapKindOfCapability: (state) => {
-      return state.newCapability.kindOfCapability;
+      return { value: state.newCapability.kindOfCapability };
     },
     /**
      * ToDo Description
@@ -259,23 +305,7 @@ const store = {
      * @return {String}
      */
     newCapFileName: (state) => {
-      return state.newCapability.fileName;
-    },
-    /**
-     * ToDo Description
-     * @param state
-     * @return {String}
-     */
-    newCapFunctionName: (state) => {
-      return state.newCapability.functionName;
-    },
-    /**
-     * ToDo Description
-     * @param state
-     * @return {String}
-     */
-    newCapSameAs: (state) => {
-      return state.newCapability.sameAs;
+      return { value: state.newCapability.fileName };
     },
     /**
      * ToDo Description

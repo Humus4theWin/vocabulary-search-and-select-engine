@@ -15,7 +15,7 @@
 
 <script>
 import { mapGetters, mapMutations } from "vuex";
-import NewCapability from "./NewCapability.vue";
+import NewCapability from "./NewCapability/NewCapability.vue";
 
 export default {
   name: "RightDrawer",

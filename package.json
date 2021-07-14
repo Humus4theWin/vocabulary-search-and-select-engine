@@ -10,6 +10,7 @@
   "dependencies": {
     "core-js": "^3.6.5",
     "he-tree-vue": "^2.0.10",
+    "pretty-print-json": "^1.0.3",
     "rdf-parse": "^1.8.0",
     "streamify-string": "^1.0.1",
     "vue": "^2.6.11",
