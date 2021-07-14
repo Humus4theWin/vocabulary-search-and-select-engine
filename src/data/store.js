@@ -21,7 +21,9 @@ const store = {
     laodFromDB(state) {
       DB.getAllVocabularies().then((res) => (state.vocabs = res));
       DB.getAllTerms().then((res) => (state.vocabTerms = res));
-      DB.getFilterCriteria().then((res) => (state.filterCriteria = res));
+      DB.getFilterCriteria().then(
+        (res) => (state.filterCriteria = res[0].value)
+      );
     },
     /**
      * saves the word, which the user choose, from the list of SearchField
@@ -40,10 +42,14 @@ const store = {
       let changedVocab = state.vocabs.filter(
         (v) => v.sourceURL === vocab.sourceURL
       )[0];
-      let index = state.vocabs.indexOf(changedVocab);
-      Object.keys(vocab).forEach(
-        (key) => (state.vocabs[index][key] = vocab[key])
-      );
+      if (changedVocab === undefined) {
+        state.vocabs = [...state.vocabs, vocab];
+      } else {
+        let index = state.vocabs.indexOf(changedVocab);
+        Object.keys(vocab).forEach(
+          (key) => (state.vocabs[index][key] = vocab[key])
+        );
+      }
 
       DB.updateVocabularys(state.vocabs);
     },
@@ -111,7 +117,12 @@ const store = {
      */
     setFilterCriteria(state, data) {
       state.filterCiteria = data;
-      DB.updateFilterCriteria(data);
+      let criteria = {
+        //todo: refactor
+        predicate: "array",
+        value: data,
+      };
+      DB.updateFilterCriteria([criteria]);
     },
   },
   getters: {
