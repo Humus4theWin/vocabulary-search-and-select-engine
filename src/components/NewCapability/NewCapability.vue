@@ -367,9 +367,9 @@ export default {
     changedSearchInput: function (eventInput) {
       console.log("jaaa" + eventInput.IRI);
       //lateron changed to switch case maybe
-      if (eventInput.Type === "kindOfCapability") {
+      if (eventInput.Type == "kindOfCapability") {
         //an dieser Stelle in den Store schreiben bitte ;)
-        this.changeKindOfCapability(eventInput.IRI);
+        this.newCapChangeKindOfCapability()(eventInput.IRI);
       }
     },
   },
