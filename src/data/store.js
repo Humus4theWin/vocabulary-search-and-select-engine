@@ -20,7 +20,7 @@ const store = {
     newCapability: {
       name: "",
       kindOfCapability: "",
-      fileName: "",
+      fileName: "index.js",
       functionName: "",
       sameAs: "",
       inputs: [],
@@ -112,6 +112,13 @@ const store = {
      */
     newCapChangeFileName(state, value) {
       state.newCapability.fileName = value;
+    },
+    /**
+     * TODO Description
+     * @param state current state
+     */
+    newCapChangeFunctionName(state, value) {
+      state.newCapability.functionName = value;
     },
     /**
      * TODO Description
@@ -249,7 +256,7 @@ const store = {
       state.newCapability = {
         name: "",
         kindOfCapability: "",
-        fileName: "",
+        fileName: "index.js",
         functionName: "",
         sameAs: "",
         inputs: [],
@@ -350,6 +357,14 @@ const store = {
      */
     newCapFileName: (state) => {
       return { value: state.newCapability.fileName };
+    },
+    /**
+     * ToDo Description
+     * @param state
+     * @return {String}
+     */
+    newCapFunctionName: (state) => {
+      return { value: state.newCapability.functionName };
     },
     /**
      * ToDo Description

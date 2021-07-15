@@ -44,15 +44,15 @@
               class="text-h6 white--text pl-2"
               style="font-weight: 400"
             >
-              File Name
+              Function Name
             </v-toolbar-title>
           </v-app-bar>
           <v-card-text class="text-left">
             <v-text-field
-              label='e.g., "index.js"'
+              label='e.g., "takePhoto()"'
               required
-              v-model="fileName().value"
-              @input="changeFileName(fileName().value)"
+              v-model="functionName().value"
+              @input="changeFunctionName(functionName().value)"
             ></v-text-field>
           </v-card-text>
         </v-card>
@@ -105,12 +105,14 @@ export default {
     ...mapGetters({
       kindOfCapability: "newCapKindOfCapability", // map `this.newCapKindOfCapability()` to `this.$store.dispatch('newCapKindOfCapability')`
       fileName: "newCapFileName", // map `this.newCapFileName()` to `this.$store.dispatch('newCapFileName')`
+      functionName: "newCapFunctionName", // map `this.newCapFunctionName()` to `this.$store.dispatch('newCapFunctionName')`
       inputs: "newCapInputs", // map `this.newCapInputs()` to `this.$store.dispatch('newCapInputs')`
       outputs: "newCapOutputs", // map `this.newCapOutputs()` to `this.$store.dispatch('newCapOutputs')`
     }),
     ...mapMutations({
       changeKindOfCapability: "newCapChangeKindOfCapability", // map `this.newCapChangeKindOfCapability()` to `this.$store.dispatch('newCapChangeKindOfCapability')`
       changeFileName: "newCapChangeFileName", // map `this.newCapChangeFileName()` to `this.$store.dispatch('newCapChangeFileName')`
+      changeFunctionName: "newCapChangeFunctionName", // map `this.newCapChangeFunctionName()` to `this.$store.dispatch('newCapChangeFunctionName')`
       clearCapability: "newCapClear", // map `this.newCapClear()` to `this.$store.dispatch('newCapClear')`
     }),
     generateJSON() {
