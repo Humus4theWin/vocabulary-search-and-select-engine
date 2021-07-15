@@ -192,7 +192,6 @@ export default {
     ioToJson(io, isInput) {
       let parameters = [];
       for (let i = 0; i < io.length; i++) {
-        let additionalValidations; // TO DO - enable adding / removing additional validations
         let properties;
 
         if (io[i].complex.value) {
@@ -202,6 +201,15 @@ export default {
             "@type": isInput
               ? ["fno:Parameter", "xsd:complexType"]
               : ["fno:Output", "xsd:complexType"],
+            ...(io[i].description.value
+              ? { "schema:description": io[i].description.value }
+              : {}),
+            ...(io[i].minValue.value
+              ? { "schema:minValue": io[i].minValue.value }
+              : {}),
+            ...(io[i].maxValue.value
+              ? { "schema:maxValue": io[i].maxValue.value }
+              : {}),
             "terms:hasPart": {
               "@list":
                 io[i]["sub"] != null && io[i]["sub"].length > 0
@@ -209,7 +217,6 @@ export default {
                   : [],
             },
             ...(isInput ? { "fno:required": io[i].required.value } : {}),
-            ...(additionalValidations ? { additionalValidations } : {}),
           };
         } else {
           properties = {
@@ -226,8 +233,16 @@ export default {
                   new Set([...["fno:Output"], ...[io[i].dataType.value]])
                 )
               : ["fno:Output"],
+            ...(io[i].description.value
+              ? { "schema:description": io[i].description.value }
+              : {}),
+            ...(io[i].minValue.value
+              ? { "schema:minValue": io[i].minValue.value }
+              : {}),
+            ...(io[i].maxValue.value
+              ? { "schema:maxValue": io[i].maxValue.value }
+              : {}),
             ...(isInput ? { "fno:required": io[i].required.value } : {}),
-            ...(additionalValidations ? { additionalValidations } : {}),
           };
         }
 
