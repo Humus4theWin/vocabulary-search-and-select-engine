@@ -1,7 +1,7 @@
 <template>
   <!-- INPUTS -->
 
-  <v-card class="ma-5 capIO" color="#3b4453">
+  <v-card class="ma-3 capIO" color="#3b4453">
     <v-app-bar flat color="#1d2a36">
       <v-toolbar-title
         class="text-h6 white--text pl-2"
@@ -35,7 +35,7 @@
           <v-card
             v-for="(input, index) in inputs()"
             :key="index"
-            class="ma-3"
+            class="ma-2"
             color="#5c6473"
           >
             <v-app-bar flat color="#293239">
@@ -73,22 +73,6 @@
               >
                 <v-icon>mdi-delete</v-icon>
               </v-btn>
-              <v-btn
-                v-if="inputs()[index].complex.value == true"
-                class="ma-0"
-                text
-                icon
-                color="white"
-                @click="
-                  addCapabilityInput({
-                    input: getIOTemplate(),
-                    inputIndex: index,
-                    subInputIndex: -1,
-                  })
-                "
-              >
-                <v-icon>mdi-card-plus</v-icon>
-              </v-btn>
             </v-app-bar>
             <v-card-text class="text-left">
               <v-expansion-panels class="pt-2">
@@ -116,6 +100,7 @@
                           {{ parameterValue.displayName }}
                         </div>
                         <v-text-field
+                          class="ma-0 pa-0"
                           :label="'e.g., ' + parameterValue.example"
                           v-model="inputs()[index][parameterName].value"
                           @input="
@@ -146,7 +131,7 @@
                           </div>
                           <v-spacer></v-spacer>
                           <v-checkbox
-                            class="mb-3"
+                            class="mb-0"
                             color="#1d2a36"
                             v-model="inputs()[index][parameterName].value"
                             @change="
@@ -164,6 +149,21 @@
                     </v-col>
                   </v-expansion-panel-content>
                 </v-expansion-panel>
+                <v-btn
+                  v-if="inputs()[index].complex.value == true"
+                  class="mt-5 mb-2"
+                  x-large
+                  color="white"
+                  style="min-width: 100%"
+                  @click="
+                    addCapabilityInput({
+                      input: getIOTemplate(),
+                      inputIndex: index,
+                      subInputIndex: -1,
+                    })
+                  "
+                  >Add Sub-Input</v-btn
+                >
               </v-expansion-panels>
 
               <!-- SUB INPUTS -->
@@ -171,7 +171,7 @@
               <v-card
                 v-for="(input, subIndex) in inputs()[index]['sub']"
                 :key="subIndex"
-                class="ma-3"
+                class="ma-2"
                 color="#5c6473"
               >
                 <v-app-bar flat color="#242b31">
@@ -220,24 +220,6 @@
                   >
                     <v-icon>mdi-delete</v-icon>
                   </v-btn>
-                  <v-btn
-                    v-if="
-                      inputs()[index]['sub'][subIndex].complex.value == true
-                    "
-                    class="ma-0"
-                    text
-                    icon
-                    color="white"
-                    @click="
-                      addCapabilityInput({
-                        input: getIOTemplate(),
-                        inputIndex: index,
-                        subInputIndex: subIndex,
-                      })
-                    "
-                  >
-                    <v-icon>mdi-card-plus</v-icon>
-                  </v-btn>
                 </v-app-bar>
                 <v-card-text class="text-left">
                   <v-expansion-panels class="pt-2">
@@ -267,6 +249,7 @@
                               {{ parameterValue.displayName }}
                             </div>
                             <v-text-field
+                              class="ma-0 pa-0"
                               :label="'e.g., ' + parameterValue.example"
                               v-model="
                                 inputs()[index]['sub'][subIndex][parameterName]
@@ -303,7 +286,7 @@
                               </div>
                               <v-spacer></v-spacer>
                               <v-checkbox
-                                class="mb-3"
+                                class="mb-0"
                                 color="#1d2a36"
                                 v-model="
                                   inputs()[index]['sub'][subIndex][
@@ -328,6 +311,24 @@
                         </v-col>
                       </v-expansion-panel-content>
                     </v-expansion-panel>
+
+                    <v-btn
+                      v-if="
+                        inputs()[index]['sub'][subIndex].complex.value == true
+                      "
+                      class="mt-5 mb-2"
+                      x-large
+                      color="white"
+                      style="min-width: 100%"
+                      @click="
+                        addCapabilityInput({
+                          input: getIOTemplate(),
+                          inputIndex: index,
+                          subInputIndex: subIndex,
+                        })
+                      "
+                      >Add Sub-Sub-Input</v-btn
+                    >
                   </v-expansion-panels>
 
                   <!-- SUB SUB INPUTS -->
@@ -337,7 +338,7 @@
                       subIndex
                     ]['sub']"
                     :key="subsubIndex"
-                    class="ma-3"
+                    class="ma-2"
                     color="#5c6473"
                   >
                     <v-app-bar flat color="#1c2124">
@@ -426,6 +427,7 @@
                                   {{ parameterValue.displayName }}
                                 </div>
                                 <v-text-field
+                                  class="ma-0 pa-0"
                                   :label="'e.g., ' + parameterValue.example"
                                   v-model="
                                     inputs()[index]['sub'][subIndex]['sub'][
@@ -466,7 +468,7 @@
                                   </div>
                                   <v-spacer></v-spacer>
                                   <v-checkbox
-                                    class="mb-3"
+                                    class="mb-0"
                                     color="#1d2a36"
                                     v-model="
                                       inputs()[index]['sub'][subIndex]['sub'][

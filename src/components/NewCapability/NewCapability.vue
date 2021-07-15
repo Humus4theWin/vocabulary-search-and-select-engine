@@ -19,7 +19,7 @@
 
     <v-col class="pa-8">
       <v-row align="center" justify="center">
-        <v-card class="ma-5 capabilityCard">
+        <v-card class="ma-3 capabilityCard">
           <v-app-bar flat color="#1d2a36">
             <v-toolbar-title
               class="text-h6 white--text pl-2"
@@ -38,7 +38,7 @@
           </v-card-text>
         </v-card>
 
-        <v-card class="ma-5 capabilityCard">
+        <v-card class="ma-3 capabilityCard">
           <v-app-bar flat color="#1d2a36">
             <v-toolbar-title
               class="text-h6 white--text pl-2"

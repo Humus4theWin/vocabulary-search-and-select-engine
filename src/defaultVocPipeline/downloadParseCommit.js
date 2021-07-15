@@ -177,7 +177,6 @@ function indexVocabularies() {
           IRI: quad.subject.value,
           label: quad.object.value,
           vocabSourceURL: url,
-         
         };
       });
     // add all attributes
@@ -201,7 +200,7 @@ function indexVocabularies() {
       numberOfQuads: quads.length,
       terms: terms,
       isUsed: true,
-       type: type,
+      type: type,
     });
   }
   const d = new Date();
