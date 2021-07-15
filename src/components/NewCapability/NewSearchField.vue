@@ -1,0 +1,161 @@
+<template>
+  <v-autocomplete
+    v-model="select"
+    :items="terms"
+    :search-input.sync="search"
+    :filter="filterObjects"
+    item-text="label"
+    item-value="IRI"
+    cache-items
+    class="mx-4"
+    hide-no-data
+    hide-details
+    placeholder="Start typing to search"
+    v-bind:label="label"
+    return-object
+    @change="emitEvent"
+  ></v-autocomplete>
+</template>
+
+<style>
+.descriptionTitle {
+  color: white !important;
+  font-weight: 500;
+  text-align: left;
+}
+
+.descriptionSubtitle {
+  color: lightgrey !important;
+  text-align: left;
+}
+</style>
+
+<script>
+// https://gitlab.com/dBPMS-PROCEED/vocabulary-search-and-select-engine/-/blob/master/src/components/SearchField.vue
+export default {
+  data: () => ({
+    terms: [],
+    search: null,
+    select: null,
+    //selecteditem: null,
+  }),
+  created() {
+    // this.terms = this.$store.getters.getVocabTerms;
+  },
+  watch: {
+    search(val) {
+      //val !== undefined;
+      if (val.length < 2) {
+        console.log(val + val.length);
+        this.terms = [];
+        return;
+      } else {
+        this.terms = this.$store.getters.getVocabTerms;
+      } // &&
+      //val.length > 0 &&
+      // this.searchFunction(val);
+    },
+  },
+  props: {
+    label: {
+      type: String,
+      default: "Terms",
+    },
+    //kindOfCapability,kindOfValue,dataType
+    type: {
+      type: String,
+    },
+  },
+  computed: {
+    fields() {
+      return Object.keys(this.select);
+    },
+  },
+  methods: {
+    filterObjects(item, queryText) {
+      // console.log(queryText)
+      // console.log(queryText.type)
+      //console.log(item);
+      if (queryText.length > 2) {
+        return this.$store.getters.getFilterCriteria
+          .filter((criteria) => criteria.isUsed)
+          .map((criteria) => {
+            return (
+              item[criteria["predicate"]] !== undefined &&
+              this.getFilterFunction(criteria.searchType)(
+                item[criteria["predicate"]],
+                queryText
+              )
+            );
+          })
+          .every((b) => b === true);
+      } else {
+        return;
+      }
+    },
+
+    /**
+     * Is triggered when a character is typed in the search field.
+     * When the search contains more then 2 char, the list of terms is added to the entries for search.
+     * @param val contains the search input
+     */
+    querySelections(val) {
+      // Simulated ajax query
+      if (val.length < 2) {
+        console.log("search value {{val + val.length}}");
+        this.entries = [];
+        return;
+      } else {
+        this.terms = this.$store.getters.getVocabTerms;
+      }
+    },
+    searchFunction(searchString, filterCriteria) {
+      if (filterCriteria === undefined)
+        filterCriteria = this.$store.getters.getFilterCriteria;
+      if (searchString === undefined) searchString = ""; //todo: get from store this.$store.getters....;
+      let terms = this.$store.getters.getVocabTerms;
+
+      filterCriteria
+        .filter((criteria) => criteria.isUsed)
+        .forEach((criteria) => {
+          console.log(criteria);
+          terms = terms.filter((term) => {
+            return (
+              term[criteria["predicate"]] !== undefined &&
+              this.getFilterFunction(criteria.searchType)(
+                term[criteria["predicate"]],
+                searchString
+              )
+            );
+          });
+        });
+      console.log(terms);
+      this.terms = terms;
+      return terms;
+    },
+
+    getFilterFunction(searchType) {
+      switch (searchType) {
+        case "matches":
+          return (a, b) => a === b;
+        case "unequals":
+          return (a, b) => a !== b;
+        case "includes":
+          return (a, b) => a.includes(b);
+        case "excludes":
+          return (a, b) => !a.includes(b);
+      }
+    },
+    /**
+     * is triggerded when @change is triggered of the v-autocomplete.
+     * Sends an event "SearchValue" with the choosen IRI and the type paramter
+     */
+    emitEvent() {
+      /*console.log(this.select);
+      console.log(this.select.IRI);*/
+      let params = { IRI: this.select.IRI, type: this.type };
+      this.$emit("SearchValue", params);
+    },
+  },
+};
+</script>

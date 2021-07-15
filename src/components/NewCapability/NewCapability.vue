@@ -29,12 +29,17 @@
             </v-toolbar-title>
           </v-app-bar>
           <v-card-text class="text-left">
-            <v-text-field
+            <new-search-field
+              label='e.g., "schema.org/PhotographAction"'
+              type="kindOfCapability"
+              @SearchValue="changedSearchInput"
+            ></new-search-field>
+            <!--<v-text-field
               label='e.g., "schema.org/PhotographAction"'
               required
               v-model="kindOfCapability().value"
               @input="changeKindOfCapability(kindOfCapability().value)"
-            ></v-text-field>
+            ></v-text-field>-->
           </v-card-text>
         </v-card>
 
@@ -91,6 +96,7 @@ import NewCapabilityInputs from "./NewCapabilityInputs.vue";
 // eslint-disable-next-line no-unused-vars
 import { prettyPrintJson } from "pretty-print-json";
 import NewCapabilityOutputs from "./NewCapabilityOutputs.vue";
+import NewSearchField from "./NewSearchField.vue";
 
 export default {
   name: "NewCapability",
@@ -98,6 +104,7 @@ export default {
     //SearchField,
     NewCapabilityInputs,
     NewCapabilityOutputs,
+    NewSearchField,
   },
 
   computed: {},
@@ -352,6 +359,18 @@ export default {
       };
 
       return mapping;
+    },
+    /**
+     *prints input of searchfield over given event
+     *@param { Type, IRI} eventInput contains data of the search output as Type=  the prop type and IRI like the IRI of the choosen Term in the Search field
+     */
+    changedSearchInput: function (eventInput) {
+      console.log("jaaa" + eventInput.IRI);
+      //lateron changed to switch case maybe
+      if (eventInput.Type === "kindOfCapability") {
+        //an dieser Stelle in den Store schreiben bitte ;)
+        this.changeKindOfCapability(eventInput.IRI);
+      }
     },
   },
 };
