@@ -160,6 +160,13 @@ const store = {
      * TODO Description
      * @param state current state
      */
+    newCapReplaceCapabilityInputsForSequenceChange(state, value) {
+      state.newCapability.inputs = value;
+    },
+    /**
+     * TODO Description
+     * @param state current state
+     */
     newCapAddCapabilityOutput(state, { output, outputIndex, subOutputIndex }) {
       if (subOutputIndex >= 0) {
         // Add new Sub Sub Output
@@ -191,6 +198,13 @@ const store = {
       } else {
         state.newCapability.outputs.splice(index, 1);
       }
+    },
+    /**
+     * TODO Description
+     * @param state current state
+     */
+    newCapReplaceCapabilityOutputsForSequenceChange(state, value) {
+      state.newCapability.outputs = value;
     },
     /**
      * TODO Description

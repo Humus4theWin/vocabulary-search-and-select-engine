@@ -36,21 +36,6 @@
       <v-list-item-content>
         <v-btn
           class="primary"
-          :to="{ name: 'Capability' }"
-          depressed
-          min-height="80"
-          max-height="85"
-          width="80"
-        >
-          <span>Capability</span>
-          <v-icon class="pa-2">mdi-pencil</v-icon>
-        </v-btn>
-      </v-list-item-content>
-    </v-list-item>
-    <v-list-item>
-      <v-list-item-content>
-        <v-btn
-          class="primary"
           :to="{ name: 'CreateTerm' }"
           depressed
           min-height="80"
