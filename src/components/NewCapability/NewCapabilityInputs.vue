@@ -98,36 +98,66 @@
                         v-for="(parameterValue, parameterName) in inputs()[
                           index
                         ]"
-                        :key="parameterName"
+                        :key="parameterName">
+                      <v-col
+                        class="ma-0 pa-0"
+                        v-if="
+                          (parameterValue.displayName == 'Kind of Value' ||
+                            parameterValue.displayName == 'Data Type') &&
+                          !(
+                            parameterValue.complexCompatible == false &&
+                            inputs()[index].complex.value
+                          )
+                        "
                       >
-                        <v-col
+                        <div class="grey--text">
+                          {{ parameterValue.displayName }}
+                        </div>
+                        <new-search-field
+                          label="'e.g., ' + parameterValue.example"
+                          type="input"
+                          v-bind:options="{
+                            inputIndex: index,
+                            subIndex: -1,
+                            subsubIndex: -1,
+                            propertyKey: parameterName,
+                            value: inputs()[index][parameterName],
+                          }"
+                        ></new-search-field>
+                      </v-col>
+                      <v-col
+                        class="ma-0 pa-0"
+                        v-if="
+                          typeof parameterValue.value == 'string' &&
+                          !(
+                            parameterValue.displayName == 'Kind of Value' ||
+                            parameterValue.displayName == 'Data Type'
+                          ) &&
+                          !(
+                            parameterValue.complexCompatible == false &&
+                            inputs()[index].complex.value
+                          )
+                        "
+                      >
+                        
+                        <div class="grey--text">
+                          {{ parameterValue.displayName }}
+                        </div>
+                        <v-text-field
                           class="ma-0 pa-0"
-                          v-if="
-                            typeof parameterValue.value == 'string' &&
-                            !(
-                              parameterValue.complexCompatible == false &&
-                              inputs()[index].complex.value
-                            )
+                          :label="'e.g., ' + parameterValue.example"
+                          v-model="inputs()[index][parameterName].value"
+                          @input="
+                            changeCapabilityInputProperty({
+                              inputIndex: index,
+                              subIndex: -1,
+                              subsubIndex: -1,
+                              propertyKey: parameterName,
+                              value: inputs()[index][parameterName],
+                            })
                           "
-                        >
-                          <div class="grey--text">
-                            {{ parameterValue.displayName }}
-                          </div>
-                          <v-text-field
-                            class="ma-0 pa-0"
-                            :label="'e.g., ' + parameterValue.example"
-                            v-model="inputs()[index][parameterName].value"
-                            @input="
-                              changeCapabilityInputProperty({
-                                inputIndex: index,
-                                subIndex: -1,
-                                subsubIndex: -1,
-                                propertyKey: parameterName,
-                                value: inputs()[index][parameterName],
-                              })
-                            "
-                          ></v-text-field>
-                        </v-col>
+                        ></v-text-field>
+                      </v-col>
 
                         <v-col
                           class="ma-0 pa-0"
@@ -141,6 +171,50 @@
                         >
                           <v-row align="center" justify="center">
                             <div class="grey--text mb-3 ml-3">
+                          <v-col
+                            class="ma-0 pa-0"
+                            v-if="
+                              (parameterValue.displayName == 'Kind of Value' ||
+                                parameterValue.displayName == 'Data Type') &&
+                              !(
+                                parameterValue.complexCompatible == false &&
+                                inputs()[index]['sub'][subIndex].complex.value
+                              )
+                            "
+                          >
+                            <div class="grey--text">
+                              {{ parameterValue.displayName }}
+                            </div>
+                            <new-search-field
+                              label="'e.g., ' + parameterValue.example"
+                              type="input"
+                              v-bind:options="{
+                                inputIndex: index,
+                                subIndex: subIndex,
+                                subsubIndex: -1,
+                                propertyKey: parameterName,
+                                value:
+                                  inputs()[index]['sub'][subIndex][
+                                    parameterName
+                                  ],
+                              }"
+                            ></new-search-field>
+                          </v-col>
+                          <v-col
+                            class="ma-0 pa-0"
+                            v-if="
+                              typeof parameterValue.value == 'string' &&
+                              !(
+                                parameterValue.displayName == 'Kind of Value' ||
+                                parameterValue.displayName == 'Data Type'
+                              ) &&
+                              !(
+                                parameterValue.complexCompatible == false &&
+                                inputs()[index]['sub'][subIndex].complex.value
+                              )
+                            "
+                          >
+                            <div class="grey--text">
                               {{ parameterValue.displayName }}
                             </div>
                             <v-spacer></v-spacer>
@@ -266,7 +340,45 @@
                               <v-col
                                 class="ma-0 pa-0"
                                 v-if="
+                                  (parameterValue.displayName ==
+                                    'Kind of Value' ||
+                                    parameterValue.displayName ==
+                                      'Data Type') &&
+                                  !(
+                                    parameterValue.complexCompatible == false &&
+                                    inputs()[index]['sub'][subIndex]['sub'][
+                                      subsubIndex
+                                    ].complex.value
+                                  )
+                                "
+                              >
+                                <div class="grey--text">
+                                  {{ parameterValue.displayName }}
+                                </div>
+                                <new-search-field
+                                  label="'e.g., ' + parameterValue.example"
+                                  type="input"
+                                  v-bind:options="{
+                                    inputIndex: index,
+                                    subIndex: subIndex,
+                                    subsubIndex: subsubIndex,
+                                    propertyKey: parameterName,
+                                    value:
+                                      inputs()[index]['sub'][subIndex]['sub'][
+                                        subsubIndex
+                                      ][parameterName],
+                                  }"
+                                ></new-search-field>
+                              </v-col>
+                              <v-col
+                                class="ma-0 pa-0"
+                                v-if="
                                   typeof parameterValue.value == 'string' &&
+                                  !(
+                                    parameterValue.displayName ==
+                                      'Kind of Value' ||
+                                    parameterValue.displayName == 'Data Type'
+                                  ) &&
                                   !(
                                     parameterValue.complexCompatible == false &&
                                     inputs()[index]['sub'][subIndex].complex
@@ -574,6 +686,7 @@
 <script>
 import { mapGetters, mapMutations } from "vuex";
 import draggable from "vuedraggable";
+import NewSearchField from "./NewSearchField.vue";
 //import SearchField from "@/components/SearchField.vue";
 
 export default {
@@ -581,6 +694,7 @@ export default {
   components: {
     //SearchField,
     draggable,
+    NewSearchField,
   },
   data() {
     return {
@@ -611,6 +725,18 @@ export default {
       removeCapabilityInput: "newCapRemoveCapabilityInput", // map `this.newCapRemoveCapabilityInput()` to `this.$store.dispatch('newCapRemoveCapabilityInput')`
       changeCapabilityInputProperty: "newCapChangeCapabilityInputProperty", // map `this.newCapChangeCapabilityInputProperty()` to `this.$store.dispatch('newCapChangeCapabilityInputProperty')`
     }),
+    /**
+     *prints input of searchfield over given event
+     *@param { Type, IRI} eventInput contains data of the search output as Type=  the prop type and IRI like the IRI of the choosen Term in the Search field
+     */
+    changedSearchInput: function (eventInput) {
+      //later on changed to switch case maybe
+      console.log(this.inputs());
+      if (eventInput.type == "kindOfCapability") {
+        //an dieser Stelle in den Store schreiben bitte ;)
+        this.changeKindOfCapability(eventInput.IRI);
+      }
+    },
     getIOTemplate() {
       return {
         name: {
@@ -620,6 +746,7 @@ export default {
           value: "",
           optional: false,
         },
+        //RDF
         kindOfValue: {
           displayName: "Kind of Value",
           example: "schema.org/width",
@@ -648,6 +775,7 @@ export default {
           value: false,
           optional: true,
         },
+        //RDF
         dataType: {
           displayName: "Data Type (opt.)",
           example: "xs:integer",
