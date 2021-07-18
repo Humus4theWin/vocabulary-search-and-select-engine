@@ -34,12 +34,7 @@
               type="kindOfCapability"
               @SearchValue="changedSearchInput"
             ></new-search-field>
-            <!--<v-text-field
-              label='e.g., "schema.org/PhotographAction"'
-              required
-              v-model="kindOfCapability().value"
-              @input="changeKindOfCapability(kindOfCapability().value)"
-            ></v-text-field>-->
+            
           </v-card-text>
         </v-card>
 
