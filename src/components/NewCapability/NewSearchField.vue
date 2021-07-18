@@ -32,6 +32,7 @@
 
 <script>
 // https://gitlab.com/dBPMS-PROCEED/vocabulary-search-and-select-engine/-/blob/master/src/components/SearchField.vue
+import { mapMutations } from "vuex";
 export default {
   data: () => ({
     terms: [],
@@ -65,6 +66,14 @@ export default {
     type: {
       type: String,
     },
+    // takes all parmeter of input or output search fields
+    options: {
+      inputIndex: Number,
+      subIndex: Number,
+      subsubIndex: Number,
+      propertyKey: String,
+      value: String,
+    },
   },
   computed: {
     fields() {
@@ -72,6 +81,11 @@ export default {
     },
   },
   methods: {
+    ...mapMutations({
+      addCapabilityInput: "newCapAddCapabilityInput", // map `this.newCapAddCapabilityInput()` to `this.$store.dispatch('newCapAddCapabilityInput')`
+      removeCapabilityInput: "newCapRemoveCapabilityInput", // map `this.newCapRemoveCapabilityInput()` to `this.$store.dispatch('newCapRemoveCapabilityInput')`
+      changeCapabilityInputProperty: "newCapChangeCapabilityInputProperty", // map `this.newCapChangeCapabilityInputProperty()` to `this.$store.dispatch('newCapChangeCapabilityInputProperty')`
+    }),
     filterObjects(item, queryText) {
       // console.log(queryText)
       // console.log(queryText.type)
@@ -153,8 +167,27 @@ export default {
     emitEvent() {
       /*console.log(this.select);
       console.log(this.select.IRI);*/
-      let params = { IRI: this.select.IRI, type: this.type };
-      this.$emit("SearchValue", params);
+      if (this.type == "input") {
+        console.log(this.options);
+        console.log({
+          inputIndex: this.options.inputIndex,
+          subIndex: this.options.subIndex,
+          subsubIndex: this.options.subsubIndex,
+          propertyKey: this.options.propertyKey,
+          value: this.select.IRI,
+        });
+        this.options.value.value = this.select.IRI;
+        this.changeCapabilityInputProperty({
+          inputIndex: this.options.inputIndex,
+          subIndex: this.options.subIndex,
+          subsubIndex: this.options.subsubIndex,
+          propertyKey: this.options.propertyKey,
+          value: this.options.value,
+        });
+      } else {
+        let params = { IRI: this.select.IRI, type: this.type };
+        this.$emit("SearchValue", params);
+      }
     },
   },
 };

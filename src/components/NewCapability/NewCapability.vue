@@ -365,11 +365,10 @@ export default {
      *@param { Type, IRI} eventInput contains data of the search output as Type=  the prop type and IRI like the IRI of the choosen Term in the Search field
      */
     changedSearchInput: function (eventInput) {
-      console.log("jaaa" + eventInput.IRI);
-      //lateron changed to switch case maybe
-      if (eventInput.Type == "kindOfCapability") {
+      //later on changed to switch case maybe
+      if (eventInput.type == "kindOfCapability") {
         //an dieser Stelle in den Store schreiben bitte ;)
-        this.newCapChangeKindOfCapability()(eventInput.IRI);
+        this.changeKindOfCapability(eventInput.IRI);
       }
     },
   },

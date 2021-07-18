@@ -193,6 +193,9 @@ const store = {
       state,
       { inputIndex, subIndex, subsubIndex, propertyKey, value }
     ) {
+      console.log(
+        "" + inputIndex + subIndex + subsubIndex + propertyKey + value
+      );
       // The input array needs to be recreated using 'splice()' so the UI updates automatically
       let input = state.newCapability.inputs[inputIndex];
       if (subsubIndex >= 0) {
