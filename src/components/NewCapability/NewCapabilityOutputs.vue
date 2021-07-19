@@ -115,7 +115,7 @@
                         </div>
                         <new-search-field
                           label="'e.g., ' + parameterValue.example"
-                          type="input"
+                          type="output"
                           v-bind:options="{
                             outputIndex: index,
                             subIndex: -1,
@@ -289,7 +289,7 @@
                             </div>
                             <new-search-field
                               label="'e.g., ' + parameterValue.example"
-                              type="input"
+                              type="output"
                               v-bind:options="{
                                 outputIndex: index,
                                 subIndex: subIndex,
@@ -475,7 +475,7 @@
                                 </div>
                                 <new-search-field
                                   label="'e.g., ' + parameterValue.example"
-                                  type="input"
+                                  type="output"
                                   v-bind:options="{
                                     outputIndex: index,
                                     subIndex: subIndex,
