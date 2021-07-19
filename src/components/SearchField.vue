@@ -14,7 +14,6 @@
       <v-autocomplete
         v-model="select"
         :items="terms"
-        :search-input.sync="search"
         :filter="filterObjects"
         item-text="label"
         item-value="IRI"
@@ -63,8 +62,6 @@
 // https://gitlab.com/dBPMS-PROCEED/vocabulary-search-and-select-engine/-/blob/master/src/components/SearchField.vue
 export default {
   data: () => ({
-    terms: [],
-    search: null,
     select: null,
     selecteditem: null,
 
@@ -74,20 +71,7 @@ export default {
   created() {
     // this.terms = this.$store.getters.getVocabTerms;
   },
-  watch: {
-    search(val) {
-      //val !== undefined;
-      if (val.length < 2) {
-        console.log(val + val.length);
-        this.terms = [];
-        return;
-      } else {
-        this.terms = this.$store.getters.getVocabTerms;
-      } // &&
-      //val.length > 0 &&
-      // this.searchFunction(val);
-    },
-  },
+
   props: {
     searchLabel: {
       type: String,
@@ -95,6 +79,9 @@ export default {
     },
   },
   computed: {
+    terms() {
+      return this.$store.getters.getVocabTerms;
+    },
     fields() {
       return Object.keys(this.select);
     },
