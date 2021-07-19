@@ -99,7 +99,7 @@
                           class="ma-0 pa-0"
                           v-if="
                             (parameterValue.displayName == 'Kind of Value' ||
-                              parameterValue.displayName == 'Data Type') &&
+                              parameterValue.displayName == 'Data Type (opt.)') &&
                             !(
                               parameterValue.complexCompatible == false &&
                               outputs()[index].complex.value
@@ -127,7 +127,7 @@
                             typeof parameterValue.value == 'string' &&
                             !(
                               parameterValue.displayName == 'Kind of Value' ||
-                              parameterValue.displayName == 'Data Type'
+                              parameterValue.displayName == 'Data Type (opt.)'
                             ) &&
                             !(
                               parameterValue.complexCompatible == false &&
@@ -286,7 +286,7 @@
                                   (parameterValue.displayName ==
                                     'Kind of Value' ||
                                     parameterValue.displayName ==
-                                      'Data Type') &&
+                                      'Data Type (opt.)') &&
                                   !(
                                     parameterValue.complexCompatible == false &&
                                     outputs()[index]['sub'][subIndex]['sub'][
@@ -320,7 +320,7 @@
                                   !(
                                     parameterValue.displayName ==
                                       'Kind of Value' ||
-                                    parameterValue.displayName == 'Data Type'
+                                    parameterValue.displayName == 'Data Type (opt.)'
                                   ) &&
                                   !(
                                     parameterValue.complexCompatible == false &&
