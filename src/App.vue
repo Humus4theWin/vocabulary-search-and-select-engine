@@ -1,11 +1,10 @@
 <template>
   <v-app>
+    <Header />
     <split-pane :min-percent="25" :default-percent="40" split="vertical">
       <template slot="paneL">
         <v-col class="leftView">
-          <Header />
           <router-view />
-          <Navigation />
           <left-drawer />
         </v-col>
       </template>
@@ -13,6 +12,7 @@
         <v-col class="rightView"><right-drawer /></v-col>
       </template>
     </split-pane>
+    <Navigation />
   </v-app>
 </template>
 
