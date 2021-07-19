@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar color="primary" height="120">
+  <v-app-bar color="primary" height="120" class="mb-10">
     <v-col>
       <v-row align="center">
         <router-link :to="{ name: 'Home' }">
@@ -29,7 +29,7 @@
             @click="toggleLeftDrawerState()"
           ></v-app-bar-nav-icon>
 
-          <v-toolbar-title>Capabilities</v-toolbar-title>
+          <!--<v-toolbar-title>Capabilities</v-toolbar-title>-->
 
           <v-spacer></v-spacer>
 
