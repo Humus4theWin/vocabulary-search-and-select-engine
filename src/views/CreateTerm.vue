@@ -1,5 +1,5 @@
 <template>
-  <v-container fill-height class="mb-12" style="background: white">
+  <v-container fill-height class="mb-12 rounded-xl" style="background: white">
     <v-layout justify-center>
       <v-col cols="6" xs="12">
         <v-container>
