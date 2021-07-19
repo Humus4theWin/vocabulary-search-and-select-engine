@@ -20,7 +20,7 @@
 
 <script>
 //import AddVocab from "@/components/AddVocab.vue";
-import vocabTable from "@/components/VocabTableCRUD.vue";
+import vocabTable from "@/components/VocabTable.vue";
 import SearchPropertySelect from "@/components/SearchPropertySelect";
 
 export default {

@@ -1,4 +1,4 @@
-import DB from "./genericIndexDB"; // getAllVocabularies getAllTerms
+import DB from "./indexDB"; // getAllVocabularies getAllTerms
 
 /** @type {*} */
 const store = {
