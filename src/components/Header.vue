@@ -29,7 +29,7 @@
             @click="toggleLeftDrawerState()"
           ></v-app-bar-nav-icon>
 
-          <v-toolbar-title>Capabilities</v-toolbar-title>
+          <!--<v-toolbar-title>Capabilities</v-toolbar-title>-->
 
           <v-spacer></v-spacer>
 

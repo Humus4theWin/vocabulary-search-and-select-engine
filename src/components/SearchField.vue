@@ -91,7 +91,6 @@ export default {
       // console.log(queryText)
       // console.log(queryText.type)
       //console.log(item);
-      this.getSynonymsEnglish();
       if (queryText.length > 2) {
         return this.$store.getters.getFilterCriteria
           .filter((criteria) => criteria.isUsed)
@@ -160,30 +159,6 @@ export default {
           return (a, b) => a.includes(b);
         case "excludes":
           return (a, b) => !a.includes(b);
-      }
-    },
-
-    async getSynonymsEnglish() {
-      try {
-        //last part of URL is search string
-        fetch("https://api.dictionaryapi.dev/api/v2/entries/en_US/machine")
-          .then((response) => response.json())
-          .then((data) => console.log(data));
-      } catch (e) {
-        console.log(e);
-      }
-    },
-
-    async getSynonymsGerman() {
-      try {
-        //last part of URL is search string
-        await fetch(
-          "https://www.openthesaurus.de/synonyme/search?q=test&format=application/json"
-        )
-          .then((response) => response.json())
-          .then((data) => console.log(data));
-      } catch (e) {
-        console.log(e);
       }
     },
   },
