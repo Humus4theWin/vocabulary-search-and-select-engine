@@ -10,8 +10,8 @@
           max-height="85"
           width="80"
         >
-          <span>Capability</span>
-          <v-icon class="pa-2">mdi-hammer-wrench</v-icon>
+          <span>Search</span>
+          <v-icon class="pa-2">mdi-magnify</v-icon>
         </v-btn>
       </v-list-item-content>
     </v-list-item>

@@ -1,5 +1,5 @@
 <template>
-  <v-col>
+  <v-col class="mb-16">
     <v-row>
       <h1
         class="ma-8 white--text"
