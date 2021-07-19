@@ -1,75 +1,69 @@
 <template>
-  <v-container fill-height class="mb-12 rounded-xl" style="background: white">
+  <v-container fill-height class="mb-16 rounded-xl" style="background: white">
     <v-layout justify-center>
-      <v-col cols="6" xs="12">
-        <v-container>
-          <v-row>
-            <v-col class="pl-0">
-              <h1>Create a new Term</h1>
-            </v-col>
-          </v-row>
-          <v-row>
-            <h3>Subject:</h3>
-          </v-row>
-          <v-row>
-            <v-col cols="6">
-              <v-text-field
-                dense
-                v-model="title"
-                :hint="changeHint"
-                label="Term Name"
-              ></v-text-field>
-            </v-col>
-          </v-row>
-          <v-row>
-            <h3>Predicate:</h3>
-          </v-row>
-          <v-row>
-            <!--TODO key value like addVocab -->
-            <v-col cols="6">
-              <v-select
-                :items="items"
-                label="RDFS Predicate"
-                item-text="state"
-                v-model="select"
-                return-object
-                dense
-              ></v-select>
-            </v-col>
-          </v-row>
-          <v-row>
-            <h3>Object:</h3>
-          </v-row>
-          <v-row>
-            <v-radio-group v-model="radios" mandatory row>
-              <v-radio label="IRI as Object" value="IRI"></v-radio>
-              <v-radio label="Literal as Object" value="Literal"></v-radio>
-            </v-radio-group>
-          </v-row>
-          <v-row class="pl-0">
-            <v-col v-if="radios === 'IRI'" cols="12">
-              <SearchField />
-            </v-col>
-            <v-col v-else cols="9">
-              <v-textarea
-                v-model="description"
-                label="Enter your literal description"
-                name="input-7-1"
-                value=""
-                background-color="grey lighten-4"
-              ></v-textarea>
-            </v-col>
-          </v-row>
-          <v-row class="pt-3">
-            <v-btn v-on:click="addTerm">add Term</v-btn>
-          </v-row>
-        </v-container>
-      </v-col>
-      <v-col cols="6" xs="12">
+      <v-container class="pa-6" fill-width>
         <v-row>
-          <v-container> <termsTable /></v-container>
+          <v-col cols="12" class="pl-0">
+            <h1>Create a new Term</h1>
+          </v-col>
         </v-row>
-      </v-col>
+        <v-row>
+          <h4 class="mt-5">Subject:</h4>
+          <v-col cols="9">
+            <v-text-field
+              dense
+              v-model="title"
+              :hint="changeHint"
+              label="Term Name"
+            ></v-text-field>
+          </v-col>
+        </v-row>
+        <v-row>
+          <h4 class="mt-5">Predicate:</h4>
+          <!--TODO key value like addVocab -->
+          <v-col cols="9">
+            <v-select
+              :items="items"
+              label="RDFS Predicate"
+              item-text="state"
+              v-model="select"
+              return-object
+              dense
+            ></v-select>
+          </v-col>
+        </v-row>
+        <v-row>
+          <h4>Object:</h4>
+        </v-row>
+        <v-row>
+          <v-radio-group v-model="radios" mandatory row>
+            <v-radio label="IRI as Object" value="IRI"></v-radio>
+            <v-radio label="Literal as Object" value="Literal"></v-radio>
+          </v-radio-group>
+        </v-row>
+        <v-row class="pl-0">
+          <v-col v-if="radios === 'IRI'" cols="9">
+            <SearchField />
+          </v-col>
+          <v-col v-else cols="9">
+            <v-textarea
+              v-model="description"
+              label="Enter your literal description"
+              name="input-7-1"
+              value=""
+              background-color="grey lighten-4"
+            ></v-textarea>
+          </v-col>
+        </v-row>
+        <v-row class="pt-3 mb-3">
+          <v-spacer></v-spacer>
+          <v-btn color="primary" v-on:click="addTerm">add Term</v-btn>
+        </v-row>
+        <v-divider></v-divider>
+        <v-row>
+          <v-col cols="12"><termsTable /></v-col>
+        </v-row>
+      </v-container>
     </v-layout>
   </v-container>
 </template>
