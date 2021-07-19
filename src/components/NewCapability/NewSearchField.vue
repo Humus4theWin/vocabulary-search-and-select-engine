@@ -35,27 +35,33 @@
 import { mapMutations } from "vuex";
 export default {
   data: () => ({
-    terms: [],
-    search: null,
     select: null,
     //selecteditem: null,
+    value: ["http://www.w3.org/2000/01/rdf-schema#Class"],
   }),
   created() {
-    // this.terms = this.$store.getters.getVocabTerms;
-  },
-  watch: {
-    search(val) {
-      //val !== undefined;
-      if (val.length < 2) {
-        console.log(val + val.length);
-        this.terms = [];
-        return;
-      } else {
-        this.terms = this.$store.getters.getVocabTerms;
-      } // &&
-      //val.length > 0 &&
-      // this.searchFunction(val);
-    },
+    this.value = [];
+    switch (this.type) {
+      case "kindOfCapability": {
+        this.value.push("http://www.w3.org/2000/01/rdf-schema#Class");
+        break;
+      }
+      //its an input or output
+      case "input":
+      case "output": {
+        console.log(this.options.value.displayName);
+        if (this.options.value.displayName == "Kind of Value") {
+          this.value.push(
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property",
+            "http://www.w3.org/2002/07/owl#ObjectProperty"
+          );
+        }
+        if (this.options.value.displayName == "Data Type (opt.)") {
+          this.value.push("https://schema.org/DataType");
+        }
+        break;
+      }
+    }
   },
   props: {
     label: {
@@ -73,6 +79,14 @@ export default {
     fields() {
       return Object.keys(this.select);
     },
+    terms() {
+      return this.$store.getters.getVocabTerms;
+    },
+    types() {
+      return this.$store.getters.getVocabTerms
+        .map((term) => term["http://www.w3.org/1999/02/22-rdf-syntax-ns#type"])
+        .filter((type) => type !== undefined);
+    },
   },
   methods: {
     ...mapMutations({
@@ -80,25 +94,29 @@ export default {
       changeCapabilityOutputProperty: "newCapChangeCapabilityOutputProperty", // map `this.newCapChangeCapabilityOutputProperty()` to `this.$store.dispatch('newCapChangeCapabilityOutputProperty')`
     }),
     filterObjects(item, queryText) {
-      // console.log(queryText)
-      // console.log(queryText.type)
-      //console.log(item);
+      if (
+        !(
+          this.value.length === 0 ||
+          this.value
+            .map(
+              (typeVal) =>
+                item["http://www.w3.org/1999/02/22-rdf-syntax-ns#type"] ===
+                typeVal
+            )
+            .some((e) => e)
+        )
+      )
+        return false;
+
       if (queryText.length > 2) {
         return this.$store.getters.getFilterCriteria
-          .filter((criteria) => criteria.isUsed)
-          .map((criteria) => {
-            return (
-              item[criteria["predicate"]] !== undefined &&
-              this.getFilterFunction(criteria.searchType)(
-                item[criteria["predicate"]],
-                queryText
-              )
-            );
-          })
-          .every((b) => b === true);
-      } else {
-        return;
-      }
+          .map(
+            (criterion) =>
+              item[criterion.predicate] !== undefined &&
+              item[criterion.predicate].includes(queryText)
+          )
+          .some((e) => e);
+      } else return true;
     },
 
     /**
