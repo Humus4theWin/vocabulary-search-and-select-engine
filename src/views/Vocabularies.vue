@@ -1,5 +1,5 @@
 <template>
-  <v-container fill-height>
+  <v-container fill-height style="background: white">
     <v-layout column justify-center>
       <v-row justify-center align-content="center"></v-row>
       <v-row>

@@ -1,49 +1,20 @@
 <template>
-  <v-card>
-    <v-card-text class="pa-6">
-      <v-autocomplete
-        v-model="value"
-        :items="types"
-        auto-select-first
-        label="rdfs:type"
-        chips
-        clearable
-        deletable-chips
-        multiple
-      ></v-autocomplete>
-      <v-autocomplete
-        v-model="select"
-        :items="terms"
-        :search-input.sync="search"
-        :filter="filterObjects"
-        item-text="label"
-        item-value="IRI"
-        cache-items
-        class="mx-4"
-        hide-no-data
-        hide-details
-        placeholder="Start typing to search"
-        v-bind:label="searchLabel"
-        return-object
-      ></v-autocomplete>
-    </v-card-text>
-    <v-expand-transition>
-      <v-list v-if="select" class="info">
-        <v-list-item v-for="(field, i) in fields" :key="i">
-          <v-list-item-content>
-            <v-list-item-title
-              class="descriptionTitle"
-              v-text="field"
-            ></v-list-item-title>
-            <v-list-item-subtitle
-              class="descriptionSubtitle"
-              v-text="select[field]"
-            ></v-list-item-subtitle>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-    </v-expand-transition>
-  </v-card>
+  <v-autocomplete
+    v-model="select"
+    :items="terms"
+    :search-input.sync="search"
+    :filter="filterObjects"
+    item-text="label"
+    item-value="IRI"
+    cache-items
+    class="mx-4"
+    hide-no-data
+    hide-details
+    placeholder="Start typing to search"
+    v-bind:label="label"
+    return-object
+    @change="emitEvent"
+  ></v-autocomplete>
 </template>
 
 <style>
@@ -61,15 +32,13 @@
 
 <script>
 // https://gitlab.com/dBPMS-PROCEED/vocabulary-search-and-select-engine/-/blob/master/src/components/SearchField.vue
+import { mapMutations } from "vuex";
 export default {
   data: () => ({
     terms: [],
     search: null,
     select: null,
-    selecteditem: null,
-
-    //select
-    value: [],
+    //selecteditem: null,
   }),
   created() {
     // this.terms = this.$store.getters.getVocabTerms;
@@ -89,46 +58,47 @@ export default {
     },
   },
   props: {
-    searchLabel: {
+    label: {
       type: String,
       default: "Terms",
     },
+    //kindOfCapability,kindOfValue,dataType
+    type: {
+      type: String,
+    },
+    // takes all parmeter of input or output search fields
+    options: Object,
   },
   computed: {
     fields() {
       return Object.keys(this.select);
     },
-    types() {
-      return this.$store.getters.getVocabTerms
-        .map((term) => term["http://www.w3.org/1999/02/22-rdf-syntax-ns#type"])
-        .filter((type) => type !== undefined);
-    },
   },
   methods: {
+    ...mapMutations({
+      changeCapabilityInputProperty: "newCapChangeCapabilityInputProperty", // map `this.newCapChangeCapabilityInputProperty()` to `this.$store.dispatch('newCapChangeCapabilityInputProperty')`
+      changeCapabilityOutputProperty: "newCapChangeCapabilityOutputProperty", // map `this.newCapChangeCapabilityOutputProperty()` to `this.$store.dispatch('newCapChangeCapabilityOutputProperty')`
+    }),
     filterObjects(item, queryText) {
-      if (
-        !(
-          this.value.length === 0 ||
-          this.value
-            .map(
-              (typeVal) =>
-                item["http://www.w3.org/1999/02/22-rdf-syntax-ns#type"] ===
-                typeVal
-            )
-            .some((e) => e)
-        )
-      )
-        return false;
-
+      // console.log(queryText)
+      // console.log(queryText.type)
+      //console.log(item);
       if (queryText.length > 2) {
         return this.$store.getters.getFilterCriteria
-          .map(
-            (criterion) =>
-              item[criterion.predicate] !== undefined &&
-              item[criterion.predicate].includes(queryText)
-          )
-          .some((e) => e);
-      } else return true;
+          .filter((criteria) => criteria.isUsed)
+          .map((criteria) => {
+            return (
+              item[criteria["predicate"]] !== undefined &&
+              this.getFilterFunction(criteria.searchType)(
+                item[criteria["predicate"]],
+                queryText
+              )
+            );
+          })
+          .every((b) => b === true);
+      } else {
+        return;
+      }
     },
 
     /**
@@ -181,6 +151,38 @@ export default {
           return (a, b) => a.includes(b);
         case "excludes":
           return (a, b) => !a.includes(b);
+      }
+    },
+    /**
+     * is triggerded when @change is triggered of the v-autocomplete.
+     * Sends an event "SearchValue" with the choosen IRI and the type paramter
+     */
+    emitEvent() {
+      /*console.log(this.select);
+      console.log(this.select.IRI);*/
+      if (this.type == "input") {
+        this.options.value.value = this.select.IRI;
+        this.changeCapabilityInputProperty({
+          inputIndex: this.options.inputIndex,
+          subIndex: this.options.subIndex,
+          subsubIndex: this.options.subsubIndex,
+          propertyKey: this.options.propertyKey,
+          value: this.options.value,
+        });
+      } else {
+        if (this.type == "output") {
+          this.options.value.value = this.select.IRI;
+          this.changeCapabilityOutputProperty({
+            outputIndex: this.options.outputIndex,
+            subIndex: this.options.subIndex,
+            subsubIndex: this.options.subsubIndex,
+            propertyKey: this.options.propertyKey,
+            value: this.options.value,
+          });
+        } else {
+          let params = { IRI: this.select.IRI, type: this.type };
+          this.$emit("SearchValue", params);
+        }
       }
     },
   },

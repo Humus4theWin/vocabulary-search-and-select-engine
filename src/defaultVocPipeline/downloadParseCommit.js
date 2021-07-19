@@ -166,8 +166,9 @@ async function parseVocabularies(downloadedVocabularies, index) {
 function indexVocabularies() {
   for (let i = 0; i < parsedVocabularies.length; i++) {
     let name = parsedVocabularies[i].name;
-    let url = parsedVocabularies[i].url;
+    let url = parsedVocabularies[i].sourceURL;
     let quads = parsedVocabularies[i].quads;
+    let type = parsedVocabularies[i].type;
 
     let terms = quads
       .filter((quad) => quad.predicate.value.includes("label"))
@@ -175,6 +176,7 @@ function indexVocabularies() {
         return {
           IRI: quad.subject.value,
           label: quad.object.value,
+          vocabSourceURL: url,
         };
       });
     // add all attributes
@@ -190,10 +192,16 @@ function indexVocabularies() {
         }
         term[attr.predicate.value] = val;
       });
-
       return term;
     });
-    indexedVocabularies.push({ name: name, sourceURL: url, terms: terms });
+    indexedVocabularies.push({
+      name: name,
+      sourceURL: url,
+      numberOfQuads: quads.length,
+      terms: terms,
+      isUsed: true,
+      type: type,
+    });
   }
   const d = new Date();
   let output = {

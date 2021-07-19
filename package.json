@@ -10,11 +10,14 @@
   },
   "dependencies": {
     "core-js": "^3.6.5",
+    "he-tree-vue": "^2.0.10",
     "material-design-icons-iconfont": "^6.1.0",
+    "pretty-print-json": "^1.0.3",
     "rdf-parse": "^1.8.0",
     "streamify-string": "^1.0.1",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
+    "vue-splitpane": "^1.0.6",
     "vue-worker": "^1.2.1",
     "vuedraggable": "^2.24.3",
     "vuetify": "^2.4.0",
@@ -22,6 +25,7 @@
     "worker-plugin": "^5.0.1"
   },
   "devDependencies": {
+    "@mdi/font": "^5.9.55",
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-plugin-router": "^4.5.13",
