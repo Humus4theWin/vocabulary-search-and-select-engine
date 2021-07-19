@@ -1,11 +1,12 @@
+/*eslint-disable*/
 import rdfParser from "rdf-parse";
 
-// eslint-disable-next-line no-unused-vars
-function onmessage(event) {
+addEventListener("message", (event) => {
+
   let url = event.data[0];
   let type = event.data[1];
   importVocab(url, type);
-}
+});
 
 /**
  * imports vocabulary and parses quads; adds it to Vuex
@@ -35,7 +36,7 @@ async function importVocab(url, format) {
     vocab.type = response.headers.get("content-type").split(";")[0];
     vocab.data = await response.text();
   } else {
-    console.log("error: " + url);
+    //console.log("error: " + url);
     return;
   }
   if (format) vocab.type = format;
@@ -55,9 +56,14 @@ async function importVocab(url, format) {
     })
     .on("error", (error) => console.error(error))
     .on("end", () => {
-      window.App.$store.commit("addVocab", vocab);
-      console.log("All done!");
-      indexVocab(url, vocab.quads);
+      //post vocabs
+
+      //console.log("All done!");
+      indexVocab(url, vocab);
+      vocab.quads = undefined
+      vocab.date = new Date().toISOString()
+      vocab.isUsed = true
+      //postMessage(["addVocab",vocab]);
     });
 }
 
@@ -66,7 +72,8 @@ async function importVocab(url, format) {
  * @param url
  * @param quads
  */
-function indexVocab(url, quads) {
+function indexVocab(url, vocab) {
+  let quads = vocab.quads
   //find terms in other Thread
   let terms = quads
     .filter((quad) => quad.predicate.value.includes("label"))
@@ -77,7 +84,7 @@ function indexVocab(url, quads) {
         vocabSourceURL: url,
       };
     });
-  console.log(quads);
+  //console.log(quads);
   // add all attributes
   terms = terms.map((term) => {
     let attributes = quads.filter((quad) => {
@@ -85,16 +92,16 @@ function indexVocab(url, quads) {
     });
 
     attributes.forEach((attr) => {
-      let val = attr.object.value;
       //if (val.length > this.descriptionLimit) {
       //  val = val.slice(0, this.descriptionLimit) + "...";
       //}
-      term[attr.predicate.value] = val;
+      term[attr.predicate.value] = attr.object.value;
     });
-
+    term.sourceURL = url;
     return term;
   });
-  window.App.$store.commit("addVocabTerms", terms);
-  console.log(terms);
+  vocab.terms = terms
+  postMessage(["addVocab", vocab]);
+  //console.log(terms);
 }
 export default onmessage;

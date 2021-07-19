@@ -4,13 +4,13 @@ import App from "./App.vue";
 import vuetify from "./plugins/vuetify";
 import router from "./router";
 import Vuex from "vuex";
-import VueWorker from "vue-worker";
+//import VueWorker from "vue-worker";
 import store from "./data/store";
 
 Vue.config.productionTip = false;
 Vue.use(Vuetify);
 Vue.use(Vuex);
-Vue.use(VueWorker);
+//Vue.use(VueWorker);
 
 let storeObj = new Vuex.Store(store.store); // get from store
 

@@ -2,20 +2,21 @@ const DB_NAME = "PROCEED";
 const DB_VERSION = 1;
 let DB;
 
-let defaultFilterCriteria = [
-  {
-    isUsed: true,
-    predicate: "http://www.w3.org/2000/01/rdf-schema#label",
-    searchType: "includes",
-  },
-  {
-    isUsed: true,
-    predicate: "http://www.w3.org/2000/01/rdf-schema#comment",
-    searchType: "includes",
-  },
-];
-
 export default {
+  dbNames: {
+    VOCABULARIES: "Vocabs",
+    TERMS: "Terms",
+    SETTINGS: "Settings",
+  },
+  dbIndexes: {
+    VOCABULARIES: "sourceURL",
+    TERMS: "IRI",
+    SETTINGS: "key",
+  },
+  settingsKeys: {
+    PREDICATES: "predicates",
+  },
+
   async getDb() {
     return new Promise((resolve, reject) => {
       if (DB) {
@@ -35,156 +36,80 @@ export default {
       };
 
       request.onupgradeneeded = (e) => {
-        console.log("onupgradeneeded");
+        console.log("create index DB");
         let db = e.target.result;
-        db.createObjectStore("Vocabs", { keyPath: "sourceURL" });
-        db.createObjectStore("Terms", { keyPath: "IRI" });
-        db.createObjectStore("Filter", { keyPath: "predicate" });
-        console.log(this.getFilterCriteria());
-        this.getFilterCriteria().then((arr) => {
-          if (arr.length === 0)
-            this.updateFilterCriteria(defaultFilterCriteria);
-        });
-         this.getAllTerms().then((arr) => {
-          if (arr.length === 0) this.loadDefaultVocabs();
+        Object.keys(this.dbNames).forEach((dbName) => {
+          let dbIndex = this.dbIndexes[dbName];
+          db.createObjectStore(this.dbNames[dbName], { keyPath: dbIndex });
         });
       };
     });
   },
-  /*async deleteCat(cat) {
 
-    let db = await this.getDb();
-
-    return new Promise(resolve => {
-
-      let trans = db.transaction(['cats'],'readwrite');
-      trans.oncomplete = () => {
-        resolve();
-      };
-
-      let store = trans.objectStore('cats');
-      store.delete(cat.id);
-    });
-  },*/
-  async getAllVocabularies() {
+  async getAll(dbName) {
     let db = await this.getDb();
 
     return new Promise((resolve) => {
-      let trans = db.transaction(["Vocabs"], "readonly");
+      let trans = db.transaction([dbName], "readonly");
       trans.oncomplete = () => {
-        resolve(vocabs);
+        resolve(elements);
       };
 
-      let store = trans.objectStore("Vocabs");
-      let vocabs = [];
+      let store = trans.objectStore(dbName);
+      let elements = [];
 
       store.openCursor().onsuccess = (e) => {
         let cursor = e.target.result;
         if (cursor) {
-          vocabs.push(cursor.value);
+          elements.push(cursor.value);
           cursor.continue();
         }
       };
     });
   },
-
-  async addVocabulary(vocab) {
+  async getSingle(dbName, keyName) {
+    let allData = await this.getAll(dbName);
+    return allData.find((elem) => elem.key === keyName).value;
+  },
+  async putSingle(dbName, value) {
     let db = await this.getDb();
 
     return new Promise((resolve) => {
-      let trans = db.transaction(["Vocabs"], "readwrite");
+      let trans = db.transaction([dbName], "readwrite");
       trans.oncomplete = () => {
         resolve();
       };
 
-      let store = trans.objectStore("Vocabs");
-      store.put(vocab);
+      let store = trans.objectStore(dbName);
+      store.put(value);
     });
   },
-  async getAllTerms() {
+  async putAll(dbName, values) {
     let db = await this.getDb();
 
     return new Promise((resolve) => {
-      let trans = db.transaction(["Terms"], "readonly");
-      trans.oncomplete = () => {
-        resolve(terms);
-      };
-
-      let store = trans.objectStore("Terms");
-      let terms = [];
-
-      store.openCursor().onsuccess = (e) => {
-        let cursor = e.target.result;
-        if (cursor) {
-          terms.push(cursor.value);
-          cursor.continue();
-        }
-      };
-    });
-  },
-
-  async addTerms(terms) {
-    let db = await this.getDb();
-
-    return new Promise((resolve) => {
-      let trans = db.transaction(["Terms"], "readwrite");
+      let trans = db.transaction([dbName], "readwrite");
       trans.oncomplete = () => {
         resolve();
       };
 
-      let store = trans.objectStore("Terms");
-      terms.forEach((term) => store.put(term));
+      let store = trans.objectStore(dbName);
+      values.forEach((value) => store.put(value));
     });
   },
 
-  async getFilterCriteria() {
+  async overwriteAll(dbName, values) {
     let db = await this.getDb();
 
     return new Promise((resolve) => {
-      let trans = db.transaction(["Filter"], "readonly");
-      trans.oncomplete = () => {
-        resolve(criteria);
-      };
-
-      let store = trans.objectStore("Filter");
-      let criteria = [];
-
-      store.openCursor().onsuccess = (e) => {
-        let cursor = e.target.result;
-        if (cursor) {
-          criteria.push(cursor.value);
-          cursor.continue();
-        }
-      };
-    });
-  },
-     async loadDefaultVocabs() {
-    let res = await fetch(
-      "https://dbpms-proceed.gitlab.io/vocabulary-search-and-select-engine/defaultVocabularies.json"
-    );
-    if (res.ok) {
-      let json = await res.json();
-      json.vocabularies.forEach((vocab) => {
-        this.addTerms(vocab.terms);
-        vocab.terms = undefined;
-        this.addVocabulary(vocab);
-      });
-    }
-  },
-
-  async updateFilterCriteria(filterCriteria) {
-    //array of criteria
-    let db = await this.getDb();
-
-    return new Promise((resolve) => {
-      let trans = db.transaction(["Filter"], "readwrite");
+      let trans = db.transaction([dbName], "readwrite");
       trans.oncomplete = () => {
         resolve();
       };
 
-      let store = trans.objectStore("Filter");
-      store.clear(); //todo: may refactor to handle single CRUD Events
-      filterCriteria.forEach((criteria) => store.put(criteria));
+      let store = trans.objectStore(dbName);
+      store.clear();
+      values.forEach((value) => store.put(value));
     });
   },
 };

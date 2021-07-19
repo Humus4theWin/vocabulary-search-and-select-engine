@@ -7,9 +7,8 @@ const store = {
     vocabs: [],
     //contains terms {subject, predicate, object} added by the user
     vocabTerms: [],
-
     // searchFilter
-    filterCriteria: [],
+    filterPredicates: [],
 
     ownTermAttributes: [],
     //contains the results of the search
@@ -28,28 +27,47 @@ const store = {
     },
   },
   mutations: {
-    laodFromDB(state) {
-      DB.getAllVocabularies().then((res) => (state.vocabs = res));
-      DB.getAllTerms().then((res) => (state.vocabTerms = res));
-      DB.getFilterCriteria().then((res) => (state.filterCriteria = res));
+    async laodFromDB(state) {
+      state.vocabs = await DB.getAll(DB.dbNames.VOCABULARIES);
+      state.vocabTerms = await DB.getAll(DB.dbNames.TERMS);
+      state.filterPredicates = await DB.getSingle(
+        DB.dbNames.SETTINGS,
+        DB.settingsKeys.PREDICATES
+      );
     },
-    /**
-     * saves the word, which the user choose, from the list of SearchField
-     * @param state current state
-     * @param {string} word string of searched
-     */
-    saveSearchedWord(state, word) {
-      state.search = word;
-    },
+
     /**
      * adds a vocab (quads) to the list of available vocabs
      * @param state current state
      * @param {Object} vocab a rdf vocab
      */
     addVocab(state, vocab) {
-      console.log(vocab);
-      state.vocabs.push(vocab);
-      DB.addVocabulary(vocab);
+      let changedVocab = state.vocabs.filter(
+        (v) => v.sourceURL === vocab.sourceURL
+      )[0];
+      if (changedVocab === undefined) {
+        state.vocabTerms = [...state.vocabTerms, ...vocab.terms];
+        DB.putAll(DB.dbNames.TERMS, [...vocab.terms]);
+
+        vocab.terms = undefined; //do not sore terms in vocabs
+        state.vocabs = [...state.vocabs, vocab];
+        DB.putSingle(DB.dbNames.VOCABULARIES, vocab);
+      } else {
+        let index = state.vocabs.indexOf(changedVocab);
+        Object.keys(vocab)
+          .filter((key) => key !== "terms") //do not sore terms in vocabs
+          .forEach((key) => (state.vocabs[index][key] = vocab[key]));
+
+        let updatedTerms = this.state.vocabTerms.filter(
+          (term) => term.vocabSourceURL !== vocab.sourceURL
+        );
+        console.log(updatedTerms);
+        updatedTerms.push(...vocab.terms);
+        console.log(updatedTerms);
+        this.state.vocabTerms = updatedTerms;
+        DB.overwriteAll(DB.dbNames.VOCABULARIES, state.vocabs);
+        DB.overwriteAll(DB.dbNames.TERMS, state.vocabTerms);
+      }
     },
     /**
      * adds terms to the vocab, that matches the VocabUrl
@@ -59,8 +77,49 @@ const store = {
     addVocabTerms: function (state, data) {
       console.log(data);
       state.vocabTerms.push(...data);
-      DB.addTerms(data);
+      DB.putAll(DB.dbNames.TERMS, data);
     },
+    /**
+     * overwrites the list of available vocabs
+     * @param state current state
+     * @param [{Object}] vocab a rdf vocab
+     */
+    setVocabs(state, vocabs) {
+      state.vocabs = vocabs;
+      DB.overwriteAll(DB.dbNames.VOCABULARIES, vocabs);
+    },
+    /**
+     *
+     * @param state
+     * @param Array of {object}
+     *
+     * @property {boolean} isUsed if the criteria is applied
+     * @property {string} predicate the IRI of the predicate, being filtered on
+     * @property {string} searchType  enum, how to filter the Terms on the predicate
+     */
+    setFilterCriteria(state, data) {
+      state.filterPredicates = data;
+      console.log("setFilterCriteria");
+      console.log(data);
+      let criteria = {
+        //todo: refactor
+        key: DB.settingsKeys.PREDICATES,
+        value: data,
+      };
+
+      DB.putSingle(DB.dbNames.SETTINGS, criteria);
+    },
+    /**
+     * adds terms to the vocab, that matches the VocabUrl
+     * @param state
+     * @param Array data - [{{IRI: string, vocabSourceURL: string, ...any : string}}]
+     */
+    setVocabTerms: function (state, data) {
+      console.log(data);
+      state.vocabTerms = data;
+      DB.overwriteAll(DB.dbNames.TERMSdata);
+    },
+
     /**
      * adds a new term (subject, predicate, object), created by the user to terms
      * @param state current state
@@ -85,17 +144,12 @@ const store = {
       state.rightDrawerState = !state.rightDrawerState;
     },
     /**
-     *
-     * @param state
-     * @param Array of {object}
-     *
-     * @property {boolean} isUsed if the criteria is applied
-     * @property {string} predicate the IRI of the predicate, being filtered on
-     * @property {string} searchType  enum, how to filter the Terms on the predicate
+     * saves the word, which the user choose, from the list of SearchField
+     * @param state current state
+     * @param {string} word string of searched
      */
-    setFilterCriteria(state, data) {
-      state.filterCiteria = data;
-      DB.updateFilterCriteria(data);
+    saveSearchedWord(state, word) {
+      state.search = word;
     },
 
     /**
@@ -323,33 +377,32 @@ const store = {
       return state.ownTermAttributes;
     },
     /**
-     * returns all terms from all vocab
-     * @todo refactor JSDoc of function? Format not clear
-     * @param state
-     * @return {term[]}
+         * returns all terms from all vocab
+         * @todo refactor JSDoc of function? Format not clear
+         * @param state
+         * @return {term[]}
 
-     * @typedef {Object} term
-     * @property {string} label the name of the term (aka. the subject)
-     * @property {string} url the IRI of the Term (aka. the subject)
-     * term can have additional arrtibues (key/val pairs), containning other predicate/object data for the given subject (lable/url)
-     * access them through: Object.keys(<term>)
-     */
+         * @typedef {Object} term
+         * @property {string} label the name of the term (aka. the subject)
+         * @property {string} url the IRI of the Term (aka. the subject)
+         * term can have additional arrtibues (key/val pairs), containning other predicate/object data for the given subject (lable/url)
+         * access them through: Object.keys(<term>)
+         */
     getVocabTerms(state) {
       return state.vocabTerms;
     },
     /**
-     * returns all filter crieria
-     * @param state
-     * @return {fitlerCritera[]}
+         * returns all filter crieria
+         * @param state
+         * @return {fitlerCritera[]}
 
-     * @typedef Array of {object}
-     * @property {boolean} isUsed if the criteria is applied
-     * @property {string} predicate the IRI of the predicate, being filtered on
-     * @property {string} searchType  enum, how to filter the Terms on the predicate
-     */
+         * @typedef Array of {object}
+         * @property {boolean} isUsed if the criteria is applied
+         * @property {string} predicate the IRI of the predicate, being filtered on
+         * @property {string} searchType  enum, how to filter the Terms on the predicate
+         */
     getFilterCriteria(state) {
-      console.log(state.filterCriteria);
-      return state.filterCriteria;
+      return state.filterPredicates;
     },
     /**
      * returns the outcome of the user's choice after searching throw the added vocabs, saved in state.search

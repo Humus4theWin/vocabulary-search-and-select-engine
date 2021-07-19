@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import onmessage from "../data/webWorker";
+//import onmessage from "../data/worker";
 
 //import VocabWorker from "../data/webWorker";
 //import Worker from "worker-loader!./Worker.js";
@@ -70,13 +70,29 @@ export default {
       //let vocabWorker = new VocabWorker(worker);
       //vocabWorker.postMessage([this.addURL, this.select.state]);
 
-      //let myWorker = new Worker();    //'../data/webWorker.js');   require.toUrl('../data/webWorker.js') 'scr/data/webWorker.js', {type: 'module'}
+      //let myWorker = new Worker();    //'../data/worker.js');   require.toUrl('../data/worker.js') 'scr/data/worker.js', {type: 'module'}
       //myWorker.postMessage([this.addURL,this.select.state])
       //let myWorker = new Worker(window.URL.createObjectURL(new Blob(VocabWorker, { type: "text/javascript" })));
       //console.log(myWorker)
       //myWorker.postMessage([this.addURL,this.select.state])
 
-      onmessage({ data: [this.addURL, this.select.state] });
+      // onmessage({ data: [this.addURL, this.select.state] });
+
+      const worker = new Worker("../data/worker", { type: "module" });
+
+      worker.onmessage = (message) => {
+        console.log(message);
+        switch (message.data[0]) {
+          case "addVocab":
+            window.App.$store.commit("addVocab", message.data[1]);
+            break;
+          case "addVocabTerms":
+            window.App.$store.commit("addVocabTerms", message.data[1]);
+            break;
+        }
+      };
+
+      worker.postMessage([this.addURL, this.select.state]);
 
       //clean up
       this.select.state = undefined;

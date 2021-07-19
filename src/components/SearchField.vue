@@ -2,6 +2,16 @@
   <v-card>
     <v-card-text class="pa-6">
       <v-autocomplete
+        v-model="value"
+        :items="types"
+        auto-select-first
+        label="rdfs:type"
+        chips
+        clearable
+        deletable-chips
+        multiple
+      ></v-autocomplete>
+      <v-autocomplete
         v-model="select"
         :items="terms"
         :search-input.sync="search"
@@ -57,6 +67,9 @@ export default {
     search: null,
     select: null,
     selecteditem: null,
+
+    //select
+    value: [],
   }),
   created() {
     // this.terms = this.$store.getters.getVocabTerms;
@@ -85,28 +98,37 @@ export default {
     fields() {
       return Object.keys(this.select);
     },
+    types() {
+      return this.$store.getters.getVocabTerms
+        .map((term) => term["http://www.w3.org/1999/02/22-rdf-syntax-ns#type"])
+        .filter((type) => type !== undefined);
+    },
   },
   methods: {
     filterObjects(item, queryText) {
-      // console.log(queryText)
-      // console.log(queryText.type)
-      //console.log(item);
+      if (
+        !(
+          this.value.length === 0 ||
+          this.value
+            .map(
+              (typeVal) =>
+                item["http://www.w3.org/1999/02/22-rdf-syntax-ns#type"] ===
+                typeVal
+            )
+            .some((e) => e)
+        )
+      )
+        return false;
+
       if (queryText.length > 2) {
         return this.$store.getters.getFilterCriteria
-          .filter((criteria) => criteria.isUsed)
-          .map((criteria) => {
-            return (
-              item[criteria["predicate"]] !== undefined &&
-              this.getFilterFunction(criteria.searchType)(
-                item[criteria["predicate"]],
-                queryText
-              )
-            );
-          })
-          .every((b) => b === true);
-      } else {
-        return;
-      }
+          .map(
+            (criterion) =>
+              item[criterion.predicate] !== undefined &&
+              item[criterion.predicate].includes(queryText)
+          )
+          .some((e) => e);
+      } else return true;
     },
 
     /**

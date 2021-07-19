@@ -114,7 +114,6 @@ export default {
     },
     searchTypes: ["includes", "matches", "excludes", "unequals"],
   }),
-
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? "New Rule" : "Edit Rule";
@@ -140,7 +139,7 @@ export default {
       val || this.closeDelete();
     },
     filterCriteria(val) {
-      console.log("val");
+      console.log("filterCriteria");
       console.log(val);
     },
   },
