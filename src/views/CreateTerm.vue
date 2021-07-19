@@ -1,11 +1,11 @@
 <template>
-  <v-container fill-height class="pt-16" style="background: white">
+  <v-container fill-height class="mb-12" style="background: white">
     <v-layout justify-center>
       <v-col cols="6" xs="12">
         <v-container>
           <v-row>
-            <v-col sm="9" cols="7" xl="5" class="pl-0">
-              <h1>CREATE A NEW TERM</h1>
+            <v-col class="pl-0">
+              <h1>Create a new Term</h1>
             </v-col>
           </v-row>
           <v-row>
@@ -56,7 +56,7 @@
                 label="Enter your literal description"
                 name="input-7-1"
                 value=""
-                background-color="grey lighten-3"
+                background-color="grey lighten-4"
               ></v-textarea>
             </v-col>
           </v-row>
