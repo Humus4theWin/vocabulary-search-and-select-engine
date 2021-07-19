@@ -1,5 +1,5 @@
 <template>
-  <v-bottom-navigation class="primary" height="80">
+  <v-bottom-navigation class="primary" height="80" app="true">
     <v-btn
         class="primary mr-10"
         href=https://docs.proceed-labs.org/concepts/capability-description/
