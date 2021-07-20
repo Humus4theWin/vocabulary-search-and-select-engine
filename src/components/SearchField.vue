@@ -147,9 +147,7 @@ export default {
           );
         }
       );
-      filteredTerms = filteredTerms.map(
-        (term) => term["http://www.w3.org/2000/01/rdf-schema#label"]
-      );
+
       console.log(filteredTerms);
       return filteredTerms;
     },
