@@ -159,6 +159,7 @@ export default {
       } else {
         filteredTerms = array;
       }
+      console.log(filteredTerms);
       filteredTerms = this.$store.getters.getFilterCriteria.flatMap(
         (predicate) => {
           console.log(predicate);
