@@ -24,7 +24,7 @@
       </v-row>
 
       <v-card class="actionBar" color="grey lighten-4" flat height="0px" tile>
-        <v-toolbar extension-height="100">
+        <v-toolbar extension-height="100" color="white">
           <v-app-bar-nav-icon
             @click="toggleLeftDrawerState()"
           ></v-app-bar-nav-icon>
