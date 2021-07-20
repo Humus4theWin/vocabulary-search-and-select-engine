@@ -1,5 +1,5 @@
 <template>
-  <v-container fill-height style="background: white">
+  <v-container fill-height class="rounded-xl mb-16" style="background: white">
     <v-layout column justify-center>
       <v-row justify-center align-content="center"></v-row>
       <v-row>
@@ -7,8 +7,9 @@
           <vocabTable />
         </v-col>
       </v-row>
+      <v-row class="mx-2"><h3>Adjust Search Fields and Priority</h3></v-row>
 
-      <v-row>
+      <v-row class="mx-2">
         <SearchPropertySelect />
       </v-row>
 

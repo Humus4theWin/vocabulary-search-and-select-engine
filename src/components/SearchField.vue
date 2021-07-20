@@ -2,16 +2,6 @@
   <v-card>
     <v-card-text class="pa-6">
       <v-autocomplete
-        v-model="value"
-        :items="types"
-        auto-select-first
-        label="rdfs:type"
-        chips
-        clearable
-        deletable-chips
-        multiple
-      ></v-autocomplete>
-      <v-autocomplete
         v-model="select"
         :items="terms"
         :filter="filterObjects"
@@ -24,7 +14,35 @@
         v-bind:label="searchLabel"
         return-object
         @update:search-input="doIt"
+        prepend-icon="mdi-magnify"
       ></v-autocomplete>
+      <v-row class="mt-3">
+        <v-spacer></v-spacer>
+        <p class="mt-1 advancedSearch">Advanced Search</p>
+        <v-btn
+          class="mb-1"
+          color="primary"
+          icon
+          @click="showFilter = !showFilter"
+        >
+          <v-icon>{{
+            showFilter ? "mdi-chevron-up" : "mdi-chevron-down"
+          }}</v-icon>
+        </v-btn>
+      </v-row>
+      <v-expand-transition>
+        <v-autocomplete
+          v-show="showFilter"
+          v-model="value"
+          :items="types"
+          auto-select-first
+          label="Filter rdfs:type"
+          chips
+          clearable
+          deletable-chips
+          multiple
+        ></v-autocomplete>
+      </v-expand-transition>
     </v-card-text>
     <v-expand-transition>
       <v-list v-if="select" class="info">
@@ -56,6 +74,9 @@
   color: lightgrey !important;
   text-align: left;
 }
+.advancedSearch {
+  color: #74b559;
+}
 </style>
 
 <script>
@@ -69,6 +90,7 @@ export default {
 
     //select
     value: [],
+    showFilter: false,
   }),
   created() {
     this.allTerms = this.$store.getters.getVocabTerms;
