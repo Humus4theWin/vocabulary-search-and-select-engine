@@ -2,11 +2,10 @@
   <v-autocomplete
     v-model="select"
     :items="terms"
-    :search-input.sync="search"
     :filter="filterObjects"
+    :search-input.sync="search"
     item-text="http://www.w3.org/2000/01/rdf-schema#label"
     item-value="IRI"
-    cache-items
     class="mx-4"
     hide-no-data
     hide-details
@@ -14,6 +13,7 @@
     v-bind:label="label"
     return-object
     @change="emitEvent"
+    @update:search-input="doIt"
   ></v-autocomplete>
 </template>
 
@@ -38,8 +38,12 @@ export default {
     select: null,
     //selecteditem: null,
     value: [],
+    allTerms: [],
   }),
   created() {
+    console.log(this.type + "was created");
+    this.allTerms = this.$store.getters.getVocabTerms;
+
     this.value = [];
     switch (this.type) {
       case "kindOfCapability": {
@@ -50,7 +54,6 @@ export default {
       case "input":
       case "output":
         {
-          console.log(this.options.value.displayName);
           if (this.options.value.displayName == "Kind of Value") {
             this.value.push("Property");
           }
@@ -78,12 +81,9 @@ export default {
       return Object.keys(this.select);
     },
     terms() {
-      return this.$store.getters.getVocabTerms;
-    },
-    types() {
-      return this.$store.getters.getVocabTerms
-        .map((term) => term["http://www.w3.org/1999/02/22-rdf-syntax-ns#type"])
-        .filter((type) => type !== undefined);
+      console.log("terms got changed ");
+
+      return this.allTerms;
     },
   },
   methods: {
@@ -91,83 +91,62 @@ export default {
       changeCapabilityInputProperty: "newCapChangeCapabilityInputProperty", // map `this.newCapChangeCapabilityInputProperty()` to `this.$store.dispatch('newCapChangeCapabilityInputProperty')`
       changeCapabilityOutputProperty: "newCapChangeCapabilityOutputProperty", // map `this.newCapChangeCapabilityOutputProperty()` to `this.$store.dispatch('newCapChangeCapabilityOutputProperty')`
     }),
-    filterObjects(item, queryText) {
-      if (
-        !(
-          this.value.length === 0 ||
-          this.value
-            .map((typeVal) =>
-              item["http://www.w3.org/1999/02/22-rdf-syntax-ns#type"].includes(
-                typeVal
-              )
-            )
-            .some((e) => e)
-        )
-      )
-        return false;
-
-      if (queryText.length > 2) {
-        return this.$store.getters.getFilterCriteria
-          .map(
-            (criterion) =>
-              item[criterion.predicate] !== undefined &&
-              item[criterion.predicate].includes(queryText)
-          )
-          .some((e) => e);
-      } else return true;
-    },
-
     /**
-     * Is triggered when a character is typed in the search field.
-     * When the search contains more then 2 char, the list of terms is added to the entries for search.
-     * @param val contains the search input
+     * is triggerde whenever the user types a char in input of the autocomplete.
+     * @param event contains the search input
      */
-    querySelections(val) {
-      // Simulated ajax query
-      if (val.length < 2) {
-        console.log("search value {{val + val.length}}");
-        this.entries = [];
-        return;
+    doIt(event) {
+      console.log("did something");
+      this.flag = true;
+      this.allTerms = this.filterAndSort(
+        this.$store.getters.getVocabTerms,
+        event
+      );
+      console.log("terms:");
+      console.log(this.terms);
+    },
+    /**
+     * filters and sorts the array and returns an array
+     * @param array array to sort
+     * @param input input of user
+     * @returns an sorted and filtered array
+     */
+    filterAndSort(array, input) {
+      //filter correct types
+      console.log(array);
+      let filteredTerms;
+      if (!input || input.length == 0) {
+        return []; //array;
+      } else if (this.value.length > 0) {
+        filteredTerms = array.filter((term) =>
+          this.value.some((type) =>
+            term["http://www.w3.org/1999/02/22-rdf-syntax-ns#type"].includes(
+              type
+            )
+          )
+        );
       } else {
-        this.terms = this.$store.getters.getVocabTerms;
+        filteredTerms = array;
       }
-    },
-    searchFunction(searchString, filterCriteria) {
-      if (filterCriteria === undefined)
-        filterCriteria = this.$store.getters.getFilterCriteria;
-      if (searchString === undefined) searchString = ""; //todo: get from store this.$store.getters....;
-      let terms = this.$store.getters.getVocabTerms;
+      console.log(filteredTerms);
+      filteredTerms = this.$store.getters.getFilterCriteria.flatMap(
+        (predicate) => {
+          return filteredTerms.filter(
+            (term) =>
+              term[predicate.predicate] !== undefined &&
+              term[predicate.predicate].includes(input)
+          );
+        }
+      );
 
-      filterCriteria
-        .filter((criteria) => criteria.isUsed)
-        .forEach((criteria) => {
-          console.log(criteria);
-          terms = terms.filter((term) => {
-            return (
-              term[criteria["predicate"]] !== undefined &&
-              this.getFilterFunction(criteria.searchType)(
-                term[criteria["predicate"]],
-                searchString
-              )
-            );
-          });
-        });
-      console.log(terms);
-      this.terms = terms;
-      return terms;
+      console.log(filteredTerms);
+      return filteredTerms;
     },
-
-    getFilterFunction(searchType) {
-      switch (searchType) {
-        case "matches":
-          return (a, b) => a === b;
-        case "unequals":
-          return (a, b) => a !== b;
-        case "includes":
-          return (a, b) => a.includes(b);
-        case "excludes":
-          return (a, b) => !a.includes(b);
-      }
+    /**
+     * disables the filter of the v-autocomplete
+     */
+    filterObjects() {
+      return true;
     },
     /**
      * is triggerded when @change is triggered of the v-autocomplete.
