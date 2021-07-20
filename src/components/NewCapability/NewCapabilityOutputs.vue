@@ -99,7 +99,8 @@
                           class="ma-0 pa-0"
                           v-if="
                             (parameterValue.displayName == 'Kind of Value' ||
-                              parameterValue.displayName == 'Data Type (opt.)') &&
+                              parameterValue.displayName ==
+                                'Data Type (opt.)') &&
                             !(
                               parameterValue.complexCompatible == false &&
                               outputs()[index].complex.value
@@ -289,9 +290,8 @@
                                       'Data Type (opt.)') &&
                                   !(
                                     parameterValue.complexCompatible == false &&
-                                    outputs()[index]['sub'][subIndex]['sub'][
-                                      subsubIndex
-                                    ].complex.value
+                                    outputs()[index]['sub'][subIndex].complex
+                                      .value
                                   )
                                 "
                               >
@@ -304,12 +304,12 @@
                                   v-bind:options="{
                                     outputIndex: index,
                                     subIndex: subIndex,
-                                    subsubIndex: subsubIndex,
+                                    subsubIndex: -1,
                                     propertyKey: parameterName,
                                     value:
-                                      outputs()[index]['sub'][subIndex]['sub'][
-                                        subsubIndex
-                                      ][parameterName],
+                                      outputs()[index]['sub'][subIndex][
+                                        parameterName
+                                      ],
                                   }"
                                 ></new-search-field>
                               </v-col>
@@ -320,7 +320,8 @@
                                   !(
                                     parameterValue.displayName ==
                                       'Kind of Value' ||
-                                    parameterValue.displayName == 'Data Type (opt.)'
+                                    parameterValue.displayName ==
+                                      'Data Type (opt.)'
                                   ) &&
                                   !(
                                     parameterValue.complexCompatible == false &&
@@ -734,3 +735,4 @@ export default {
     },
   },
 };
+</script>
