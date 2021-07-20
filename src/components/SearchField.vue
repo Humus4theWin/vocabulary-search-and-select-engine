@@ -14,7 +14,6 @@
       <v-autocomplete
         v-model="select"
         :items="terms"
-        :filter="filterObjects"
         item-text="http://www.w3.org/2000/01/rdf-schema#label"
         item-value="IRI"
         cache-items
@@ -122,17 +121,44 @@ export default {
      * @returns an sorted and filtered array
      */
     filterAndSort(array, input) {
-      let nTerms = [];
-      nTerms = array;
-      //search and sort logic here
+      console.log("filterAndSort");
       console.log(input);
-      nTerms = ["a", "b"];
+      console.log(array);
 
-      return nTerms;
+      //filter correct types
+      let filteredTerms;
+      if (!input || input.length == 0) {
+        return []; //array;
+      } else if (this.value.length > 0) {
+        filteredTerms = array.filter((term) =>
+          this.value.includes(
+            term["http://www.w3.org/1999/02/22-rdf-syntax-ns#type"]
+          )
+        );
+      } else {
+        filteredTerms = array;
+      }
+
+      filteredTerms = this.$store.getters.getFilterCriteria.flatMap(
+        (predicate) => {
+          console.log(predicate);
+          return filteredTerms.filter(
+            (term) =>
+              term[predicate.predicate] !== undefined &&
+              term[predicate.predicate].includes(input)
+          );
+        }
+      );
+      filteredTerms = filteredTerms.map(
+        (term) => term["http://www.w3.org/2000/01/rdf-schema#label"]
+      );
+      console.log(filteredTerms);
+      return filteredTerms;
     },
 
-    filterObjects(item, queryText) {
-      if (
+    filterObjects() {
+      //item, queryText
+      /*if (
         !(
           this.value.length === 0 ||
           this.value
@@ -154,7 +180,7 @@ export default {
               item[criterion.predicate].includes(queryText)
           )
           .some((e) => e);
-      } else return true;
+      } else return true;*/
     },
 
     /**
