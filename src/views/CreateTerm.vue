@@ -10,7 +10,7 @@
         <v-row>
           <v-text-field
             label="My Token"
-            v-model="title"
+            v-model="token"
             disabled
           ></v-text-field>
         </v-row>
