@@ -305,9 +305,8 @@
                                       'Data Type (opt.)') &&
                                   !(
                                     parameterValue.complexCompatible == false &&
-                                    inputs()[index]['sub'][subIndex]['sub'][
-                                      subsubIndex
-                                    ].complex.value
+                                    inputs()[index]['sub'][subIndex].complex
+                                      .value
                                   )
                                 "
                               >
@@ -323,9 +322,9 @@
                                     subsubIndex: subsubIndex,
                                     propertyKey: parameterName,
                                     value:
-                                      inputs()[index]['sub'][subIndex]['sub'][
-                                        subsubIndex
-                                      ][parameterName],
+                                      inputs()[index]['sub'][subIndex][
+                                        parameterName
+                                      ],
                                   }"
                                 ></new-search-field>
                               </v-col>
