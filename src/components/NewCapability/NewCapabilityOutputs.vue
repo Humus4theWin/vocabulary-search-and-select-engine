@@ -508,8 +508,48 @@
                                     <v-col
                                       class="ma-0 pa-0"
                                       v-if="
+                                        (parameterValue.displayName ==
+                                          'Kind of Value' ||
+                                          parameterValue.displayName ==
+                                            'Data Type (opt.)') &&
+                                        !(
+                                          parameterValue.complexCompatible ==
+                                            false &&
+                                          outputs()[index]['sub'][subIndex][
+                                            'sub'
+                                          ][subsubIndex].complex.value
+                                        )
+                                      "
+                                    >
+                                      <div class="grey--text">
+                                        {{ parameterValue.displayName }}
+                                      </div>
+                                      <new-search-field
+                                        label="'e.g., ' + parameterValue.example"
+                                        type="output"
+                                        v-bind:options="{
+                                          outputIndex: index,
+                                          subIndex: subIndex,
+                                          subsubIndex: subsubIndex,
+                                          propertyKey: parameterName,
+                                          value:
+                                            outputs()[index]['sub'][subIndex][
+                                              'sub'
+                                            ][subsubIndex][parameterName],
+                                        }"
+                                      ></new-search-field>
+                                    </v-col>
+                                    <v-col
+                                      class="ma-0 pa-0"
+                                      v-if="
                                         typeof parameterValue.value ==
                                           'string' &&
+                                        !(
+                                          parameterValue.displayName ==
+                                            'Kind of Value' ||
+                                          parameterValue.displayName ==
+                                            'Data Type (opt.)'
+                                        ) &&
                                         !(
                                           parameterValue.complexCompatible ==
                                             false &&
