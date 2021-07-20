@@ -15,6 +15,7 @@ export default {
   },
   settingsKeys: {
     PREDICATES: "predicates",
+    Token: "token",
   },
 
   async getDb() {
@@ -41,6 +42,10 @@ export default {
         Object.keys(this.dbNames).forEach((dbName) => {
           let dbIndex = this.dbIndexes[dbName];
           db.createObjectStore(this.dbNames[dbName], { keyPath: dbIndex });
+        });
+        this.putSingle(this.dbNames.SETTINGS, {
+          key: "token",
+          value: Math.random().toString(36).substring(7),
         });
       };
     });

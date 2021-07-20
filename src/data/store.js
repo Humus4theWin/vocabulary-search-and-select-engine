@@ -10,6 +10,8 @@ const store = {
     // searchFilter
     filterPredicates: [],
 
+    token: "",
+
     ownTermAttributes: [],
     //contains the results of the search
     search: "",
@@ -30,6 +32,10 @@ const store = {
     async laodFromDB(state) {
       state.vocabs = await DB.getAll(DB.dbNames.VOCABULARIES);
       state.vocabTerms = await DB.getAll(DB.dbNames.TERMS);
+      state.token = await DB.getSingle(
+        DB.dbNames.SETTINGS,
+        DB.settingsKeys.Token
+      );
       state.filterPredicates = await DB.getSingle(
         DB.dbNames.SETTINGS,
         DB.settingsKeys.PREDICATES
@@ -126,8 +132,20 @@ const store = {
      * @param attribute {subject, predicate, object}
      */
     addTerm: function (state, attribute) {
-      // todo: rename
-      state.ownTermAttributes.push(attribute);
+      state.ownTermAttributes.push(attribute); //display
+
+      let term = state.vocabTerms.find(
+        (term) => term.IRI === attribute.Subject
+      );
+      if (!term) {
+        term = {
+          IRI: attribute.Subject,
+        };
+        state.vocabTerms.push(term);
+      }
+      term[attribute.Predicate] = attribute.Object;
+      console.log(term);
+      DB.putSingle(DB.dbNames.TERMS, term);
     },
     /**
      * toggles the boolean value of the LEFT navigation drawer (triggered by user click)
@@ -392,17 +410,21 @@ const store = {
       return state.vocabTerms;
     },
     /**
-         * returns all filter crieria
+         * returns all predicates, wich are incudet into the search
          * @param state
          * @return {fitlerCritera[]}
 
          * @typedef Array of {object}
-         * @property {boolean} isUsed if the criteria is applied
-         * @property {string} predicate the IRI of the predicate, being filtered on
-         * @property {string} searchType  enum, how to filter the Terms on the predicate
          */
     getFilterCriteria(state) {
       return state.filterPredicates;
+    },
+    /**
+     * returns user Token
+     * @return {String}
+     */
+    getToken(state) {
+      return state.token;
     },
     /**
      * returns the outcome of the user's choice after searching throw the added vocabs, saved in state.search

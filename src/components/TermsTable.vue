@@ -9,7 +9,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in $store.getters.terms" :key="item.Subject">
+        <tr v-for="item in $store.getters.terms" :key="item.id">
           <td>{{ item.Subject }}</td>
           <td>{{ item.Predicate }}</td>
           <td>{{ item.Object }}</td>

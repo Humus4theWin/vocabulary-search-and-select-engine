@@ -2,11 +2,20 @@
   <v-card>
     <v-card-text class="pa-6">
       <v-autocomplete
+        v-model="value"
+        :items="types"
+        auto-select-first
+        label="rdfs:type"
+        chips
+        clearable
+        deletable-chips
+        multiple
+      ></v-autocomplete>
+      <v-autocomplete
         v-model="select"
         :items="terms"
-        :search-input.sync="search"
         :filter="filterObjects"
-        item-text="label"
+        item-text="http://www.w3.org/2000/01/rdf-schema#label"
         item-value="IRI"
         cache-items
         class="mx-4"
@@ -15,6 +24,7 @@
         placeholder="Start typing to search"
         v-bind:label="searchLabel"
         return-object
+        @update:search-input="doIt"
         prepend-icon="mdi-magnify"
       ></v-autocomplete>
       <v-row class="mt-3">
@@ -84,32 +94,19 @@
 // https://gitlab.com/dBPMS-PROCEED/vocabulary-search-and-select-engine/-/blob/master/src/components/SearchField.vue
 export default {
   data: () => ({
-    terms: [],
-    search: null,
     select: null,
     selecteditem: null,
+    flag: false,
+    allTerms: [],
 
     //select
     value: [],
     showFilter: false,
   }),
   created() {
-    // this.terms = this.$store.getters.getVocabTerms;
+    this.allTerms = this.$store.getters.getVocabTerms;
   },
-  watch: {
-    search(val) {
-      //val !== undefined;
-      if (val.length < 2) {
-        console.log(val + val.length);
-        this.terms = [];
-        return;
-      } else {
-        this.terms = this.$store.getters.getVocabTerms;
-      } // &&
-      //val.length > 0 &&
-      // this.searchFunction(val);
-    },
-  },
+
   props: {
     searchLabel: {
       type: String,
@@ -117,6 +114,12 @@ export default {
     },
   },
   computed: {
+    terms() {
+      // is triggered once during render and if terms are changed
+
+      return this.allTerms;
+    },
+    // is triggered when the user choose an item
     fields() {
       return Object.keys(this.select);
     },
@@ -126,7 +129,40 @@ export default {
         .filter((type) => type !== undefined);
     },
   },
+  watch: {
+    select() {
+      console.log(this.select.IRI);
+      this.$emit("newSelect", this.select.IRI);
+    },
+  },
   methods: {
+    /**
+     * is triggerde whenever the user types a char in input of the autocomplete.
+     * @param event contains the search input
+     */
+    doIt(event) {
+      this.flag = true;
+      this.allTerms = this.filterAndSort(
+        this.$store.getters.getVocabTerms,
+        event
+      );
+    },
+    /**
+     * filters and sorts the array and returns an array
+     * @param array array to sort
+     * @param input input of user
+     * @returns an sorted and filtered array
+     */
+    filterAndSort(array, input) {
+      let nTerms = [];
+      nTerms = array;
+      //search and sort logic here
+      console.log(input);
+      nTerms = ["a", "b"];
+
+      return nTerms;
+    },
+
     filterObjects(item, queryText) {
       if (
         !(
@@ -158,7 +194,7 @@ export default {
      * When the search contains more then 2 char, the list of terms is added to the entries for search.
      * @param val contains the search input
      */
-    querySelections(val) {
+    /*querySelections(val) {
       // Simulated ajax query
       if (val.length < 2) {
         console.log("search value {{val + val.length}}");
@@ -167,8 +203,8 @@ export default {
       } else {
         this.terms = this.$store.getters.getVocabTerms;
       }
-    },
-    searchFunction(searchString, filterCriteria) {
+    },*/
+    /*searchFunction(searchString, filterCriteria) {
       if (filterCriteria === undefined)
         filterCriteria = this.$store.getters.getFilterCriteria;
       if (searchString === undefined) searchString = ""; //todo: get from store this.$store.getters....;
@@ -191,9 +227,9 @@ export default {
       console.log(terms);
       this.terms = terms;
       return terms;
-    },
+    },*/
 
-    getFilterFunction(searchType) {
+    /*getFilterFunction(searchType) {
       switch (searchType) {
         case "matches":
           return (a, b) => a === b;
@@ -204,7 +240,7 @@ export default {
         case "excludes":
           return (a, b) => !a.includes(b);
       }
-    },
+    },*/
   },
 };
 </script>
