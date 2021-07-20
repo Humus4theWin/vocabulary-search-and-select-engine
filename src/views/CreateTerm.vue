@@ -29,8 +29,8 @@
             <v-col cols="6">
               <v-select
                 :items="items"
+                item-text="abbr"
                 label="RDFS Predicate"
-                item-text="state"
                 v-model="select"
                 return-object
                 dense
@@ -91,18 +91,47 @@ export default {
     //contains subject
     title: "",
     items: [
-      { state: "undefined" },
-      { state: "rdfs:Class" },
-      { state: "rdf:Property" },
-      { state: "rdf:type" },
-      { state: "rdfs:subClassOf" },
-      { state: "rdfs:subPropertyOf" },
-      { state: "rdfs:domain" },
-      { state: "rdfs:range" },
+      { state: "_", abbr: "undefined" },
+      {
+        state: "http://www.w3.org/2000/01/rdf-schema#Class",
+        abbr: "rdfs:Class",
+      },
+      {
+        state: "https://www.w3.org/2000/01/rdf-schema#Property",
+        abbr: "rdf:Property",
+      },
+      {
+        state: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        abbr: "rdf:type",
+      },
+      {
+        state: "https://www.w3.org/2000/01/rdf-schema#subClassOf",
+        abbr: "rdfs:subClassOf",
+      },
+      {
+        state: "https://www.w3.org/2000/01/rdf-schema#subPropertyOf",
+        abbr: "rdfs:subPropertyOf",
+      },
+      {
+        state: "https://www.w3.org/2000/01/rdf-schema#domain",
+        abbr: "rdfs:domain",
+      },
+      {
+        state: "https://www.w3.org/2000/01/rdf-schema#range",
+        abbr: "rdfs:range",
+      },
+      {
+        state: "http://www.w3.org/2000/01/rdf-schema#label",
+        abbr: "rdfs:label",
+      },
+      {
+        state: "http://www.w3.org/2000/01/rdf-schema#comment",
+        abbr: "rdfs:comment",
+      },
     ],
     hint: "Your created IRI is: https://rdf.proceed-labs.org/",
     radios: null,
-    select: { state: undefined },
+    select: { state: undefined, abbr: "undefined" },
     description: "",
   }),
   computed: {

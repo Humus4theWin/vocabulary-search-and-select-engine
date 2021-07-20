@@ -126,8 +126,20 @@ const store = {
      * @param attribute {subject, predicate, object}
      */
     addTerm: function (state, attribute) {
-      // todo: rename
-      state.ownTermAttributes.push(attribute);
+      state.ownTermAttributes.push(attribute); //display
+
+      let term = state.vocabTerms.find(
+        (term) => term.IRI === attribute.Subject
+      );
+      if (!term) {
+        term = {
+          IRI: attribute.Subject,
+        };
+        state.vocabTerms.push(term);
+      }
+      term[attribute.Predicate] = attribute.Object;
+      console.log(term);
+      DB.putSingle(DB.dbNames.TERMS, term);
     },
     /**
      * toggles the boolean value of the LEFT navigation drawer (triggered by user click)
