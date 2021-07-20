@@ -181,6 +181,8 @@ export default {
         }
         this.$store.commit("addTerm", quad);
         this.select.state = "undefined";
+        this.select.abbr = "undefined";
+        this.title = "";
         this.description = "";
       } else {
         console.log("fehlerhafte Eingabe");
