@@ -15,7 +15,7 @@
         v-model="select"
         :items="terms"
         :filter="filterObjects"
-        item-text="label"
+        item-text="http://www.w3.org/2000/01/rdf-schema#label"
         item-value="IRI"
         cache-items
         class="mx-4"
@@ -95,6 +95,12 @@ export default {
       return this.$store.getters.getVocabTerms
         .map((term) => term["http://www.w3.org/1999/02/22-rdf-syntax-ns#type"])
         .filter((type) => type !== undefined);
+    },
+  },
+  watch: {
+    select() {
+      console.log(this.select.IRI);
+      this.$emit("newSelect", this.select.IRI);
     },
   },
   methods: {

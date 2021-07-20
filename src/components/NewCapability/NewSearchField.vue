@@ -4,7 +4,7 @@
     :items="terms"
     :search-input.sync="search"
     :filter="filterObjects"
-    item-text="label"
+    item-text="http://www.w3.org/2000/01/rdf-schema#label"
     item-value="IRI"
     cache-items
     class="mx-4"
@@ -43,24 +43,22 @@ export default {
     this.value = [];
     switch (this.type) {
       case "kindOfCapability": {
-        this.value.push("http://www.w3.org/2000/01/rdf-schema#Class");
+        this.value.push("Class");
         break;
       }
       //its an input or output
       case "input":
-      case "output": {
-        console.log(this.options.value.displayName);
-        if (this.options.value.displayName == "Kind of Value") {
-          this.value.push(
-            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property",
-            "http://www.w3.org/2002/07/owl#ObjectProperty"
-          );
-        }
-        if (this.options.value.displayName == "Data Type (opt.)") {
-          this.value.push("https://schema.org/DataType");
+      case "output":
+        {
+          console.log(this.options.value.displayName);
+          if (this.options.value.displayName == "Kind of Value") {
+            this.value.push("Property");
+          }
+          if (this.options.value.displayName == "Data Type (opt.)") {
+            this.value.push("DataType");
+          }
         }
         break;
-      }
     }
   },
   props: {
@@ -98,10 +96,10 @@ export default {
         !(
           this.value.length === 0 ||
           this.value
-            .map(
-              (typeVal) =>
-                item["http://www.w3.org/1999/02/22-rdf-syntax-ns#type"] ===
+            .map((typeVal) =>
+              item["http://www.w3.org/1999/02/22-rdf-syntax-ns#type"].includes(
                 typeVal
+              )
             )
             .some((e) => e)
         )

@@ -8,6 +8,14 @@
               <h1>CREATE A NEW TERM</h1>
             </v-col>
           </v-row>
+
+          <v-row>
+            <v-text-field
+              label="My Token"
+              v-model="token"
+              disabled
+            ></v-text-field>
+          </v-row>
           <v-row>
             <h3>Subject:</h3>
           </v-row>
@@ -29,8 +37,8 @@
             <v-col cols="6">
               <v-select
                 :items="items"
+                item-text="abbr"
                 label="RDFS Predicate"
-                item-text="state"
                 v-model="select"
                 return-object
                 dense
@@ -48,7 +56,7 @@
           </v-row>
           <v-row class="pl-0">
             <v-col v-if="radios === 'IRI'" cols="12">
-              <SearchField />
+              <SearchField @newSelect="handleIRIChnage" />
             </v-col>
             <v-col v-else cols="9">
               <v-textarea
@@ -61,7 +69,7 @@
             </v-col>
           </v-row>
           <v-row class="pt-3">
-            <v-btn v-on:click="addTerm">add Term</v-btn>
+            <v-btn v-on:click="addTerm">add property</v-btn>
           </v-row>
         </v-container>
       </v-col>
@@ -91,19 +99,49 @@ export default {
     //contains subject
     title: "",
     items: [
-      { state: "undefined" },
-      { state: "rdfs:Class" },
-      { state: "rdf:Property" },
-      { state: "rdf:type" },
-      { state: "rdfs:subClassOf" },
-      { state: "rdfs:subPropertyOf" },
-      { state: "rdfs:domain" },
-      { state: "rdfs:range" },
+      { state: "_", abbr: "undefined" },
+      {
+        state: "http://www.w3.org/2000/01/rdf-schema#Class",
+        abbr: "rdfs:Class",
+      },
+      {
+        state: "https://www.w3.org/2000/01/rdf-schema#Property",
+        abbr: "rdf:Property",
+      },
+      {
+        state: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        abbr: "rdf:type",
+      },
+      {
+        state: "https://www.w3.org/2000/01/rdf-schema#subClassOf",
+        abbr: "rdfs:subClassOf",
+      },
+      {
+        state: "https://www.w3.org/2000/01/rdf-schema#subPropertyOf",
+        abbr: "rdfs:subPropertyOf",
+      },
+      {
+        state: "https://www.w3.org/2000/01/rdf-schema#domain",
+        abbr: "rdfs:domain",
+      },
+      {
+        state: "https://www.w3.org/2000/01/rdf-schema#range",
+        abbr: "rdfs:range",
+      },
+      {
+        state: "http://www.w3.org/2000/01/rdf-schema#label",
+        abbr: "rdfs:label",
+      },
+      {
+        state: "http://www.w3.org/2000/01/rdf-schema#comment",
+        abbr: "rdfs:comment",
+      },
     ],
     hint: "Your created IRI is: https://rdf.proceed-labs.org/",
     radios: null,
-    select: { state: undefined },
+    select: { state: undefined, abbr: "undefined" },
     description: "",
+    selectedIRI: "",
   }),
   computed: {
     /**
@@ -113,14 +151,23 @@ export default {
     changeHint() {
       return "Your created IRI is: https://rdf.proceed-labs.org/" + this.title;
     },
+    token() {
+      return this.$store.getters.getToken;
+    },
   },
   methods: {
+    handleIRIChnage(newVal) {
+      console.log("handleIRIChnage: " + newVal);
+      this.selectedIRI = newVal;
+    },
+
     /**
      * adds the new term as quad ( with object or literal) to the existing user terms in the store
      */
     addTerm() {
       let quad = {
-        Subject: "https://rdf.proceed-labs.org/" + this.title,
+        Subject:
+          "https://rdf.proceed-labs.org/" + this.token + "/" + this.title,
         Predicate: this.select.state,
         Object: "",
       };
@@ -131,8 +178,10 @@ export default {
       ) {
         console.log(this.title + this.select.state);
         if (this.radios === "IRI") {
-          console.log("IRI" + this.$store.getters.search);
-          quad.Object = this.$store.getters.search;
+          //console.log("IRI" + this.$store.getters.search);
+          //quad.Object = this.$store.getters.search;
+          console.log("IRI" + this.selectedIRI);
+          quad.Object = this.selectedIRI;
         } else {
           console.log(this.description);
           quad.Object = this.description;
