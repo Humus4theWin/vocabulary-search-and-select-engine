@@ -56,6 +56,7 @@ export default {
         {
           if (this.options.value.displayName == "Kind of Value") {
             this.value.push("Property");
+            this.value.push("Class");
           }
           if (this.options.value.displayName == "Data Type (opt.)") {
             this.value.push("DataType");
