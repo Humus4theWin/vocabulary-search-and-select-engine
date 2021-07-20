@@ -8,6 +8,10 @@
               <h1>CREATE A NEW TERM</h1>
             </v-col>
           </v-row>
+
+          <v-row>
+            <v-text-field label="My Token" v-model="token"></v-text-field>
+          </v-row>
           <v-row>
             <h3>Subject:</h3>
           </v-row>
@@ -61,7 +65,7 @@
             </v-col>
           </v-row>
           <v-row class="pt-3">
-            <v-btn v-on:click="addTerm">add Term</v-btn>
+            <v-btn v-on:click="addTerm">add property</v-btn>
           </v-row>
         </v-container>
       </v-col>
@@ -142,6 +146,9 @@ export default {
     changeHint() {
       return "Your created IRI is: https://rdf.proceed-labs.org/" + this.title;
     },
+    token() {
+      return this.$store.getters.getToken;
+    },
   },
   methods: {
     /**
@@ -149,7 +156,8 @@ export default {
      */
     addTerm() {
       let quad = {
-        Subject: "https://rdf.proceed-labs.org/" + this.title,
+        Subject:
+          "https://rdf.proceed-labs.org/" + this.token + "/" + this.title,
         Predicate: this.select.state,
         Object: "",
       };
