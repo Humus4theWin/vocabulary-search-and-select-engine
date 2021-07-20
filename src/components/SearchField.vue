@@ -91,6 +91,12 @@ export default {
         .filter((type) => type !== undefined);
     },
   },
+  watch: {
+    select() {
+      console.log(this.select.IRI);
+      this.$emit("newSelect", this.select.IRI);
+    },
+  },
   methods: {
     filterObjects(item, queryText) {
       if (

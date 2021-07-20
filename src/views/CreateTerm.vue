@@ -56,7 +56,7 @@
           </v-row>
           <v-row class="pl-0">
             <v-col v-if="radios === 'IRI'" cols="12">
-              <SearchField />
+              <SearchField @newSelect="handleIRIChnage" />
             </v-col>
             <v-col v-else cols="9">
               <v-textarea
@@ -141,6 +141,7 @@ export default {
     radios: null,
     select: { state: undefined, abbr: "undefined" },
     description: "",
+    selectedIRI: "",
   }),
   computed: {
     /**
@@ -155,6 +156,11 @@ export default {
     },
   },
   methods: {
+    handleIRIChnage(newVal) {
+      console.log("handleIRIChnage: " + newVal);
+      this.selectedIRI = newVal;
+    },
+
     /**
      * adds the new term as quad ( with object or literal) to the existing user terms in the store
      */
@@ -172,8 +178,10 @@ export default {
       ) {
         console.log(this.title + this.select.state);
         if (this.radios === "IRI") {
-          console.log("IRI" + this.$store.getters.search);
-          quad.Object = this.$store.getters.search;
+          //console.log("IRI" + this.$store.getters.search);
+          //quad.Object = this.$store.getters.search;
+          console.log("IRI" + this.selectedIRI);
+          quad.Object = this.selectedIRI;
         } else {
           console.log(this.description);
           quad.Object = this.description;
