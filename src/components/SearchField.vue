@@ -2,16 +2,6 @@
   <v-card>
     <v-card-text class="pa-6">
       <v-autocomplete
-        v-model="value"
-        :items="types"
-        auto-select-first
-        label="rdfs:type"
-        chips
-        clearable
-        deletable-chips
-        multiple
-      ></v-autocomplete>
-      <v-autocomplete
         v-model="select"
         :items="terms"
         :filter="filterObjects"
