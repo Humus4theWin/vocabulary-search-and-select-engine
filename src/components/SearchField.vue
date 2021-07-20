@@ -24,6 +24,7 @@
         placeholder="Start typing to search"
         v-bind:label="searchLabel"
         return-object
+        @update:search-input="doIt"
       ></v-autocomplete>
     </v-card-text>
     <v-expand-transition>
@@ -64,12 +65,14 @@ export default {
   data: () => ({
     select: null,
     selecteditem: null,
+    flag: false,
+    allTerms: [],
 
     //select
     value: [],
   }),
   created() {
-    // this.terms = this.$store.getters.getVocabTerms;
+    this.allTerms = this.$store.getters.getVocabTerms;
   },
 
   props: {
@@ -80,8 +83,11 @@ export default {
   },
   computed: {
     terms() {
-      return this.$store.getters.getVocabTerms;
+      // is triggered once during render and if terms are changed
+
+      return this.allTerms;
     },
+    // is triggered when the user choose an item
     fields() {
       return Object.keys(this.select);
     },
@@ -92,6 +98,33 @@ export default {
     },
   },
   methods: {
+    /**
+     * is triggerde whenever the user types a char in input of the autocomplete.
+     * @param event contains the search input
+     */
+    doIt(event) {
+      this.flag = true;
+      this.allTerms = this.filterAndSort(
+        this.$store.getters.getVocabTerms,
+        event
+      );
+    },
+    /**
+     * filters and sorts the array and returns an array
+     * @param array array to sort
+     * @param input input of user
+     * @returns an sorted and filtered array
+     */
+    filterAndSort(array, input) {
+      let nTerms = [];
+      nTerms = array;
+      //search and sort logic here
+      console.log(input);
+      nTerms = ["a", "b"];
+
+      return nTerms;
+    },
+
     filterObjects(item, queryText) {
       if (
         !(
@@ -123,7 +156,7 @@ export default {
      * When the search contains more then 2 char, the list of terms is added to the entries for search.
      * @param val contains the search input
      */
-    querySelections(val) {
+    /*querySelections(val) {
       // Simulated ajax query
       if (val.length < 2) {
         console.log("search value {{val + val.length}}");
@@ -132,8 +165,8 @@ export default {
       } else {
         this.terms = this.$store.getters.getVocabTerms;
       }
-    },
-    searchFunction(searchString, filterCriteria) {
+    },*/
+    /*searchFunction(searchString, filterCriteria) {
       if (filterCriteria === undefined)
         filterCriteria = this.$store.getters.getFilterCriteria;
       if (searchString === undefined) searchString = ""; //todo: get from store this.$store.getters....;
@@ -156,9 +189,9 @@ export default {
       console.log(terms);
       this.terms = terms;
       return terms;
-    },
+    },*/
 
-    getFilterFunction(searchType) {
+    /*getFilterFunction(searchType) {
       switch (searchType) {
         case "matches":
           return (a, b) => a === b;
@@ -169,7 +202,7 @@ export default {
         case "excludes":
           return (a, b) => !a.includes(b);
       }
-    },
+    },*/
   },
 };
 </script>
