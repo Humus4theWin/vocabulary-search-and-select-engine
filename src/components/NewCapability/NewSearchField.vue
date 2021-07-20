@@ -4,7 +4,7 @@
     :items="terms"
     :search-input.sync="search"
     :filter="filterObjects"
-    item-text="label"
+    item-text="http://www.w3.org/2000/01/rdf-schema#label"
     item-value="IRI"
     cache-items
     class="mx-4"

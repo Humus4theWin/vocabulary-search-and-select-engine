@@ -10,7 +10,11 @@
           </v-row>
 
           <v-row>
-            <v-text-field label="My Token" v-model="token"></v-text-field>
+            <v-text-field
+              label="My Token"
+              v-model="token"
+              disabled
+            ></v-text-field>
           </v-row>
           <v-row>
             <h3>Subject:</h3>
