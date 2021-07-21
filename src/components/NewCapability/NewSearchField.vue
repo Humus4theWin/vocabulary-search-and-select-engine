@@ -3,7 +3,6 @@
     v-model="select"
     :items="terms"
     :filter="filterObjects"
-    :search-input.sync="search"
     item-text="http://www.w3.org/2000/01/rdf-schema#label"
     item-value="IRI"
     class="mx-4"
@@ -97,14 +96,11 @@ export default {
      * @param event contains the search input
      */
     doIt(event) {
-      console.log("did something");
       this.flag = true;
       this.allTerms = this.filterAndSort(
         this.$store.getters.getVocabTerms,
         event
       );
-      console.log("terms:");
-      console.log(this.terms);
     },
     /**
      * filters and sorts the array and returns an array
@@ -114,16 +110,19 @@ export default {
      */
     filterAndSort(array, input) {
       //filter correct types
-      console.log(array);
+
       let filteredTerms;
       if (!input || input.length == 0) {
         return []; //array;
       } else if (this.value.length > 0) {
         filteredTerms = array.filter((term) =>
-          this.value.some((type) =>
-            term["http://www.w3.org/1999/02/22-rdf-syntax-ns#type"].includes(
-              type
-            )
+          this.value.some(
+            (type) =>
+              term["http://www.w3.org/1999/02/22-rdf-syntax-ns#type"] ===
+                undefined ||
+              term["http://www.w3.org/1999/02/22-rdf-syntax-ns#type"].search(
+                new RegExp(type, "i")
+              ) !== -1
           )
         );
       } else {
@@ -135,7 +134,7 @@ export default {
           return filteredTerms.filter(
             (term) =>
               term[predicate.predicate] !== undefined &&
-              term[predicate.predicate].includes(input)
+              term[predicate.predicate].search(new RegExp(input, "i")) !== -1
           );
         }
       );

@@ -166,7 +166,7 @@ export default {
           return filteredTerms.filter(
             (term) =>
               term[predicate.predicate] !== undefined &&
-              term[predicate.predicate].includes(input)
+              term[predicate.predicate].search(new RegExp(input, "i")) !== -1
           );
         }
       );
