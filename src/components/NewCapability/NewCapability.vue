@@ -175,7 +175,6 @@ export default {
       };
 
       // For now, show the generated JSON as colorful HTML in a new tab for debugging
-
       var win = window.open("", "_blank");
       win.document.body.innerHTML =
         "<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/pretty-print-json@0.0/dist/pretty-print-json.css>" +
@@ -183,12 +182,8 @@ export default {
         prettyPrintJson.toHtml(outputTemplate) +
         "</pre>";
 
-      /*let jsonOutputTest = window.open(
-        "data:text/json," +
-          encodeURIComponent(JSON.stringify(outputTemplate, null, 4)),
-        "_blank"
-      );
-      jsonOutputTest.focus();*/
+      // This is the actual JSON file export function
+      //this.downloadJSONFile(JSON.stringify(outputTemplate));
     },
     ioToJson(io, isInput) {
       let parameters = [];
@@ -370,6 +365,27 @@ export default {
       };
 
       return mapping;
+    },
+    downloadJSONFile: function (json) {
+      const blob = new Blob([json], { type: "text/json" });
+      const aElement = document.createElement("a");
+      aElement.href = window.URL.createObjectURL(blob);
+      aElement.download =
+        (this.kindOfCapability().value || "UnnamedCapability") + ".json";
+      aElement.dataset.downloadurl = [
+        "text/json",
+        (this.kindOfCapability().value || "UnnamedCapability") + ".json",
+        aElement.href,
+      ].join(":");
+
+      const evt = new MouseEvent("click", {
+        view: window,
+        bubbles: true,
+        cancelable: true,
+      });
+
+      aElement.dispatchEvent(evt);
+      aElement.remove();
     },
     /**
      *prints input of searchfield over given event
