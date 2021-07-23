@@ -2,7 +2,7 @@
   <v-container fill-height class="mb-16" style="background: white">
     <v-row>
       <v-col>
-        <h1>Vocabularies</h1>
+        <h1>Manage Vocabularies</h1>
       </v-col>
     </v-row>
     <v-data-table

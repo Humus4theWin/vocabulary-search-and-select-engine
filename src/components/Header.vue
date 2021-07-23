@@ -24,26 +24,28 @@
       </v-row>
 
       <v-card class="actionBar" color="grey lighten-4" flat height="0px" tile>
-        <v-toolbar extension-height="100" color="white">
-          <v-app-bar-nav-icon
-            @click="toggleLeftDrawerState()"
-          ></v-app-bar-nav-icon>
-
-          <!--<v-toolbar-title>Capabilities</v-toolbar-title>-->
-
+        <v-toolbar
+          extension-height="100"
+          color="white"
+          class="rounded-action-bar"
+        >
           <v-spacer></v-spacer>
 
-          <!--<v-btn icon v-if="!rightDrawer" @click="toggleRightDrawerState()"
-            ><v-icon>mdi-arrow-left</v-icon>
-          </v-btn>
-          <v-btn icon v-else @click="toggleRightDrawerState()"
-            ><v-icon>mdi-arrow-right</v-icon>
-          </v-btn>-->
+          <v-app-bar-nav-icon
+            @click="toggleRightDrawerState()"
+            class="pr-5"
+          ></v-app-bar-nav-icon>
         </v-toolbar>
       </v-card>
     </v-col>
   </v-app-bar>
 </template>
+
+<style lang="scss">
+.rounded-action-bar {
+  border-radius: 10px !important;
+}
+</style>
 
 <script>
 import { mapGetters, mapMutations } from "vuex";
@@ -69,7 +71,6 @@ export default {
 
   methods: {
     ...mapMutations({
-      toggleLeftDrawerState: "toggleLeftDrawerState", // map `this.toggleLeftDrawerState()` to `this.$store.dispatch('toggleLeftDrawerState')`
       toggleRightDrawerState: "toggleRightDrawerState", // map `this.toggleRightDrawerState()` to `this.$store.dispatch('toggleRightDrawerState')`
     }),
   },

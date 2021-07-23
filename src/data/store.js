@@ -15,7 +15,6 @@ const store = {
     ownTermAttributes: [],
     //contains the results of the search
     search: "",
-    leftDrawerState: false,
     rightDrawerState: false,
     //contains the properties, such as kindOfCapability and inputs/outputs of new capabilities
     newCapability: {
@@ -148,15 +147,8 @@ const store = {
       DB.putSingle(DB.dbNames.TERMS, term);
     },
     /**
-     * toggles the boolean value of the LEFT navigation drawer (triggered by user click)
+     * toggles the boolean value of the RIGHT navigation drawer (triggered by user click)
      * @param state 1current state
-     */
-    toggleLeftDrawerState(state) {
-      state.leftDrawerState = !state.leftDrawerState;
-    },
-    /**
-     * toggles the boolean value of the RIGHT capability description drawer (triggered by user click)
-     * @param state current state
      */
     toggleRightDrawerState(state) {
       state.rightDrawerState = !state.rightDrawerState;
@@ -370,13 +362,6 @@ const store = {
      */
     quads: (state) => {
       return state.vocabs.flatMap((vocab) => vocab.quads);
-    },
-    /**
-     * @param state
-     * @return {boolean}
-     */
-    leftDrawerState(state) {
-      return state.leftDrawerState;
     },
     /**
      * @param state

@@ -1,10 +1,10 @@
 <template>
-  <v-container fill-height class="mb-16 rounded-xl" style="background: white">
+  <v-container fill-height class="mb-16 rounded-lg" style="background: white">
     <v-layout justify-center>
       <v-container class="pa-6" fill-width>
         <v-row>
           <v-col cols="12" class="pl-0">
-            <h1>Create a new Term</h1>
+            <h1>Create a New Term</h1>
           </v-col>
         </v-row>
         <v-row>

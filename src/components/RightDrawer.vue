@@ -1,28 +1,59 @@
 <template>
-  <v-col class="newCapabilityColumn">
-    <new-capability></new-capability>
-  </v-col>
+  <v-navigation-drawer v-model="drawerState" fixed temporary right>
+    <v-list-item>
+      <v-list-item-content>
+        <v-btn
+          class="primary"
+          :to="{ name: 'Home' }"
+          depressed
+          min-height="80"
+          max-height="85"
+          width="80"
+        >
+          <span>Search</span>
+          <v-icon class="pa-2">mdi-magnify</v-icon>
+        </v-btn>
+      </v-list-item-content>
+    </v-list-item>
+
+    <v-list-item>
+      <v-list-item-content>
+        <v-btn
+          class="primary"
+          :to="{ name: 'Vocabularies' }"
+          depressed
+          min-height="80"
+          max-height="85"
+          width="80"
+        >
+          <span>Vocabularies</span>
+          <v-icon class="pa-2">mdi-book-open-blank-variant</v-icon>
+        </v-btn>
+      </v-list-item-content>
+    </v-list-item>
+
+    <v-list-item>
+      <v-list-item-content>
+        <v-btn
+          class="primary"
+          :to="{ name: 'CreateTerm' }"
+          depressed
+          min-height="80"
+          max-height="85"
+          width="80"
+        >
+          <span>Create Term</span>
+          <v-icon class="pa-2">mdi-pencil</v-icon>
+        </v-btn>
+      </v-list-item-content>
+    </v-list-item>
+  </v-navigation-drawer>
 </template>
-
-<style lang="scss">
-.newCapabilityColumn {
-  background-color: #343c4a;
-  transition: all 0.5s;
-  transition-timing-function: ease-out;
-  height: 100%;
-}
-</style>
-
 <script>
 import { mapGetters, mapMutations } from "vuex";
-import NewCapability from "./NewCapability/NewCapability.vue";
 
 export default {
   name: "RightDrawer",
-  components: {
-    NewCapability,
-  },
-
   computed: {
     ...mapGetters({
       drawer: "rightDrawerState", // map `this.rightDrawerState()` to `this.$store.dispatch('rightDrawerState')`

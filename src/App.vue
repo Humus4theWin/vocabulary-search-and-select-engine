@@ -5,11 +5,15 @@
       <template slot="paneR">
         <v-col class="rightView">
           <router-view />
-          <left-drawer />
+          <right-drawer />
         </v-col>
       </template>
       <template slot="paneL">
-        <v-col class="leftView"><right-drawer /></v-col>
+        <v-col class="leftView"
+          ><v-col class="newCapabilityColumn">
+            <new-capability></new-capability>
+          </v-col>
+        </v-col>
       </template>
     </split-pane>
     <Navigation />
@@ -47,6 +51,9 @@ html {
 .leftView {
   height: calc(100% - 200px);
 }
+.rightView {
+  padding: 20px 30px;
+}
 
 .actionBar {
   margin-top: 25px;
@@ -81,10 +88,10 @@ html {
 import splitPane from "vue-splitpane";
 import Header from "@/components/Header";
 import Navigation from "@/components/Navigation";
-import LeftDrawer from "./components/LeftDrawer.vue";
 import RightDrawer from "./components/RightDrawer.vue";
+import NewCapability from "./components/NewCapability/NewCapability.vue";
 
 export default {
-  components: { Navigation, Header, LeftDrawer, RightDrawer, splitPane },
+  components: { Navigation, Header, RightDrawer, NewCapability, splitPane },
 };
 </script>
