@@ -20,7 +20,14 @@
     <v-col class="pa-8">
       <v-row align="center" justify="center">
         <v-card class="ma-3 capabilityCard">
-          <v-app-bar flat color="#1d2a36">
+          <v-app-bar
+            flat
+            :color="
+              missingFields().indexOf('kindOfCapability') !== -1
+                ? '#8b0000'
+                : '#1d2a36'
+            "
+          >
             <v-toolbar-title
               class="text-h6 white--text pl-2"
               style="font-weight: 400"
@@ -38,7 +45,14 @@
         </v-card>
 
         <v-card class="ma-3 capabilityCard">
-          <v-app-bar flat color="#1d2a36">
+          <v-app-bar
+            flat
+            :color="
+              missingFields().indexOf('functionName') !== -1
+                ? '#8b0000'
+                : '#1d2a36'
+            "
+          >
             <v-toolbar-title
               class="text-h6 white--text pl-2"
               style="font-weight: 400"
@@ -51,7 +65,10 @@
               label='e.g., "takePhoto()"'
               required
               v-model="functionName().value"
-              @input="changeFunctionName(functionName().value)"
+              @input="
+                changeFunctionName(functionName().value);
+                validateCapability();
+              "
             ></v-text-field>
           </v-card-text>
         </v-card>
@@ -60,12 +77,20 @@
         <new-capability-outputs ref="capOutputs"></new-capability-outputs>
 
         <v-btn
-          class="mt-5"
+          :class="
+            missingFields().length == 0
+              ? 'mt-5 black--text'
+              : 'mt-5 white--text'
+          "
           x-large
-          color="white"
+          :color="missingFields().length == 0 ? 'white' : '#8b0000'"
           style="min-width: 100%"
           @click="generateJSON()"
-          >Generate JSON-LD File</v-btn
+          >{{
+            missingFields().length == 0
+              ? "Generate JSON-LD File"
+              : "Generate JSON-LD File (missing fields)"
+          }}</v-btn
         >
       </v-row>
     </v-col>
@@ -84,7 +109,6 @@
 
 <script>
 import { mapGetters, mapMutations } from "vuex";
-//import SearchField from "@/components/SearchField.vue";
 import NewCapabilityInputs from "./NewCapabilityInputs.vue";
 
 // eslint-disable-next-line no-unused-vars
@@ -95,31 +119,29 @@ import NewSearchField from "./NewSearchField.vue";
 export default {
   name: "NewCapability",
   components: {
-    //SearchField,
     NewCapabilityInputs,
     NewCapabilityOutputs,
     NewSearchField,
   },
-
-  computed: {},
   methods: {
     ...mapGetters({
-      kindOfCapability: "newCapKindOfCapability", // map `this.newCapKindOfCapability()` to `this.$store.dispatch('newCapKindOfCapability')`
-      fileName: "newCapFileName", // map `this.newCapFileName()` to `this.$store.dispatch('newCapFileName')`
-      functionName: "newCapFunctionName", // map `this.newCapFunctionName()` to `this.$store.dispatch('newCapFunctionName')`
-      inputs: "newCapInputs", // map `this.newCapInputs()` to `this.$store.dispatch('newCapInputs')`
-      outputs: "newCapOutputs", // map `this.newCapOutputs()` to `this.$store.dispatch('newCapOutputs')`
+      kindOfCapability: "newCapKindOfCapability", // map `this.kindOfCapability()` to `this.$store.dispatch('newCapKindOfCapability')`
+      fileName: "newCapFileName", // map `this.fileName()` to `this.$store.dispatch('newCapFileName')`
+      functionName: "newCapFunctionName", // map `this.functionName()` to `this.$store.dispatch('newCapFunctionName')`
+      inputs: "newCapInputs", // map `this.inputs()` to `this.$store.dispatch('newCapInputs')`
+      outputs: "newCapOutputs", // map `this.outputs()` to `this.$store.dispatch('newCapOutputs')`
+      missingFields: "missingCapabilityFields", // map `this.missingFields()` to `this.$store.dispatch('missingCapabilityFields')`
     }),
     ...mapMutations({
-      changeKindOfCapability: "newCapChangeKindOfCapability", // map `this.newCapChangeKindOfCapability()` to `this.$store.dispatch('newCapChangeKindOfCapability')`
-      changeFileName: "newCapChangeFileName", // map `this.newCapChangeFileName()` to `this.$store.dispatch('newCapChangeFileName')`
-      changeFunctionName: "newCapChangeFunctionName", // map `this.newCapChangeFunctionName()` to `this.$store.dispatch('newCapChangeFunctionName')`
-      clearCapability: "newCapClear", // map `this.newCapClear()` to `this.$store.dispatch('newCapClear')`
+      changeKindOfCapability: "newCapChangeKindOfCapability", // map `this.changeKindOfCapability()` to `this.$store.dispatch('newCapChangeKindOfCapability')`
+      changeFileName: "newCapChangeFileName", // map `this.changeFileName()` to `this.$store.dispatch('newCapChangeFileName')`
+      changeFunctionName: "newCapChangeFunctionName", // map `this.changeFunctionName()` to `this.$store.dispatch('newCapChangeFunctionName')`
+      clearCapability: "newCapClear", // map `this.clearCapability()` to `this.$store.dispatch('newCapClear')`
+      replaceMissingFields: "replaceMissingCapabilityFields", // map `this.replaceMissingFields()` to `this.$store.dispatch('replaceMissingCapabilityFields')`
     }),
     generateJSON() {
       let additionalVocabularies; // TO DO: - add additional Vocabularies
 
-      // eslint-disable-next-line no-unused-vars
       let outputTemplate = {
         "@context": {
           schema: "https://schema.org/",
@@ -174,16 +196,18 @@ export default {
         ],
       };
 
-      // For now, show the generated JSON as colorful HTML in a new tab for debugging
-      var win = window.open("", "_blank");
-      win.document.body.innerHTML =
-        "<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/pretty-print-json@0.0/dist/pretty-print-json.css>" +
-        "<pre>" +
-        prettyPrintJson.toHtml(outputTemplate) +
-        "</pre>";
+      if (this.validateCapability().length == 0) {
+        // For now, show the generated JSON as colorful HTML in a new tab for debugging
+        var win = window.open("", "_blank");
+        win.document.body.innerHTML =
+          "<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/pretty-print-json@0.0/dist/pretty-print-json.css>" +
+          "<pre>" +
+          prettyPrintJson.toHtml(outputTemplate) +
+          "</pre>";
 
-      // This is the actual JSON file export function
-      //this.downloadJSONFile(JSON.stringify(outputTemplate));
+        // This is the actual JSON file export function
+        //this.downloadJSONFile(JSON.stringify(outputTemplate));
+      }
     },
     ioToJson(io, isInput) {
       let parameters = [];
@@ -232,11 +256,17 @@ export default {
             ...(io[i].description.value
               ? { "schema:description": io[i].description.value }
               : {}),
+            ...(io[i].defaultValue.value
+              ? { "schema:defaultValue": io[i].defaultValue.value }
+              : {}),
             ...(io[i].minValue.value
               ? { "schema:minValue": io[i].minValue.value }
               : {}),
             ...(io[i].maxValue.value
               ? { "schema:maxValue": io[i].maxValue.value }
+              : {}),
+            ...(io[i].encoding.value
+              ? { "schema:encodingFormat": io[i].encoding.value }
               : {}),
             ...(isInput ? { "fno:required": io[i].required.value } : {}),
           };
@@ -366,6 +396,124 @@ export default {
 
       return mapping;
     },
+    validateCapability() {
+      let localMissingFields = [];
+      if (
+        this.kindOfCapability().value == null ||
+        this.kindOfCapability().value == undefined ||
+        this.kindOfCapability().value == ""
+      ) {
+        localMissingFields.push("kindOfCapability");
+      }
+
+      if (
+        this.functionName().value == null ||
+        this.functionName().value == undefined ||
+        this.functionName().value == ""
+      ) {
+        localMissingFields.push("functionName");
+      }
+
+      // Check Inputs
+      for (let i = 0; i < this.inputs().length; i++) {
+        // eslint-disable-next-line no-unused-vars
+        for (const [key, value] of Object.entries(this.inputs()[i])) {
+          if (
+            value.optional === false &&
+            (value.value === undefined ||
+              value.value === null ||
+              value.value === "")
+          ) {
+            localMissingFields.push(this.inputs()[i].id);
+          }
+        }
+
+        for (let j = 0; j < this.inputs()[i]["sub"].length; j++) {
+          // eslint-disable-next-line no-unused-vars
+          for (const [key, value] of Object.entries(
+            this.inputs()[i]["sub"][j]
+          )) {
+            if (
+              value.optional === false &&
+              (value.value === undefined ||
+                value.value === null ||
+                value.value === "")
+            ) {
+              localMissingFields.push(this.inputs()[i]["sub"][j].id);
+            }
+          }
+
+          for (let k = 0; k < this.inputs()[i]["sub"][j]["sub"].length; k++) {
+            // eslint-disable-next-line no-unused-vars
+            for (const [key, value] of Object.entries(
+              this.inputs()[i]["sub"][j]["sub"][k]
+            )) {
+              if (
+                value.optional === false &&
+                (value.value === undefined ||
+                  value.value === null ||
+                  value.value === "")
+              ) {
+                localMissingFields.push(
+                  this.inputs()[i]["sub"][j]["sub"][k].id
+                );
+              }
+            }
+          }
+        }
+      }
+
+      // Check Outputs
+      for (let i = 0; i < this.outputs().length; i++) {
+        // eslint-disable-next-line no-unused-vars
+        for (const [key, value] of Object.entries(this.outputs()[i])) {
+          if (
+            value.optional === false &&
+            (value.value === undefined ||
+              value.value === null ||
+              value.value === "")
+          ) {
+            localMissingFields.push(this.outputs()[i].id);
+          }
+        }
+
+        for (let j = 0; j < this.outputs()[i]["sub"].length; j++) {
+          // eslint-disable-next-line no-unused-vars
+          for (const [key, value] of Object.entries(
+            this.outputs()[i]["sub"][j]
+          )) {
+            if (
+              value.optional === false &&
+              (value.value === undefined ||
+                value.value === null ||
+                value.value === "")
+            ) {
+              localMissingFields.push(this.outputs()[i].id);
+            }
+          }
+
+          for (let k = 0; k < this.outputs()[i]["sub"][j]["sub"].length; k++) {
+            // eslint-disable-next-line no-unused-vars
+            for (const [key, value] of Object.entries(
+              this.outputs()[i]["sub"][j]["sub"][k]
+            )) {
+              if (
+                value.optional === false &&
+                (value.value === undefined ||
+                  value.value === null ||
+                  value.value === "")
+              ) {
+                localMissingFields.push(this.outputs()[i].id);
+              }
+            }
+          }
+        }
+      }
+
+      console.log(localMissingFields);
+      this.replaceMissingFields(localMissingFields);
+      return localMissingFields;
+    },
     downloadJSONFile: function (json) {
       const blob = new Blob([json], { type: "text/json" });
       const aElement = document.createElement("a");
@@ -397,6 +545,7 @@ export default {
         //an dieser Stelle in den Store schreiben bitte ;)
         this.changeKindOfCapability(eventInput.IRI);
       }
+      this.validateCapability();
     },
   },
 };

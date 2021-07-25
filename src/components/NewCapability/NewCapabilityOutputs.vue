@@ -84,7 +84,13 @@
               <v-card-text class="text-left">
                 <v-expansion-panels class="pt-2">
                   <v-expansion-panel>
-                    <v-expansion-panel-header>
+                    <v-expansion-panel-header
+                      :class="
+                        missingFields().indexOf(outputs()[index].id) !== -1
+                          ? 'red--text'
+                          : 'black--text'
+                      "
+                    >
                       Properties
                     </v-expansion-panel-header>
                     <v-expansion-panel-content>
@@ -96,7 +102,7 @@
                         :key="parameterName"
                       >
                         <v-col
-                          class="ma-0 pa-0"
+                          class="ma-0 pa-0 pb-5"
                           v-if="
                             (parameterValue.displayName == 'Kind of Value' ||
                               parameterValue.displayName ==
@@ -107,7 +113,16 @@
                             )
                           "
                         >
-                          <div class="grey--text">
+                          <div
+                            :class="
+                              parameterValue.optional === false &&
+                              (parameterValue.value === undefined ||
+                                parameterValue.value === null ||
+                                parameterValue.value === '')
+                                ? 'red--text'
+                                : 'grey--text'
+                            "
+                          >
                             {{ parameterValue.displayName }}
                           </div>
                           <new-search-field
@@ -136,7 +151,16 @@
                             )
                           "
                         >
-                          <div class="grey--text">
+                          <div
+                            :class="
+                              parameterValue.optional === false &&
+                              (parameterValue.value === undefined ||
+                                parameterValue.value === null ||
+                                parameterValue.value === '')
+                                ? 'red--text'
+                                : 'grey--text'
+                            "
+                          >
                             {{ parameterValue.displayName }}
                           </div>
                           <v-text-field
@@ -156,7 +180,7 @@
                         </v-col>
 
                         <v-col
-                          class="ma-0 pa-0"
+                          class="ma-0 pa-0 pb-2"
                           v-if="
                             typeof parameterValue.value == 'boolean' &&
                             !(
@@ -166,7 +190,16 @@
                           "
                         >
                           <v-row align="center" justify="center">
-                            <div class="grey--text mb-3 ml-3">
+                            <div
+                              :class="
+                                parameterValue.optional === false &&
+                                (parameterValue.value === undefined ||
+                                  parameterValue.value === null ||
+                                  parameterValue.value === '')
+                                  ? 'red--text mb-3 ml-3'
+                                  : 'grey--text mb-3 ml-3'
+                              "
+                            >
                               {{ parameterValue.displayName }}
                             </div>
                             <v-spacer></v-spacer>
@@ -270,7 +303,15 @@
                     <v-card-text class="text-left">
                       <v-expansion-panels class="pt-2">
                         <v-expansion-panel>
-                          <v-expansion-panel-header>
+                          <v-expansion-panel-header
+                            :class="
+                              missingFields().indexOf(
+                                outputs()[index]['sub'][subIndex].id
+                              ) !== -1
+                                ? 'red--text'
+                                : 'black--text'
+                            "
+                          >
                             Properties
                           </v-expansion-panel-header>
                           <v-expansion-panel-content>
@@ -282,7 +323,7 @@
                               :key="parameterName"
                             >
                               <v-col
-                                class="ma-0 pa-0"
+                                class="ma-0 pa-0 pb-5"
                                 v-if="
                                   (parameterValue.displayName ==
                                     'Kind of Value' ||
@@ -295,7 +336,16 @@
                                   )
                                 "
                               >
-                                <div class="grey--text">
+                                <div
+                                  :class="
+                                    parameterValue.optional === false &&
+                                    (parameterValue.value === undefined ||
+                                      parameterValue.value === null ||
+                                      parameterValue.value === '')
+                                      ? 'red--text'
+                                      : 'grey--text'
+                                  "
+                                >
                                   {{ parameterValue.displayName }}
                                 </div>
                                 <new-search-field
@@ -330,7 +380,16 @@
                                   )
                                 "
                               >
-                                <div class="grey--text">
+                                <div
+                                  :class="
+                                    parameterValue.optional === false &&
+                                    (parameterValue.value === undefined ||
+                                      parameterValue.value === null ||
+                                      parameterValue.value === '')
+                                      ? 'red--text'
+                                      : 'grey--text'
+                                  "
+                                >
                                   {{ parameterValue.displayName }}
                                 </div>
                                 <v-text-field
@@ -357,7 +416,7 @@
                               </v-col>
 
                               <v-col
-                                class="ma-0 pa-0"
+                                class="ma-0 pa-0 pb-2"
                                 v-if="
                                   typeof parameterValue.value == 'boolean' &&
                                   !(
@@ -368,7 +427,16 @@
                                 "
                               >
                                 <v-row align="center" justify="center">
-                                  <div class="grey--text mb-3 ml-3">
+                                  <div
+                                    :class="
+                                      parameterValue.optional === false &&
+                                      (parameterValue.value === undefined ||
+                                        parameterValue.value === null ||
+                                        parameterValue.value === '')
+                                        ? 'red--text mb-3 ml-3'
+                                        : 'grey--text mb-3 ml-3'
+                                    "
+                                  >
                                     {{ parameterValue.displayName }}
                                   </div>
                                   <v-spacer></v-spacer>
@@ -492,7 +560,17 @@
                           <v-card-text class="text-left">
                             <v-expansion-panels class="pt-2">
                               <v-expansion-panel>
-                                <v-expansion-panel-header>
+                                <v-expansion-panel-header
+                                  :class="
+                                    missingFields().indexOf(
+                                      outputs()[index]['sub'][subIndex]['sub'][
+                                        subsubIndex
+                                      ].id
+                                    ) !== -1
+                                      ? 'red--text'
+                                      : 'black--text'
+                                  "
+                                >
                                   Properties
                                 </v-expansion-panel-header>
                                 <v-expansion-panel-content>
@@ -506,7 +584,7 @@
                                     :key="parameterName"
                                   >
                                     <v-col
-                                      class="ma-0 pa-0"
+                                      class="ma-0 pa-0 pb-5"
                                       v-if="
                                         (parameterValue.displayName ==
                                           'Kind of Value' ||
@@ -521,7 +599,16 @@
                                         )
                                       "
                                     >
-                                      <div class="grey--text">
+                                      <div
+                                        :class="
+                                          parameterValue.optional === false &&
+                                          (parameterValue.value === undefined ||
+                                            parameterValue.value === null ||
+                                            parameterValue.value === '')
+                                            ? 'red--text'
+                                            : 'grey--text'
+                                        "
+                                      >
                                         {{ parameterValue.displayName }}
                                       </div>
                                       <new-search-field
@@ -559,7 +646,16 @@
                                         )
                                       "
                                     >
-                                      <div class="grey--text">
+                                      <div
+                                        :class="
+                                          parameterValue.optional === false &&
+                                          (parameterValue.value === undefined ||
+                                            parameterValue.value === null ||
+                                            parameterValue.value === '')
+                                            ? 'red--text'
+                                            : 'grey--text'
+                                        "
+                                      >
                                         {{ parameterValue.displayName }}
                                       </div>
                                       <v-text-field
@@ -588,7 +684,7 @@
                                     </v-col>
 
                                     <v-col
-                                      class="ma-0 pa-0"
+                                      class="ma-0 pa-0 pb-2"
                                       v-if="
                                         typeof parameterValue.value ==
                                           'boolean' &&
@@ -603,7 +699,17 @@
                                       "
                                     >
                                       <v-row align="center" justify="center">
-                                        <div class="grey--text mb-3 ml-3">
+                                        <div
+                                          :class="
+                                            parameterValue.optional === false &&
+                                            (parameterValue.value ===
+                                              undefined ||
+                                              parameterValue.value === null ||
+                                              parameterValue.value === '')
+                                              ? 'red--text mb-3 ml-3'
+                                              : 'grey--text mb-3 ml-3'
+                                          "
+                                        >
                                           {{ parameterValue.displayName }}
                                         </div>
                                         <v-spacer></v-spacer>
@@ -661,12 +767,11 @@
 import { mapGetters, mapMutations } from "vuex";
 import draggable from "vuedraggable";
 import NewSearchField from "./NewSearchField.vue";
-//import SearchField from "@/components/SearchField.vue";
+import { uuid } from "vue-uuid";
 
 export default {
   name: "NewCapabilityOutputs",
   components: {
-    //SearchField,
     draggable,
     NewSearchField,
   },
@@ -692,7 +797,8 @@ export default {
   },
   methods: {
     ...mapGetters({
-      outputs: "newCapOutputs", // map `this.newCapOutputs()` to `this.$store.dispatch('newCapOutputs')`
+      outputs: "newCapOutputs", // map `this.outputs()` to `this.$store.dispatch('newCapOutputs')`
+      missingFields: "missingCapabilityFields", // map `this.missingFields()` to `this.$store.dispatch('missingCapabilityFields')`
     }),
     ...mapMutations({
       addCapabilityOutput: "newCapAddCapabilityOutput", // map `this.newCapAddCapabilityOutput()` to `this.$store.dispatch('newCapAddCapabilityOutput')`
@@ -701,6 +807,7 @@ export default {
     }),
     getIOTemplate() {
       return {
+        id: uuid.v1(),
         name: {
           displayName: "Name",
           example: "px or opt.ions",

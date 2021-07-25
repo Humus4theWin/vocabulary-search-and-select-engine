@@ -12,6 +12,8 @@ const store = {
 
     token: "",
 
+    missingCapabilityFields: [],
+
     ownTermAttributes: [],
     //contains the results of the search
     search: "",
@@ -161,7 +163,14 @@ const store = {
     saveSearchedWord(state, word) {
       state.search = word;
     },
-
+    /**
+     * TODO Description
+     * @param state current state
+     * @param value
+     */
+    replaceMissingCapabilityFields(state, value) {
+      state.missingCapabilityFields = value;
+    },
     /**
      * TODO Description
      * @param state current state
@@ -417,6 +426,14 @@ const store = {
      */
     search: (state) => {
       return state.search;
+    },
+
+    /**
+     * ToDo
+     * @return  state.missingCapabilityFields
+     */
+    missingCapabilityFields: (state) => {
+      return state.missingCapabilityFields;
     },
 
     /**
