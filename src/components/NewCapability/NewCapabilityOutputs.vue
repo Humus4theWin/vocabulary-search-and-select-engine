@@ -770,6 +770,10 @@ export default {
     NewSearchField,
   },
   computed: {
+    /** Getter and setter for the newCapOutputs array, which contains the outputs, sub-outputs and sub-sub-outputs of a capability description (needed for the drag-and-drop capability through the vuedraggable package)
+     *
+     * @author Dimitri Staufer <staufer@tu-berlin.de>
+     */
     outputsSorted: {
       get() {
         return this.$store.getters.newCapOutputs;
@@ -792,6 +796,13 @@ export default {
       removeCapabilityOutput: "newCapRemoveCapabilityOutput", // map `this.newCapRemoveCapabilityOutput()` to `this.$store.dispatch('newCapRemoveCapabilityOutput')`
       changeCapabilityOutputProperty: "newCapChangeCapabilityOutputProperty", // map `this.newCapChangeCapabilityOutputProperty()` to `this.$store.dispatch('newCapChangeCapabilityOutputProperty')`
     }),
+
+    /** This function returns a template from which to create the property fields of an output parameter
+     *
+     * @returns {object} A template from which to create the property fields of an output parameter
+     *
+     * @author Dimitri Staufer <staufer@tu-berlin.de>
+     */
     getIOTemplate() {
       return {
         id: uuid.v1(),

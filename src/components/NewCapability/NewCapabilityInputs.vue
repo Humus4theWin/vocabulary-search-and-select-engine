@@ -795,6 +795,10 @@ export default {
     NewSearchField,
   },
   computed: {
+    /** Getter and setter for the newCapInputs array, which contains the inputs, sub-inputs and sub-sub-inputs of a capability description (needed for the drag-and-drop capability through the vuedraggable package)
+     *
+     * @author Dimitri Staufer <staufer@tu-berlin.de>
+     */
     inputsSorted: {
       get() {
         return this.$store.getters.newCapInputs;
@@ -829,6 +833,12 @@ export default {
         this.changeKindOfCapability(eventInput.IRI);
       }
     },
+    /** This function returns a template from which to create the property fields of an input parameter
+     *
+     * @returns {object} A template from which to create the property fields of an input parameter
+     *
+     * @author Dimitri Staufer <staufer@tu-berlin.de>
+     */
     getIOTemplate() {
       return {
         id: uuid.v1(),

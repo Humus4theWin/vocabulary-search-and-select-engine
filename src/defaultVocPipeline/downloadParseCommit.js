@@ -56,7 +56,7 @@ async function downloadLastDefaultVocabularies() {
 
 /** This function downloads a list of vocabularies
  *
- * @param {Dictionary} downloadList - A list of dictionaries containing the name and download URL of RDF vocabularies
+ * @param {object} downloadList - A list of dictionaries containing the name and download URL of RDF vocabularies
  *
  * @author Dimitri Staufer <staufer@tu-berlin.de>
  */
@@ -119,8 +119,8 @@ async function downloadVocabularies(downloadList = defaultVocabularies) {
 
 /** This recursive function parses a list of downloaded vocabularies and when complete calls indexVocabularies()
  *
- * @param {Dictionary} downloadedVocabularies - A list of vocabulary dictionaries as defined by Linus in src/components/AddVocab.vue
- * @param {Number} index - The index of the vocabulary to parse
+ * @param {object} downloadedVocabularies - A list of vocabulary dictionaries as defined by Linus in src/components/AddVocab.vue
+ * @param {number} index - The index of the vocabulary to parse
  *
  * @author Dimitri Staufer <staufer@tu-berlin.de>
  */

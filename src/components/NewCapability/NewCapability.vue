@@ -139,6 +139,10 @@ export default {
       clearCapability: "newCapClear", // map `this.clearCapability()` to `this.$store.dispatch('newCapClear')`
       replaceMissingFields: "replaceMissingCapabilityFields", // map `this.replaceMissingFields()` to `this.$store.dispatch('replaceMissingCapabilityFields')`
     }),
+    /** This function calls other helper function to put together and validate the valid JSON-LD description of the capability as defined in https://docs.proceed-labs.org/concepts/capability-description and then outputs this description as json file to the user
+     *
+     * @author Dimitri Staufer <staufer@tu-berlin.de>
+     */
     generateJSON() {
       let additionalVocabularies; // TO DO: - add additional Vocabularies
 
@@ -197,6 +201,7 @@ export default {
       };
 
       if (this.validateCapability().length == 0) {
+        // Only output the final JSON-LD all required information has been provided by the user
         // For now, show the generated JSON as colorful HTML in a new tab for debugging
         var win = window.open("", "_blank");
         win.document.body.innerHTML =
@@ -209,6 +214,15 @@ export default {
         //this.downloadJSONFile(JSON.stringify(outputTemplate));
       }
     },
+    /** This function creates the function input parameter or function output list as defined in https://docs.proceed-labs.org/concepts/capability-description depending on whether isInput is true or false
+     *
+     * @param {array} io An array of the function inputs or outputs from the Vuex Store
+     * @param {boolean} isInput A boolean value, if true then input parameter - if false then output
+     *
+     * @return {object} the capability's input parameters and outputs, alongside their properites as defined in https://docs.proceed-labs.org/concepts/capability-description
+     *
+     * @author Dimitri Staufer <staufer@tu-berlin.de>
+     */
     ioToJson(io, isInput) {
       let parameters = [];
       for (let i = 0; i < io.length; i++) {
@@ -276,6 +290,12 @@ export default {
       }
       return parameters;
     },
+    /** This function creates the property mapping fields as defined in https://docs.proceed-labs.org/concepts/capability-description
+     *
+     * @return {object} the mapping values for the capability description as defined in https://docs.proceed-labs.org/concepts/capability-description
+     *
+     * @author Dimitri Staufer <staufer@tu-berlin.de>
+     */
     generateMappings() {
       let flatInputs = [];
       let flatOutputs = [];
@@ -396,6 +416,10 @@ export default {
 
       return mapping;
     },
+    /** This function makes sure that the kindOfCapability and functionName fields, as well as non-optional input/outputs properties contain data and if not, adds their unique identifier to a list of missing fields
+     *
+     * @author Dimitri Staufer <staufer@tu-berlin.de>
+     */
     validateCapability() {
       let localMissingFields = [];
       if (
@@ -514,6 +538,12 @@ export default {
       this.replaceMissingFields(localMissingFields);
       return localMissingFields;
     },
+    /** This function creates a data Blob from a json input, injects it into an 'a' element and clicks said element to start the download of the json file from the user's browser
+     *
+     * @param {object} json A json file containing the capability description to be downloaded
+     *
+     * @author Dimitri Staufer <staufer@tu-berlin.de>
+     */
     downloadJSONFile: function (json) {
       const blob = new Blob([json], { type: "text/json" });
       const aElement = document.createElement("a");
