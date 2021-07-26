@@ -7,13 +7,13 @@ const store = {
     vocabs: [],
     //contains terms {subject, predicate, object} added by the user
     vocabTerms: [],
-    // searchFilter
+    // ???
     filterPredicates: [],
-
+    // ???
     token: "",
-
+    // ???
     missingCapabilityFields: [],
-
+    //contains the id of input/output fields that were identified in NewCapability.vue to be empty
     ownTermAttributes: [],
     //contains the results of the search
     search: "",
@@ -164,38 +164,46 @@ const store = {
       state.search = word;
     },
     /**
-     * TODO Description
+     * Replaces the list of missing capability field's ids
      * @param state current state
-     * @param value
+     * @param value {array} Array of strings containing the ids of missing capabilitiy fields
+     * @author Dimitri Staufer <staufer@tu-berlin.de>
      */
     replaceMissingCapabilityFields(state, value) {
       state.missingCapabilityFields = value;
     },
     /**
-     * TODO Description
+     * Replaces the kind of capability of a new capability
      * @param state current state
-     * @param value
+     * @param value The new kind of capability as string
+     * @author Dimitri Staufer <staufer@tu-berlin.de>
      */
     newCapChangeKindOfCapability(state, value) {
       state.newCapability.kindOfCapability = value;
     },
     /**
-     * TODO Description
+     * Replaces the file name of a new capability
      * @param state current state
+     * @param value The new file name as string
+     * @author Dimitri Staufer <staufer@tu-berlin.de>
      */
     newCapChangeFileName(state, value) {
       state.newCapability.fileName = value;
     },
     /**
-     * TODO Description
+     * Replaces the function name of a new capability
      * @param state current state
+     * @param value The new function name as string
+     * @author Dimitri Staufer <staufer@tu-berlin.de>
      */
     newCapChangeFunctionName(state, value) {
       state.newCapability.functionName = value;
     },
     /**
-     * TODO Description
+     * Either adds an input parameter, or sub input parameter, or sub-sub input parameter, depending on whether a valid (>= 0) inputIndex or subInputIndex is provided for nesting
      * @param state current state
+     * @param {{input: object, inputIndex: number, subInputIndex : number}} value the input parameter to be added, the optional input index -> sub-input or sub-sub input, the optional subInput index -> sub-sub input
+     * @author Dimitri Staufer <staufer@tu-berlin.de>
      */
     newCapAddCapabilityInput(state, { input, inputIndex, subInputIndex }) {
       if (subInputIndex >= 0) {
@@ -214,8 +222,10 @@ const store = {
       }
     },
     /**
-     * TODO Description
+     * Either removes an input parameter, or sub input parameter, or sub-sub input parameter, depending on whether a valid (>= 0) inputIndex or subInputIndex is provided for nesting
      * @param state current state
+     * @param {{input: object, inputIndex: number, subInputIndex : number}} value the input parameter to be removed, the optional input index -> sub-input or sub-sub input, the optional subInput index -> sub-sub input
+     * @author Dimitri Staufer <staufer@tu-berlin.de>
      */
     newCapRemoveCapabilityInput(state, { index, subIndex, subsubIndex }) {
       if (subsubIndex >= 0) {
@@ -230,15 +240,19 @@ const store = {
       }
     },
     /**
-     * TODO Description
+     * Replaces the array of inputs for a new capability description to force the UI to rebuild after a change of sequences through drag-and-drop
      * @param state current state
+     * @param value {array} The array of inputs (containing the new sequence)
+     * @author Dimitri Staufer <staufer@tu-berlin.de>
      */
     newCapReplaceCapabilityInputsForSequenceChange(state, value) {
       state.newCapability.inputs = value;
     },
     /**
-     * TODO Description
+     * Either adds an output parameter, or sub output parameter, or sub-sub output parameter, depending on whether a valid (>= 0) outputIndex or subOutputIndex is provided for nesting
      * @param state current state
+     * @param {{output: object, outputIndex: number, subOutputIndex : number}} value the output parameter to be added, the optional output index -> sub-output or sub-sub output, the optional subOutput index -> sub-sub output
+     * @author Dimitri Staufer <staufer@tu-berlin.de>
      */
     newCapAddCapabilityOutput(state, { output, outputIndex, subOutputIndex }) {
       if (subOutputIndex >= 0) {
@@ -257,8 +271,10 @@ const store = {
       }
     },
     /**
-     * TODO Description
+     * Either removes an output parameter, or sub output parameter, or sub-sub output parameter, depending on whether a valid (>= 0) outputIndex or subOutputIndex is provided for nesting
      * @param state current state
+     * @param {{output: object, outputIndex: number, subOutputIndex : number}} value the output parameter to be removed, the optional output index -> sub-output or sub-sub output, the optional subOutput index -> sub-sub output
+     * @author Dimitri Staufer <staufer@tu-berlin.de>
      */
     newCapRemoveCapabilityOutput(state, { index, subIndex, subsubIndex }) {
       if (subsubIndex >= 0) {
@@ -273,15 +289,19 @@ const store = {
       }
     },
     /**
-     * TODO Description
+     * Replaces the array of outputs for a new capability description to force the UI to rebuild after a change of sequences through drag-and-drop
      * @param state current state
+     * @param value {array} The array of outputs (containing the new sequence)
+     * @author Dimitri Staufer <staufer@tu-berlin.de>
      */
     newCapReplaceCapabilityOutputsForSequenceChange(state, value) {
       state.newCapability.outputs = value;
     },
     /**
-     * TODO Description
+     * Changes the value of an input's, sub-input's, or sub-sub-input's parameter value, depending on whether a valid (>= 0) inputIndex, subIndex, or subsubIndex is provided for nesting
      * @param state current state
+     * @param {{inputIndex: number, subIndex: number, subsubIndex : number, propertyKey : string, value : string}} value the input parameter this is refering to, the optional subIndex -> sub-output or sub-sub input, the optional subsubIndex -> sub-sub input, the key and value of the property to be mutated
+     * @author Dimitri Staufer <staufer@tu-berlin.de>
      */
     newCapChangeCapabilityInputProperty(
       state,
@@ -311,8 +331,10 @@ const store = {
       state.newCapability.inputs.splice(inputIndex, 1, input);
     },
     /**
-     * TODO Description
+     * Changes the value of an output's, sub-output's, or sub-sub-output's parameter value, depending on whether a valid (>= 0) outputIndex, subIndex, or subsubIndex is provided for nesting
      * @param state current state
+     * @param {{outputIndex: number, subIndex: number, subsubIndex : number, propertyKey : string, value : string}} value the output parameter this is refering to, the optional subIndex -> sub-output or sub-sub output, the optional subsubIndex -> sub-sub output, the key and value of the property to be mutated
+     * @author Dimitri Staufer <staufer@tu-berlin.de>
      */
     newCapChangeCapabilityOutputProperty(
       state,
@@ -339,8 +361,9 @@ const store = {
       state.newCapability.outputs.splice(outputIndex, 1, output);
     },
     /**
-     * TODO Description
+     * Restores the newCapability object to its original state, i.e. remove/clear all user input
      * @param state current state
+     * @author Dimitri Staufer <staufer@tu-berlin.de>
      */
     newCapClear(state) {
       state.newCapability = {
@@ -429,49 +452,55 @@ const store = {
     },
 
     /**
-     * ToDo
-     * @return  state.missingCapabilityFields
+     * Returns the list of missing capability field's ids
+     * @return state.missingCapabilityFields, i.e. an array of field id strings that have not been filled-out by the user yet
+     * @author Dimitri Staufer <staufer@tu-berlin.de>
      */
     missingCapabilityFields: (state) => {
       return state.missingCapabilityFields;
     },
 
     /**
-     * ToDo Description
+     * Returns the kind of capability value, which is a string
      * @param state
-     * @return {String}
+     * @return {String} The kind of capability
+     * @author Dimitri Staufer <staufer@tu-berlin.de>
      */
     newCapKindOfCapability: (state) => {
       return { value: state.newCapability.kindOfCapability };
     },
     /**
-     * ToDo Description
+     * Returns the file name of the capability, which is a string
      * @param state
-     * @return {String}
+     * @return {String} the capability's file name
+     * @author Dimitri Staufer <staufer@tu-berlin.de>
      */
     newCapFileName: (state) => {
       return { value: state.newCapability.fileName };
     },
     /**
-     * ToDo Description
+     * Returns the function name of the capability, which is a string
      * @param state
-     * @return {String}
+     * @return {String} the capability's function name
+     * @author Dimitri Staufer <staufer@tu-berlin.de>
      */
     newCapFunctionName: (state) => {
       return { value: state.newCapability.functionName };
     },
     /**
-     * ToDo Description
+     * Returns the inputs array of the newCapability object
      * @param state
      * @return state.inputs
+     * @author Dimitri Staufer <staufer@tu-berlin.de>
      */
     newCapInputs: (state) => {
       return state.newCapability.inputs;
     },
     /**
-     * ToDo Description
+     * Returns the outputs array of the newCapability object
      * @param state
      * @return state.outputs
+     * @author Dimitri Staufer <staufer@tu-berlin.de>
      */
     newCapOutputs: (state) => {
       return state.newCapability.outputs;

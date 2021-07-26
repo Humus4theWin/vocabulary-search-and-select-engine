@@ -1,4 +1,4 @@
-# Projekt Description 
+# Web Application for Semantic Capability Description Generation
 ## License
 This is an open Source Project under the GNU Affero General Public License. (for further details see: https://www.gnu.org/licenses/licenses.en.html#AGPL)
 ## General
