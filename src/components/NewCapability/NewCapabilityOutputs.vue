@@ -757,12 +757,6 @@
   </v-card>
 </template>
 
-<style lang="scss">
-.capIO {
-  min-width: 350px;
-}
-</style>
-
 <script>
 import { mapGetters, mapMutations } from "vuex";
 import draggable from "vuedraggable";
@@ -774,13 +768,6 @@ export default {
   components: {
     draggable,
     NewSearchField,
-  },
-  data() {
-    return {
-      openedPanel: [],
-      openedPanelSub: [],
-      openedPanelSubSub: [],
-    };
   },
   computed: {
     outputsSorted: {
@@ -810,7 +797,7 @@ export default {
         id: uuid.v1(),
         name: {
           displayName: "Name",
-          example: "px or opt.ions",
+          example: "px",
           complexCompatible: true,
           value: "",
           optional: false,

@@ -7,7 +7,6 @@ const rdfParser = require("rdf-parse").default;
 const defaultVocabularies = require("./defaultVocabularies.json");
 const originalFetch = require("isomorphic-fetch");
 const fetch = require("fetch-retry")(originalFetch);
-//const fs = require('fs')
 
 let lastDefaultVocabularies = [];
 let downloadedVocabularies = [];
