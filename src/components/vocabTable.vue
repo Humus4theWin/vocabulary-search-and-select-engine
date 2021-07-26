@@ -99,7 +99,7 @@
           </v-dialog>
         </v-toolbar>
       </template>
-      <template v-slot:item.actions="{ item }">
+      <template v-slot:[`item.actions`]="{ item }">
         <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil</v-icon>
         <v-icon small @click="deleteItem(item)"> mdi-delete</v-icon>
         <v-icon small @click="refreshItem(item)"> mdi-refresh</v-icon>
@@ -121,16 +121,16 @@ export default {
     dialogDelete: false,
     headers: [
       {
-        text: "name",
+        text: "Name",
         align: "start",
         sortable: true,
         value: "name",
       },
-      { text: "date", value: "date" },
+      { text: "Date", value: "date" },
       { text: "Source URL", value: "sourceURL" },
       { text: "Source type", value: "type" },
       { text: "Number of Quads", value: "numberOfQuads" },
-      { text: "used for search", value: "isUsed" },
+      { text: "Used for Search", value: "isUsed" },
       { text: "Actions", value: "actions", sortable: false },
     ],
     editedIndex: -1,

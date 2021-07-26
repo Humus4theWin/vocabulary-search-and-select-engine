@@ -5,7 +5,7 @@
     :filter="filterObjects"
     item-text="http://www.w3.org/2000/01/rdf-schema#label"
     item-value="IRI"
-    class="mx-4"
+    class="mx-0"
     hide-no-data
     hide-details
     placeholder="Start typing to search"
