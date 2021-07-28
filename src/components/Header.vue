@@ -33,7 +33,7 @@
 
           <v-app-bar-nav-icon
             @click="toggleRightDrawerState()"
-            class="pr-5"
+            class="mr-0"
           ></v-app-bar-nav-icon>
         </v-toolbar>
       </v-card>
