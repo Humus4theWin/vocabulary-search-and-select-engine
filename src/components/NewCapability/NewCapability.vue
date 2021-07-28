@@ -9,7 +9,7 @@
             : '#808080 !important',
         }"
       >
-        {{ kindOfCapability().value || "Unnamed Capability" }}
+        {{ kindOfCapability().value.label || "Unnamed Capability" }}
       </h1>
       <v-spacer></v-spacer>
       <v-btn class="ma-8" text icon color="white" @click="clearCapability()">
@@ -144,7 +144,131 @@ export default {
      * @author Dimitri Staufer <staufer@tu-berlin.de>
      */
     generateJSON() {
-      let additionalVocabularies; // TO DO: - add additional Vocabularies
+      //let string = "as";
+      let additionalVocabularies = {
+        schema: "https://schema.org/",
+        fno: "https://w3id.org/function/ontology#",
+        fnoi: "https://w3id.org/function/vocabulary/implementation",
+        fnom: "https://w3id.org/function/vocabulary/mapping#",
+        "dbpedia-owl": "http://dbpedia.org/ontology/",
+        xsd: "http://www.w3.org/2001/XMLSchema#",
+        //this.kindOfCapability().value.abbr
+        //: this.kindOfCapability().value.vocab,
+      };
+      additionalVocabularies[this.kindOfCapability().value.abbr] =
+        this.kindOfCapability().value.vocab;
+
+      // Check Inputs
+      for (let i = 0; i < this.inputs().length; i++) {
+        // eslint-disable-next-line no-unused-vars
+        for (const [key, value] of Object.entries(this.inputs()[i])) {
+          if (
+            (value.displayName === "Kind of Value" ||
+              value.displayName === "Data Type (opt.)") &&
+            !(
+              value.value === undefined ||
+              value.value === null ||
+              value.value === ""
+            )
+          ) {
+            additionalVocabularies[value.abbr] = value.vocab;
+          }
+        }
+
+        for (let j = 0; j < this.inputs()[i]["sub"].length; j++) {
+          // eslint-disable-next-line no-unused-vars
+          for (const [key, value] of Object.entries(
+            this.inputs()[i]["sub"][j]
+          )) {
+            if (
+              (value.displayName === "Kind of Value" ||
+                value.displayName === "Data Type (opt.)") &&
+              !(
+                value.value === undefined ||
+                value.value === null ||
+                value.value === ""
+              )
+            ) {
+              additionalVocabularies[value.abbr] = value.vocab;
+            }
+          }
+
+          for (let k = 0; k < this.inputs()[i]["sub"][j]["sub"].length; k++) {
+            // eslint-disable-next-line no-unused-vars
+            for (const [key, value] of Object.entries(
+              this.inputs()[i]["sub"][j]["sub"][k]
+            )) {
+              if (
+                (value.displayName === "Kind of Value" ||
+                  value.displayName === "Data Type (opt.)") &&
+                !(
+                  value.value === undefined ||
+                  value.value === null ||
+                  value.value === ""
+                )
+              ) {
+                additionalVocabularies[value.abbr] = value.vocab;
+              }
+            }
+          }
+        }
+      }
+
+      // Check Outputs
+      for (let i = 0; i < this.outputs().length; i++) {
+        // eslint-disable-next-line no-unused-vars
+        for (const [key, value] of Object.entries(this.outputs()[i])) {
+          if (
+            (value.displayName === "Kind of Value" ||
+              value.displayName === "Data Type (opt.)") &&
+            !(
+              value.value === undefined ||
+              value.value === null ||
+              value.value === ""
+            )
+          ) {
+            additionalVocabularies[value.abbr] = value.vocab;
+          }
+        }
+
+        for (let j = 0; j < this.outputs()[i]["sub"].length; j++) {
+          // eslint-disable-next-line no-unused-vars
+          for (const [key, value] of Object.entries(
+            this.outputs()[i]["sub"][j]
+          )) {
+            if (
+              (value.displayName === "Kind of Value" ||
+                value.displayName === "Data Type (opt.)") &&
+              !(
+                value.value === undefined ||
+                value.value === null ||
+                value.value === ""
+              )
+            ) {
+              additionalVocabularies[value.abbr] = value.vocab;
+            }
+          }
+
+          for (let k = 0; k < this.outputs()[i]["sub"][j]["sub"].length; k++) {
+            // eslint-disable-next-line no-unused-vars
+            for (const [key, value] of Object.entries(
+              this.outputs()[i]["sub"][j]["sub"][k]
+            )) {
+              if (
+                (value.displayName === "Kind of Value" ||
+                  value.displayName === "Data Type (opt.)") &&
+                !(
+                  value.value === undefined ||
+                  value.value === null ||
+                  value.value === ""
+                )
+              ) {
+                additionalVocabularies[value.abbr] = value.vocab;
+              }
+            }
+          }
+        }
+      }
 
       let outputTemplate = {
         "@context": {
@@ -154,27 +278,32 @@ export default {
           fnom: "https://w3id.org/function/vocabulary/mapping#",
           "dbpedia-owl": "http://dbpedia.org/ontology/",
           xsd: "http://www.w3.org/2001/XMLSchema#",
-          ...(additionalVocabularies ? { additionalVocabularies } : {}),
+          ...(additionalVocabularies ? additionalVocabularies : {}),
         },
         "@graph": [
           {
             "@id": "_:capability",
             "schema:potentialAction": {
               "@id":
-                this.kindOfCapability().value == ""
+                this.kindOfCapability().value.label == ""
                   ? "_:UnnamedCapabilityDefinition"
-                  : "_:" + this.kindOfCapability().value + "Definition",
+                  : "_:" + this.kindOfCapability().value.label + "Definition",
               "@type":
-                typeof this.kindOfCapability().value == Array
-                  ? [...this.kindOfCapability().value, "fno:Function"]
-                  : [this.kindOfCapability().value, "fno:Function"],
+                typeof this.kindOfCapability().value.label == Array
+                  ? [...this.kindOfCapability().value.label, "fno:Function"]
+                  : [
+                      this.kindOfCapability().value.abbr +
+                        ":" +
+                        this.kindOfCapability().value.label,
+                      "fno:Function",
+                    ],
             },
           },
           {
             "@id":
-              this.kindOfCapability().value == ""
+              this.kindOfCapability().value.label == ""
                 ? "_:UnnamedCapabilityDefinition"
-                : "_:" + this.kindOfCapability().value + "Definition",
+                : "_:" + this.kindOfCapability().value.label + "Definition",
             "fno:expects": {
               "@list": this.ioToJson(this.inputs(), true).map((entry) => ({
                 "@id": entry["@id"],
@@ -190,9 +319,9 @@ export default {
           ...this.ioToJson(this.outputs(), false),
           {
             "@id":
-              this.kindOfCapability().value == ""
+              this.kindOfCapability().value.label == ""
                 ? "_:UnnamedCapabilityImplementation"
-                : "_:" + this.kindOfCapability().value + "Implementation",
+                : "_:" + this.kindOfCapability().value.label + "Implementation",
             "@type": "fnoi:JavaScriptFunction",
             "dbpedia-owl:filename": this.fileName().value || "index.js",
           },
@@ -231,7 +360,11 @@ export default {
         if (io[i].complex.value) {
           properties = {
             "@id": "_:" + io[i].kindOfValue.value + "Parameter",
-            "fno:predicate": [{ "@type": io[i].kindOfValue.value }],
+            "fno:predicate": [
+              {
+                "@type": io[i].kindOfValue.abbr + ":" + io[i].kindOfValue.value,
+              },
+            ],
             "@type": isInput
               ? ["fno:Parameter", "xsd:complexType"]
               : ["fno:Output", "xsd:complexType"],
@@ -255,16 +388,26 @@ export default {
         } else {
           properties = {
             "@id": "_:" + io[i].kindOfValue.value + "Parameter",
-            "fno:predicate": [{ "@type": io[i].kindOfValue.value }],
+            "fno:predicate": [
+              {
+                "@type": io[i].kindOfValue.abbr + ":" + io[i].kindOfValue.value,
+              },
+            ],
             "@type": isInput
               ? io[i].dataType.value != ""
                 ? Array.from(
-                    new Set([...["fno:Parameter"], ...[io[i].dataType.value]])
+                    new Set([
+                      ...["fno:Parameter"],
+                      ...[io[i].dataType.abbr + ":" + io[i].dataType.value],
+                    ])
                   )
                 : ["fno:Parameter"]
               : io[i].dataType.value != ""
               ? Array.from(
-                  new Set([...["fno:Output"], ...[io[i].dataType.value]])
+                  new Set([
+                    ...["fno:Output"],
+                    ...[io[i].dataType.abbr + ":" + io[i].dataType.value],
+                  ])
                 )
               : ["fno:Output"],
             ...(io[i].description.value
@@ -398,18 +541,18 @@ export default {
 
       let mapping = {
         "@id":
-          this.kindOfCapability().value == ""
+          this.kindOfCapability().value.label == ""
             ? "_:UnnamedCapabilityMapping"
-            : "_:" + this.kindOfCapability().value + "Mapping",
+            : "_:" + this.kindOfCapability().value.label + "Mapping",
         "@type": "fno:Mapping",
         "fno:function":
-          this.kindOfCapability().value == ""
+          this.kindOfCapability().value.label == ""
             ? "_:UnnamedCapabilityDefinition"
-            : "_:" + this.kindOfCapability().value + "Definition",
+            : "_:" + this.kindOfCapability().value.label + "Definition",
         "fno:implementation":
-          this.kindOfCapability().value == ""
+          this.kindOfCapability().value.label == ""
             ? "_:UnnamedCapabilityImplementation"
-            : "_:" + this.kindOfCapability().value + "Implementation",
+            : "_:" + this.kindOfCapability().value.label + "Implementation",
         "fno:parameterMapping": [...flatInputs],
         "fno:returnMapping": [...flatOutputs],
       };
@@ -549,10 +692,10 @@ export default {
       const aElement = document.createElement("a");
       aElement.href = window.URL.createObjectURL(blob);
       aElement.download =
-        (this.kindOfCapability().value || "UnnamedCapability") + ".json";
+        (this.kindOfCapability().value.label || "UnnamedCapability") + ".json";
       aElement.dataset.downloadurl = [
         "text/json",
-        (this.kindOfCapability().value || "UnnamedCapability") + ".json",
+        (this.kindOfCapability().value.label || "UnnamedCapability") + ".json",
         aElement.href,
       ].join(":");
 
@@ -570,10 +713,8 @@ export default {
      *@param { Type, IRI} eventInput contains data of the search output as Type=  the prop type and IRI like the IRI of the choosen Term in the Search field
      */
     changedSearchInput: function (eventInput) {
-      //later on changed to switch case maybe
       if (eventInput.type == "kindOfCapability") {
-        //an dieser Stelle in den Store schreiben bitte ;)
-        this.changeKindOfCapability(eventInput.IRI);
+        this.changeKindOfCapability(eventInput);
       }
       this.validateCapability();
     },
