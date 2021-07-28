@@ -158,7 +158,7 @@ export default {
       additionalVocabularies[this.kindOfCapability().value.abbr] =
         this.kindOfCapability().value.vocab;
 
-      // Check Inputs
+      // Iterate through inputs to find additional vocabulary entries
       for (let i = 0; i < this.inputs().length; i++) {
         // eslint-disable-next-line no-unused-vars
         for (const [key, value] of Object.entries(this.inputs()[i])) {
@@ -214,7 +214,7 @@ export default {
         }
       }
 
-      // Check Outputs
+      // Iterate through outputs to find additional vocabulary entries
       for (let i = 0; i < this.outputs().length; i++) {
         // eslint-disable-next-line no-unused-vars
         for (const [key, value] of Object.entries(this.outputs()[i])) {

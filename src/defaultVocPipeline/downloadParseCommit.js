@@ -74,11 +74,11 @@ async function downloadVocabularies(downloadList = defaultVocabularies) {
     try {
       // load from remote server
       response = await fetch(url, {
-        headers: { Accept: "application/json,application/rdf+xml,text/html" },
-        retries: 3,
+        headers: { Accept: "*/*" },
+        retries: 5,
         // eslint-disable-next-line no-unused-vars
         retryDelay: function (attempt, error, response) {
-          return Math.pow(2, attempt) * 3000; // 3000, 6000, 12000
+          return Math.pow(2, attempt) * 4000; // 4000, 80000, 16000
         },
       });
       if (response.ok) {

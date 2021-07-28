@@ -5,12 +5,8 @@
       "downloadURL": "https://schema.org/version/latest/schemaorg-current-https.jsonld"
     },
     {
-      "name": "Australian Government Locator Service",
-      "downloadURL": "http://www.agls.gov.au/agls/terms"
-    },
-    {
-      "name": "OM 2: Units of Measure",
-      "downloadURL": "http://www.foodvoc.org/data/om-2.ttl"
+      "name": "QUDT Units of Measure for All Units",
+      "downloadURL": "http://qudt.org/vocab/unit"
     },
     {
       "name": "Thing Description (TD) Ontology",
@@ -21,12 +17,20 @@
       "downloadURL": "https://saref.etsi.org/core/v3.1.1/saref.jsonld"
     },
     {
-      "name": "Main QUDT (Quantities, Units, Dimensions, and Types) Ontology",
-      "downloadURL": "http://qudt.org/2.1/schema/qudt"
+      "name": "Thing Description Ontology",
+      "downloadURL": "https://archivo.dbpedia.org/download?o=https%3A//www.w3.org/2019/wot/td%23&f=ttl"
     },
     {
-      "name": "QUDT (Quantities, Units, Dimensions, and Types) Units Vocabulary",
-      "downloadURL": "http://qudt.org/2.1/vocab/unit"
+      "name": "Security mechanisms for the Web of Things",
+      "downloadURL": "https://archivo.dbpedia.org/download?o=https%3A//www.w3.org/2019/wot/security%23&f=ttl"
+    },
+    {
+      "name": "FIESTA-IoT",
+      "downloadURL": "https://archivo.dbpedia.org/download?o=http%3A//purl.org/iot/ontology/fiesta-iot%23&f=ttl"
+    },
+    {
+      "name": "EUPont: an ontology for End User Programming of the IoT",
+      "downloadURL": "https://archivo.dbpedia.org/download?o=http%3A//elite.polito.it/ontologies/eupont.owl&f=ttl"
     }
   ]
 }
