@@ -9,12 +9,16 @@
       "downloadURL": "http://qudt.org/vocab/unit"
     },
     {
-      "name": "Thing Description (TD) Ontology",
-      "downloadURL": "https://raw.githubusercontent.com/w3c/wot-thing-description/main/ontology/td.ttl"
-    },
-    {
       "name": "Smart Applications REFerence Ontology",
       "downloadURL": "https://saref.etsi.org/core/v3.1.1/saref.jsonld"
+    },
+    {
+      "name": "Thing Description Ontology",
+      "downloadURL": "https://archivo.dbpedia.org/download?o=https%3A//www.w3.org/2019/wot/td%23&f=ttl"
+    },
+    {
+      "name": "Security mechanisms for the Web of Things",
+      "downloadURL": "https://archivo.dbpedia.org/download?o=https%3A//www.w3.org/2019/wot/security%23&f=ttl"
     },
     {
       "name": "FIESTA-IoT",
