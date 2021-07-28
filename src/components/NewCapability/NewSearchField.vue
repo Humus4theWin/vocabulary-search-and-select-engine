@@ -149,14 +149,16 @@ export default {
       return true;
     },
     /**
-     * is triggerded when @change is triggered of the v-autocomplete.
-     * Sends an event "SearchValue" with the choosen IRI and the type paramter
+     * Is triggerded when @change is triggered of the v-autocomplete.
+     * Sends an event "SearchValue" with the choosen label,corosspending IRI, an abbr of the IRI and the type paramter
      */
     emitEvent() {
       /*console.log(this.select);
       console.log(this.select.IRI);*/
       if (this.type == "input") {
-        this.options.value.value = this.select.IRI;
+        this.options.value.value = this.select.label;
+        this.options.value.abbr = this.abbr(this.select.IRI);
+        this.options.value.vocab = this.vocab(this.select.IRI);
         this.changeCapabilityInputProperty({
           inputIndex: this.options.inputIndex,
           subIndex: this.options.subIndex,
@@ -166,7 +168,9 @@ export default {
         });
       } else {
         if (this.type == "output") {
-          this.options.value.value = this.select.IRI;
+          this.options.value.value = this.select.label;
+          this.options.value.abbr = this.abbr(this.select.IRI);
+          this.options.value.vocab = this.vocab(this.select.IRI);
           this.changeCapabilityOutputProperty({
             outputIndex: this.options.outputIndex,
             subIndex: this.options.subIndex,
@@ -175,10 +179,57 @@ export default {
             value: this.options.value,
           });
         } else {
-          let params = { IRI: this.select.IRI, type: this.type };
+          let params = {
+            abbr: this.abbr(this.select.IRI),
+            IRI: this.select.IRI.split("/"),
+            vocab: this.vocab(this.select.IRI),
+            type: this.type,
+            label: this.select.label,
+          };
           this.$emit("SearchValue", params);
         }
       }
+    },
+    /**
+     * Makes an abbr for a given IRI by deleting all '/' and also the start until the domain
+     * @param IRI an IRI of a Term
+     * @returns an abbreviation of the IRI as a short identifier
+     */
+    abbr(IRI) {
+      let a = IRI.split("/");
+      a.pop();
+      let string = a
+        .toString()
+        .replaceAll("www.", "")
+        .replaceAll("https:", "")
+        .replaceAll("http:", "")
+        .replaceAll(".org", "")
+        .replaceAll(".com", "")
+        .replaceAll(".net", "")
+        .replaceAll(".", "")
+        .replaceAll(":", "")
+        .replaceAll(",", "")
+        .replaceAll(";", "")
+        .replaceAll("-", "")
+        .replaceAll("_", "")
+        .replaceAll(" ", "");
+
+      console.log(IRI);
+      console.log(string);
+
+      return string;
+    },
+    /**
+     * Shortens a given IRI to represent the vocab form of it.
+     * @param IRI an IRI of a Term
+     * @return a shortend version of the IRI
+     */
+    vocab(IRI) {
+      let a = IRI.split("/");
+      a.pop();
+      let string = a.toString();
+      string = string.replaceAll(",", "/");
+      return string;
     },
   },
 };
