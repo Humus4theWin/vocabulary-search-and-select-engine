@@ -182,7 +182,7 @@ export default {
             Date.UTC(dt1.getFullYear(), dt1.getMonth(), dt1.getDate())) /
             (1000 * 60 * 60 * 24)
         );
-        return daysDifference >= 1; // todo: set to 5 days maybe
+        return daysDifference >= 5; 
       });
     },
   },
