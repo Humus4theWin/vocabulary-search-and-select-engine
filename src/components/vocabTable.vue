@@ -5,6 +5,22 @@
         <h1>Manage Vocabularies</h1>
       </v-col>
     </v-row>
+    <v-alert
+      v-if="displayCORS"
+      dismissible
+      elevation="5"
+      outlined
+      text
+      type="warning"
+      >Loading vocabulary failed! This may be due to CORS issues
+      <br />
+      <v-btn
+        color="green"
+        href="https://gitlab.com/dBPMS-PROCEED/vocabulary-search-and-select-engine"
+        target="_blank"
+        >solve!
+      </v-btn></v-alert
+    >
     <v-data-table
       :headers="headers"
       :items="vocabularies"
@@ -89,7 +105,7 @@
               </v-card-title>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" text @click="closeDelete">Cancel </v-btn>
+                <v-btn color="primary" text @click="closeDelete">Cancel</v-btn>
                 <v-btn color="primary" text @click="deleteItemConfirm"
                   >OK
                 </v-btn>
@@ -106,8 +122,8 @@
       </template>
       <template v-slot:no-data>
         <v-btn color="primary" @click="importDefaultVocabs">
-          Load Defaults</v-btn
-        >
+          Load Defaults
+        </v-btn>
       </template>
     </v-data-table>
   </v-container>
@@ -166,6 +182,9 @@ export default {
   }),
 
   computed: {
+    displayCORS() {
+      return this.$store.getters.displayCORS;
+    },
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
     },
@@ -182,7 +201,7 @@ export default {
             Date.UTC(dt1.getFullYear(), dt1.getMonth(), dt1.getDate())) /
             (1000 * 60 * 60 * 24)
         );
-        return daysDifference >= 5; 
+        return daysDifference >= 5;
       });
     },
   },
@@ -274,6 +293,9 @@ export default {
             break;
           case "addVocabTerms":
             window.App.$store.commit("addVocabTerms", message.data[1]);
+            break;
+          case "loadError":
+            window.App.$store.commit("vocabLoadError", message.data[1]);
             break;
         }
       };

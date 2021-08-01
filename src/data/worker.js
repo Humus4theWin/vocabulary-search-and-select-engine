@@ -28,6 +28,7 @@ async function importVocab(url, format) {
     response = await fetch(url);
   } catch (ex) {
     // if fails, load via proxy
+    postMessage(["loadError", vocab.sourceURL]);
     response = await fetch("http://localhost:80/proxy", {
       headers: { url: url },
     });
@@ -36,7 +37,7 @@ async function importVocab(url, format) {
     vocab.type = response.headers.get("content-type").split(";")[0];
     vocab.data = await response.text();
   } else {
-    //console.log("error: " + url);
+    console.log("error, loading: " + url);
     return;
   }
   if (format) vocab.type = format;
