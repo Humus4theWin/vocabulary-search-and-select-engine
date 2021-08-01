@@ -16,7 +16,7 @@
       <br />
       <v-btn
         color="green"
-        href="https://gitlab.com/dBPMS-PROCEED/vocabulary-search-and-select-engine"
+        href="https://gitlab.com/dBPMS-PROCEED/vocabulary-search-and-select-engine/-/tree/CORS/src/localCORSproxy"
         target="_blank"
         >solve!
       </v-btn></v-alert
