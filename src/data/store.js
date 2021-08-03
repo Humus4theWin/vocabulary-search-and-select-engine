@@ -9,6 +9,8 @@ const store = {
     vocabTerms: [],
     // ???
     filterPredicates: [],
+
+    displayCORS: false,
     // ???
     token: "",
     // ???
@@ -94,6 +96,16 @@ const store = {
     setVocabs(state, vocabs) {
       state.vocabs = vocabs;
       DB.overwriteAll(DB.dbNames.VOCABULARIES, vocabs);
+    },
+    /**
+     *
+     * @param state
+     * @param String
+     */
+
+    vocabLoadError(state, sourceURL) {
+      state.displayCORS = true;
+      console.log("error loading " + sourceURL);
     },
     /**
      *
@@ -504,6 +516,14 @@ const store = {
      */
     newCapOutputs: (state) => {
       return state.newCapability.outputs;
+    },
+    /**
+     * Returns if vocab table shuld display CORS
+     * @param state
+     * @return displayCORS
+     */
+    displayCORS: (state) => {
+      return state.displayCORS;
     },
   },
 };
