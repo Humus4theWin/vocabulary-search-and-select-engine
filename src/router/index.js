@@ -40,6 +40,7 @@ const routes = [
 const mode = "history";
 
 const router = new VueRouter({
+  base: "vocabulary-search-and-select-engine",
   routes,
   mode,
 });
