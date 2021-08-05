@@ -7,19 +7,21 @@ Vue.use(VueRouter);
 
 const routes = [
   {
-    path: "/vocabulary-search-and-select-engine/",
-    alias: ["/", "/vocabulary-search-and-select-engine/"],
+    path: "/",
+    alias: ["/vocabulary-search-and-select-engine/"],
     name: "Home",
     component: Home,
   },
   {
     path: "/vocabs",
+    alias: ["/vocabulary-search-and-select-engine/vocabs"],
     name: "Vocabularies",
     component: () =>
       import(/* webpackChunkName: "vocabularies" */ "../views/Vocabularies"),
   },
   {
     path: "/create",
+    alias: ["/vocabulary-search-and-select-engine/create"],
     name: "CreateTerm",
     component: () =>
       import(/* webpackChunkName: "createTerm" */ "../views/CreateTerm"),
