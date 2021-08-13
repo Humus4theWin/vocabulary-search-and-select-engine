@@ -1,5 +1,10 @@
 <template>
-  <v-card>
+  <v-card :loading="loading">
+    <v-card-actions>
+      <v-btn v-for="synonym in synonyms" :key="synonym.message" ripple text
+        >{{ synonym.text }}}</v-btn
+      >
+    </v-card-actions>
     <v-card-text class="pa-6">
       <v-autocomplete
         v-model="select"
@@ -13,7 +18,7 @@
         placeholder="Start typing to search"
         v-bind:label="searchLabel"
         return-object
-        @update:search-input="doIt"
+        @update:search-input="customSearch"
         prepend-icon="mdi-magnify"
       ></v-autocomplete>
       <v-row class="mt-3">
@@ -25,9 +30,9 @@
           icon
           @click="showFilter = !showFilter"
         >
-          <v-icon>{{
-            showFilter ? "mdi-chevron-up" : "mdi-chevron-down"
-          }}</v-icon>
+          <v-icon
+            >{{ showFilter ? "mdi-chevron-up" : "mdi-chevron-down" }}
+          </v-icon>
         </v-btn>
       </v-row>
       <v-expand-transition>
@@ -74,6 +79,7 @@
   color: lightgrey !important;
   text-align: left;
 }
+
 .advancedSearch {
   color: #74b559;
 }
@@ -91,6 +97,9 @@ export default {
     //select
     value: [],
     showFilter: false,
+    synonyms: [],
+    loading: false,
+    searchWord: "",
   }),
   created() {
     this.allTerms = this.$store.getters.getVocabTerms;
@@ -129,8 +138,10 @@ export default {
      * is triggerde whenever the user types a char in input of the autocomplete.
      * @param event contains the search input
      */
-    doIt(event) {
+    customSearch(event) {
       this.flag = true;
+      this.searchWord = event;
+      this.fetchSynonyms(event);
       this.allTerms = this.filterAndSort(
         this.$store.getters.getVocabTerms,
         event
@@ -178,59 +189,29 @@ export default {
     filterObjects() {
       return true;
     },
+    async fetchSynonyms(word) {
+      this.loading = true;
+      let response = await fetch(
+        "https://api.dictionaryapi.dev/api/v2/entries/en/" + word
+      );
+      let json = await response.json();
 
-    /**
-     * Is triggered when a character is typed in the search field.
-     * When the search contains more then 2 char, the list of terms is added to the entries for search.
-     * @param val contains the search input
-     */
-    /*querySelections(val) {
-      // Simulated ajax query
-      if (val.length < 2) {
-        console.log("search value {{val + val.length}}");
-        this.entries = [];
-        return;
-      } else {
-        this.terms = this.$store.getters.getVocabTerms;
-      }
-    },*/
-    /*searchFunction(searchString, filterCriteria) {
-      if (filterCriteria === undefined)
-        filterCriteria = this.$store.getters.getFilterCriteria;
-      if (searchString === undefined) searchString = ""; //todo: get from store this.$store.getters....;
-      let terms = this.$store.getters.getVocabTerms;
-
-      filterCriteria
-        .filter((criteria) => criteria.isUsed)
-        .forEach((criteria) => {
-          console.log(criteria);
-          terms = terms.filter((term) => {
-            return (
-              term[criteria["predicate"]] !== undefined &&
-              this.getFilterFunction(criteria.searchType)(
-                term[criteria["predicate"]],
-                searchString
-              )
-            );
+      console.log(json);
+      if (Array.isArray(json)) {
+        this.synonyms = json.flatMap((word) => {
+          return word["meanings"].map((meaning) => {
+            return {
+              text: word["word"] + " (" + meaning["partOfSpeech"] + ")",
+              synonyms: meaning["definitions"].flatMap(
+                (def) => def["synonyms"]
+              ),
+            };
           });
-        });
-      console.log(terms);
-      this.terms = terms;
-      return terms;
-    },*/
-
-    /*getFilterFunction(searchType) {
-      switch (searchType) {
-        case "matches":
-          return (a, b) => a === b;
-        case "unequals":
-          return (a, b) => a !== b;
-        case "includes":
-          return (a, b) => a.includes(b);
-        case "excludes":
-          return (a, b) => !a.includes(b);
+        }); //[0]["meanings"][0]["definitions"]["synonyms"]
       }
-    },*/
+      console.log(this.synonyms);
+      if (this.searchWord === word) this.loading = false;
+    },
   },
 };
 </script>
