@@ -1,9 +1,14 @@
 <template>
   <v-card :loading="loading">
     <v-card-actions>
-      <v-btn v-for="synonym in synonyms" :key="synonym.message" ripple text
-        >{{ synonym.text }}}</v-btn
-      >
+      <v-btn
+        v-for="synonym in synonyms"
+        :key="synonym.message"
+        ripple
+        text
+        @click="customSearchSynonym(synonym)"
+        >{{ synonym.text }}}
+      </v-btn>
     </v-card-actions>
     <v-card-text class="pa-6">
       <v-autocomplete
@@ -139,12 +144,23 @@ export default {
      * @param event contains the search input
      */
     customSearch(event) {
+      if (event === null) return;
       this.flag = true;
       this.searchWord = event;
       this.fetchSynonyms(event);
       this.allTerms = this.filterAndSort(
         this.$store.getters.getVocabTerms,
         event
+      );
+    },
+    /**
+     * is triggerde whenever the user selects a synonym word
+     * @param event contains the search input
+     */
+    customSearchSynonym(synonyms) {
+      this.allTerms = this.filterAndSortSynonyms(
+        this.$store.getters.getVocabTerms,
+        [...synonyms.synonyms]
       );
     },
     /**
@@ -185,7 +201,39 @@ export default {
       console.log(filteredTerms);
       return filteredTerms;
     },
+    filterAndSortSynonyms(array, synonyms) {
+      //filter correct types
+      let filteredTerms;
+      if (this.value.length > 0) {
+        filteredTerms = array.filter((term) =>
+          this.value.includes(
+            term["http://www.w3.org/1999/02/22-rdf-syntax-ns#type"]
+          )
+        );
+      } else {
+        filteredTerms = array;
+      }
+      console.log(filteredTerms);
+      filteredTerms = this.$store.getters.getFilterCriteria.flatMap(
+        (predicate) => {
+          console.log(predicate);
+          return filteredTerms.filter(
+            (term) =>
+              term[predicate.predicate] !== undefined &&
+              synonyms
+                .map(
+                  (syn) =>
+                    term[predicate.predicate].search(new RegExp(syn, "i")) !==
+                    -1
+                )
+                .find((any) => any === true)
+          );
+        }
+      );
 
+      console.log(filteredTerms);
+      return filteredTerms;
+    },
     filterObjects() {
       return true;
     },
