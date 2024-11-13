@@ -6,6 +6,12 @@ This project provides a webapp for searching throw Semantic Web vocabularies and
 It offers some preloaded vocabs, which are daily updated via a gitlab pipeline action and automaticly pushed to our repo at gitlab.
 
 ## Project setup
+
+### For node-gyp on Windows the following dependencies are required:
+install [Python](https://www.python.org/)
+install [Visual Studio for Desktop with C++](https://visualstudio.microsoft.com/de/free-developer-offers/)
+
+
 ```
 npm install
 ```
