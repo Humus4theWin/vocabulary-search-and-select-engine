@@ -8,8 +8,8 @@ It offers some preloaded vocabs, which are daily updated via a gitlab pipeline a
 ## Project setup
 
 ### For node-gyp on Windows the following dependencies are required:
-install [Python](https://www.python.org/)
-install [Visual Studio for Desktop with C++](https://visualstudio.microsoft.com/de/free-developer-offers/)
+- install [Python](https://www.python.org/)
+- install [Visual Studio for Desktop with C++](https://visualstudio.microsoft.com/de/free-developer-offers/)
 
 
 ```
